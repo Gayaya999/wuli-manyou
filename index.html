@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN" data-scientist-agent-api="http://127.0.0.1:8787">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="物理漫游：从经典力学、电磁学、相对论到量子物理的互动知识图谱。"
+    />
+    <title>物理漫游</title>
+    <script>
+      (() => {
+        const saved = localStorage.getItem("qo-alt-theme");
+        const theme =
+          saved === "light" || saved === "dark"
+            ? saved
+            : matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=compact-1" />
+  </head>
+  <body>
+    <a class="skip" href="#ask-input">跳到提问</a>
+
+    <main>
+      <div class="shell">
+        <div class="intro">
+        <header class="masthead">
+          <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
+          <div class="appearance" role="group" aria-label="外观">
+            <button type="button" data-theme="light" aria-pressed="false">浅色</button>
+            <button type="button" data-theme="dark" aria-pressed="true">深色</button>
+          </div>
+        </header>
+
+        <section class="hero" aria-labelledby="heroTitle">
+          <div class="carousel">
+            <button class="carousel-step" id="fanPrev" type="button" aria-label="上一张档案软盘">
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <path d="M10.2 3.2 5.4 8l4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <div class="fan" id="fan" aria-label="科学家档案软盘轮播"></div>
+            <button class="carousel-step" id="fanNext" type="button" aria-label="下一张档案软盘">
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <path d="M5.8 3.2 10.6 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+
+          <h1 id="heroTitle">牛顿</h1>
+          <p class="lede">
+            从经典力学走到量子概率。影像在前，文字只做标签。
+          </p>
+
+          <form class="cta" id="askForm" novalidate>
+            <label class="sr-only" for="ask-input" id="askInputLabel">向牛顿提问</label>
+            <input
+              id="ask-input"
+              name="question"
+              type="text"
+              autocomplete="off"
+              maxlength="200"
+              placeholder="为什么苹果落下，月亮却没有掉下来？"
+            />
+            <button type="button" class="cta-mic" id="voiceInput" aria-pressed="false" aria-label="语音输入">
+              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <rect x="6" y="1.8" width="4" height="7.2" rx="2" fill="none" stroke="currentColor" stroke-width="1.4" />
+                <path d="M3.8 8.4a4.2 4.2 0 0 0 8.4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                <path d="M8 12.6v1.6M5.4 14.2h5.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              </svg>
+            </button>
+            <button type="submit" id="askSubmit" disabled>
+              <span>开始对话</span>
+              <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
+                <path
+                  d="M2.2 8h10.2M8.6 3.8 13 8l-4.4 4.2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </form>
+          <p class="cta-status" id="ctaStatus" aria-live="polite"></p>
+          <button class="text-link" id="watchLink" type="button">走进这段实验</button>
+        </section>
+        </div>
+
+        <section class="stage" id="stage" aria-label="实验终端">
+          <div class="terminal">
+            <button class="mac" id="enterGame" type="button" aria-label="进入牛顿的实验（演示）">
+              <span class="mac-screen">
+                <img
+                  id="guideImage"
+                  src="assets/guides/newton.png"
+                  alt="牛顿坐在苹果树下，作为进入实验的引导画面"
+                />
+              </span>
+              <img class="mac-chassis" src="assets/hardware/pixel-computer.png?v=1" alt="" />
+            </button>
+            <div class="stage-copy">
+              <h2 id="stageCaption">牛顿 · 光与引力</h2>
+              <p class="stage-copy-slot" id="stageNote">经典力学 / 万有引力</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="colophon">
+      <a href="#stage">实验</a>
+      <a href="./visitors.html">来访者档案</a>
+      <span>挑战杯原型</span>
+    </footer>
+
+    <div class="ask" id="askDock">
+      <button class="ask-chip" id="askChip" type="button" aria-expanded="false" aria-controls="askPanel">
+        问<span id="askChipName">牛顿</span>
+      </button>
+      <section class="ask-panel" id="askPanel" hidden>
+        <header class="ask-panel-head">
+          <p>与<span id="askPanelName">牛顿</span>通信</p>
+          <button class="ask-close" id="askClose" type="button" aria-label="收起对话">关闭</button>
+        </header>
+        <div class="ask-prompts" id="askPrompts" aria-label="推荐问题"></div>
+        <div class="ask-log" id="askLog" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <dialog class="lightbox" id="lightbox" aria-label="放大肖像">
+      <img id="lightboxImage" alt="" />
+      <form method="dialog"><button class="lightbox-close" type="submit">关闭</button></form>
+    </dialog>
+
+    <dialog class="portal" id="portal" aria-labelledby="portalTitle">
+      <div class="portal-frame">
+        <img id="portalImage" alt="" />
+        <div class="portal-hud">
+          <p class="portal-kicker">演示</p>
+          <h2 id="portalTitle">牛顿 · 光与引力</h2>
+          <button class="portal-leave" id="portalLeave" type="button">离开</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./script.js?v=pixel-computer-1" type="module"></script>
+  </body>
+</html>

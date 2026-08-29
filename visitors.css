@@ -1,0 +1,263 @@
+.cabinet-page .shell {
+  padding-top: var(--space-6);
+}
+
+.room {
+  text-align: center;
+  padding-top: var(--space-10);
+}
+
+.room h1 {
+  margin: 0 auto;
+  font-family: var(--font-serif);
+  font-size: clamp(2.1rem, 5.4vw, 3.4rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.room .lede {
+  margin-top: var(--space-4);
+}
+
+.room .text-link {
+  margin-top: var(--space-6);
+}
+
+.cabinet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1.8rem 0.55rem;
+  width: min(58rem, 100%);
+  margin: var(--space-10) auto 0;
+  min-height: 14rem;
+}
+
+.slot {
+  width: clamp(6.6rem, 13vw, 9.1rem);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  transform: translateY(var(--nudge, 0px)) rotate(var(--tilt, 0deg));
+  transform-origin: 50% 100%;
+  transition: transform 420ms var(--ease);
+}
+
+.slot img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 12px oklch(0 0 0 / 0.42));
+}
+
+.slot.is-owned {
+  cursor: zoom-in;
+}
+
+.slot.is-arriving {
+  animation: slotDrop 520ms var(--ease);
+}
+
+@keyframes slotDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-28px) rotate(var(--tilt, 0deg)) scale(1.06);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(var(--nudge, 0px)) rotate(var(--tilt, 0deg)) scale(1);
+  }
+}
+
+.bench {
+  width: min(40rem, 100%);
+  margin: var(--space-12) auto 0;
+  padding: var(--space-6);
+  border-radius: 22px;
+  background: color-mix(in oklch, var(--surface) 86%, transparent);
+  box-shadow: inset 0 0 0 1px var(--hairline), var(--shadow);
+}
+
+.bench-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.bench-head h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.bench-grid {
+  display: grid;
+  grid-template-columns: 11.5rem minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.drop {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--dim);
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.drop.is-hot {
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--focus-ring);
+}
+
+.drop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.bench-fields {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.bench-fields label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: left;
+}
+
+.bench-fields input {
+  width: 100%;
+  min-height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.shells {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-align: left;
+}
+
+.shells legend {
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.shell-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: var(--space-2);
+}
+
+.shell-swatches button {
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.18);
+  cursor: pointer;
+}
+
+.shell-swatches button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.18), 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+}
+
+.bench-result {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+
+.bench-result img {
+  height: 11.5rem;
+  width: auto;
+  filter: drop-shadow(0 16px 16px oklch(0 0 0 / 0.4));
+}
+
+.bench-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.bench-actions button {
+  min-height: 2.7rem;
+  padding: 0 1.2rem;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.mint {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.hang {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.hang:disabled {
+  color: var(--dim);
+  cursor: not-allowed;
+}
+
+.lightbox-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.lightbox-actions form {
+  margin: 0;
+}
+
+.lightbox-actions .lightbox-close[hidden] {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .room {
+    padding-top: var(--space-8);
+    text-align: left;
+  }
+
+  .cabinet {
+    justify-content: space-around;
+    gap: 1.4rem 0.35rem;
+  }
+
+  .bench-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drop {
+    max-width: 14rem;
+  }
+}
