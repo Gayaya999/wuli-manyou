@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/wuli-manyou/theme-pack.schema.json",
+  "title": "物理漫游主题素材包",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "pack_id", "version", "target_scientist_id", "sources", "usage", "presentation", "assets", "gameplay"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "pack_id": { "$ref": "#/$defs/id" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "target_scientist_id": { "$ref": "#/$defs/id" },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "url"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" }
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["license_status", "provenance_note"],
+      "properties": {
+        "license_status": { "enum": ["local-demo-only", "approved-for-public-release"] },
+        "provenance_note": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "domain", "placeholder", "guide_alt", "stage_note", "card_label"],
+      "properties": {
+        "title": { "$ref": "#/$defs/text80" },
+        "domain": { "$ref": "#/$defs/text80" },
+        "placeholder": { "$ref": "#/$defs/text120" },
+        "guide_alt": { "$ref": "#/$defs/text80" },
+        "stage_note": { "$ref": "#/$defs/text80" },
+        "card_label": { "$ref": "#/$defs/text80" }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disk", "guide"],
+      "properties": {
+        "disk": { "$ref": "#/$defs/pngAsset" },
+        "guide": { "$ref": "#/$defs/pngAsset" }
+      }
+    },
+    "gameplay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["template_id", "title", "intro", "steps", "completion"],
+      "properties": {
+        "template_id": { "const": "choice-sequence-v1" },
+        "title": { "$ref": "#/$defs/text80" },
+        "intro": { "$ref": "#/$defs/text180" },
+        "steps": { "type": "array", "minItems": 2, "maxItems": 5, "items": { "$ref": "#/$defs/step" } },
+        "completion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "summary"],
+          "properties": {
+            "title": { "$ref": "#/$defs/text80" },
+            "summary": { "$ref": "#/$defs/text260" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text80": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "text120": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "text180": { "type": "string", "minLength": 1, "maxLength": 180 },
+    "text240": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "text260": { "type": "string", "minLength": 1, "maxLength": 260 },
+    "pngAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "mime", "sha256", "width", "height"],
+      "properties": {
+        "path": { "type": "string", "pattern": "^assets/[A-Za-z0-9._/-]+\\.png$" },
+        "mime": { "const": "image/png" },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "width": { "type": "integer", "minimum": 128, "maximum": 2048 },
+        "height": { "type": "integer", "minimum": 128, "maximum": 2048 }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 60 }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "prompt", "choices", "correct_choice_id", "observation", "hint"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "prompt": { "$ref": "#/$defs/text180" },
+        "choices": { "type": "array", "minItems": 2, "maxItems": 4, "items": { "$ref": "#/$defs/choice" } },
+        "correct_choice_id": { "$ref": "#/$defs/id" },
+        "observation": { "$ref": "#/$defs/text240" },
+        "hint": { "$ref": "#/$defs/text180" }
+      }
+    }
+  }
+}

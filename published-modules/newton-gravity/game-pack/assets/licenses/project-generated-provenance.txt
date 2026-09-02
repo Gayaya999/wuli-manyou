@@ -1,0 +1,5 @@
+Pixel Science Theater Newton asset provenance
+
+Visual assets were commissioned for this project and generated with OpenAI ImageGen, then processed deterministically with project Pillow scripts. Approved source prompts and generation records are retained in docs/art/m5/M5_生图与来源记录.md. Audio files are original synthesized waveforms produced by game/tools/build_m5_assets.py without external recordings or samples.
+
+Rights basis: project-generated material distributed subject to applicable OpenAI terms and local law. Adaptation, local distribution, and public project release are approved by the project asset record. This file does not grant rights in third-party historical portraits or trademarks.

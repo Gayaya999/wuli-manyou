@@ -1,0 +1,317 @@
+{
+  "schema_version": "2.0.0",
+  "pack_id": "newton-gravity",
+  "series_title": "像素科学剧场",
+  "title": "牛顿与万有引力",
+  "runtime_compatibility": {
+    "name": "pixel-science-browser",
+    "version": "2.x"
+  },
+  "asset_contract": {
+    "sprite_cell": [
+      128,
+      128
+    ],
+    "sprite_frames": 28,
+    "portrait_size": [
+      160,
+      160
+    ]
+  },
+  "files": {
+    "scientist": "scientist.json",
+    "concept": "concept.json",
+    "experience": "experience.json",
+    "models": "models.json",
+    "visuals": "visuals.json",
+    "sources": "sources.json",
+    "licenses": "licenses.json",
+    "release_report": "qa/release-report.json"
+  },
+  "assets": [
+    {
+      "asset_id": "newton-atlas",
+      "path": "assets/character/newton-atlas.png",
+      "metadata": "assets/character/newton-sprite-set.json",
+      "media_type": "image/png",
+      "expected_size": [
+        768,
+        768
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + approved M5 atlas + deterministic 128px cell padding",
+      "sha256": "ef69e0db2d07b3f778b5d39e5d4c37242a0049973e007b60a85f1d38b3453ec7"
+    },
+    {
+      "asset_id": "newton-sprite-metadata",
+      "path": "assets/character/newton-sprite-set.json",
+      "media_type": "application/json",
+      "license_id": "project-generated-v1",
+      "source": "project-authored metadata",
+      "sha256": "dc81b6bf89ae97b27a2251200f84fe1c5efa71c1ff094a3b4136938ea328bfce"
+    },
+    {
+      "asset_id": "portrait-neutral",
+      "path": "assets/portraits/newton-neutral.png",
+      "media_type": "image/png",
+      "expected_size": [
+        160,
+        160
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "deterministic crop from approved Newton atlas",
+      "sha256": "113de9b22a4a691cc2ea93d2e6f3c424b581ed3f208f756ddfe777bc9620e9f1"
+    },
+    {
+      "asset_id": "portrait-thinking",
+      "path": "assets/portraits/newton-thinking.png",
+      "media_type": "image/png",
+      "expected_size": [
+        160,
+        160
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "deterministic crop from approved Newton atlas",
+      "sha256": "458e682922f5c66df64617805de5e7390587d9bd7b3f150b36fbfbd2408d8011"
+    },
+    {
+      "asset_id": "portrait-surprised",
+      "path": "assets/portraits/newton-surprised.png",
+      "media_type": "image/png",
+      "expected_size": [
+        160,
+        160
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "deterministic crop from approved Newton atlas",
+      "sha256": "268a659b192540b49f9dd44d1fdf89df15b9e4d67659ab4736c013334c147f82"
+    },
+    {
+      "asset_id": "portrait-celebrating",
+      "path": "assets/portraits/newton-celebrating.png",
+      "media_type": "image/png",
+      "expected_size": [
+        160,
+        160
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "deterministic crop from approved Newton atlas",
+      "sha256": "e34a12a7837f4e65ef059d19d9e060f54c9701c674df222ebf86af31528aea60"
+    },
+    {
+      "asset_id": "apple-orchard",
+      "path": "assets/backgrounds/apple-orchard.png",
+      "media_type": "image/png",
+      "expected_size": [
+        480,
+        270
+      ],
+      "requires_alpha": false,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "2f773633bdc6c9e32e1aca73696238405d4380b5df90dbf91ab74c4a291671f4"
+    },
+    {
+      "asset_id": "gravity-lab",
+      "path": "assets/backgrounds/gravity-lab.png",
+      "media_type": "image/png",
+      "expected_size": [
+        480,
+        270
+      ],
+      "requires_alpha": false,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "93f039f16d52c9d2c1c845bf70a7973fd34198876f8df98ba3cb6699ed98c27f"
+    },
+    {
+      "asset_id": "orbit-observatory",
+      "path": "assets/backgrounds/orbit-observatory.png",
+      "media_type": "image/png",
+      "expected_size": [
+        480,
+        270
+      ],
+      "requires_alpha": false,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "83e3267b456cc32d5f233737daa8029777098a2fd9f87089917d05ad419375c6"
+    },
+    {
+      "asset_id": "apple",
+      "path": "assets/props/apple.png",
+      "media_type": "image/png",
+      "expected_size": [
+        24,
+        24
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "50ef6bb01890c6651ca0e2e90b22ddeb5c1f82cf21a0cf30b4318b060819eb19"
+    },
+    {
+      "asset_id": "mass-ball",
+      "path": "assets/props/mass-ball.png",
+      "media_type": "image/png",
+      "expected_size": [
+        32,
+        32
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "7a82242be277a96f54b35a9c40110c86e7f486065258da906d0e31156c471b35"
+    },
+    {
+      "asset_id": "cannon",
+      "path": "assets/props/cannon.png",
+      "media_type": "image/png",
+      "expected_size": [
+        64,
+        48
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "d547d002e16bb0d1c5f85d2a75c647343a03159e72895f434ff724bc6df08a5c"
+    },
+    {
+      "asset_id": "projectile",
+      "path": "assets/props/projectile.png",
+      "media_type": "image/png",
+      "expected_size": [
+        12,
+        12
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "3cbb67c00a6fd7ec4f448ac9d64d1d1fd2ae7baad7c2866c9a7aae865d110445"
+    },
+    {
+      "asset_id": "central-body",
+      "path": "assets/props/central-body.png",
+      "media_type": "image/png",
+      "expected_size": [
+        96,
+        96
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "b68285118ff88b2442a8b768962f006732c1476a315f0216145bffde647a8a84"
+    },
+    {
+      "asset_id": "strange-planet",
+      "path": "assets/props/strange-planet.png",
+      "media_type": "image/png",
+      "expected_size": [
+        96,
+        96
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "58b7cd50a34fb6f40b815a38c5aeb0af1ca53ec4df3021ab08b3a1444df4be75"
+    },
+    {
+      "asset_id": "manuscript-decoration",
+      "path": "assets/props/manuscript-decoration.png",
+      "media_type": "image/png",
+      "expected_size": [
+        96,
+        64
+      ],
+      "requires_alpha": true,
+      "license_id": "project-generated-v1",
+      "source": "OpenAI ImageGen + deterministic project processing",
+      "sha256": "2fbb6a87286c38496248395a8a46b4e2bcdd552700aa98f4534de0a7a2d32d69"
+    },
+    {
+      "asset_id": "sound-click",
+      "path": "assets/audio/click.wav",
+      "media_type": "audio/wav",
+      "license_id": "project-generated-v1",
+      "source": "project-original synthesized waveform",
+      "sha256": "5e3fac8bab9676204f2974ebc23efbe5c72e0d821a5cd191d744556c000374e0"
+    },
+    {
+      "asset_id": "sound-adjust",
+      "path": "assets/audio/adjust.wav",
+      "media_type": "audio/wav",
+      "license_id": "project-generated-v1",
+      "source": "project-original synthesized waveform",
+      "sha256": "f7e3540473386789d5ac564adb51967b91fa1562788500077286419a9d42836a"
+    },
+    {
+      "asset_id": "sound-landing",
+      "path": "assets/audio/landing.wav",
+      "media_type": "audio/wav",
+      "license_id": "project-generated-v1",
+      "source": "project-original synthesized waveform",
+      "sha256": "d0e1a42aafeb18a1c3ac56184b258ec7f7e15df086a5d3875fdc55f3cf4c58d3"
+    },
+    {
+      "asset_id": "sound-success",
+      "path": "assets/audio/success.wav",
+      "media_type": "audio/wav",
+      "license_id": "project-generated-v1",
+      "source": "project-original synthesized waveform",
+      "sha256": "0de9341b22d5ef0f664153dc3bad0f3ca5e192bf0816af6a8c64eb12701b3924"
+    },
+    {
+      "asset_id": "sound-failure",
+      "path": "assets/audio/failure.wav",
+      "media_type": "audio/wav",
+      "license_id": "project-generated-v1",
+      "source": "project-original synthesized waveform",
+      "sha256": "e242908fafccdb7d1fa437f7ef39d07fd1993eba213041929685466952d34c5a"
+    },
+    {
+      "asset_id": "font-title",
+      "path": "assets/fonts/title.ttf",
+      "media_type": "font/ttf",
+      "license_id": "ofl-1.1-fusion",
+      "source": "Fusion Pixel Font approved project subset",
+      "sha256": "658dfc22f8310673864845408ebd5384ddcf745a2e1c17abadc18fdf1596c646"
+    },
+    {
+      "asset_id": "font-body",
+      "path": "assets/fonts/body.ttf",
+      "media_type": "font/ttf",
+      "license_id": "ofl-1.1-noto",
+      "source": "Noto Sans SC approved project subset",
+      "sha256": "c8c5a65a58cc07e368849b541a662a353f44e45f1fd7fc0c921c11e05efaf5b5"
+    },
+    {
+      "asset_id": "license-project-generated",
+      "path": "assets/licenses/project-generated-provenance.txt",
+      "media_type": "text/plain",
+      "license_id": "project-generated-v1",
+      "source": "project provenance record",
+      "sha256": "318868259c798f58e07e8e6765fbd42c03a63fab9f1a946d303ea35cd724a285"
+    },
+    {
+      "asset_id": "license-fusion-ofl",
+      "path": "assets/fonts/OFL-FusionPixelFont.txt",
+      "media_type": "text/plain",
+      "license_id": "ofl-1.1-fusion",
+      "source": "upstream OFL text and copyright notice",
+      "sha256": "bc518cf64b8032c07690f33cc270c35c179255a6ac8efa7c165ebae7e8f76a63"
+    },
+    {
+      "asset_id": "license-noto-ofl",
+      "path": "assets/fonts/OFL-NotoSansSC.txt",
+      "media_type": "text/plain",
+      "license_id": "ofl-1.1-noto",
+      "source": "upstream OFL text, copyright and reserved font name notice",
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    }
+  ]
+}

@@ -28,7 +28,7 @@ test("alt scientist conversations are isolated per figure", () => {
 });
 
 test("alt scientist chat posts to the local agent and never embeds secrets", () => {
-  assert.match(html, /data-scientist-agent-api="http:\/\/127\.0\.0\.1:8787"/);
+  assert.match(html, /data-scientist-agent-api="\/api"/);
   assert.match(script, /scientistAgentApiRoot/);
   assert.doesNotMatch(script, /sk-ws-|DASHSCOPE|dashscope|aliyuncs/i);
   assert.doesNotMatch(html, /sk-ws-|aliyuncs/i);
@@ -61,7 +61,7 @@ test("alt stage places a transparent Macintosh beside reserved copy", () => {
   assert.doesNotMatch(html, /<video/);
   assert.match(css, /grid-template-columns:\s*minmax\(0,\s*22rem\)/);
   assert.match(css, /\.mac-screen\s*\{/);
-  assert.match(script, /stageNote\.textContent = figure\.domain/);
+  assert.match(script, /stageNote\.textContent = figure\.stageNote \?\? figure\.domain/);
   assert.match(script, /guideImage\.src = figure\.guide/);
   assert.match(script, /guide: "assets\/guides\/newton\.png"/);
   assert.match(script, /function openPortal\(/);

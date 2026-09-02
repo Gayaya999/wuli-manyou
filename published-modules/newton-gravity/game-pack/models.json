@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0.0",
+  "models": [
+    {
+      "model_id": "fall-time",
+      "inputs": {"height": {"min": 0.1, "max": 100}, "gravity": {"min": 0.1, "max": 30}},
+      "outputs": [
+        {"output_id": "fall_time", "expression": {"op": "sqrt", "args": [{"op": "divide", "args": [{"op": "multiply", "args": [{"op": "literal", "value": 2}, {"op": "input", "name": "height"}]}, {"op": "input", "name": "gravity"}]}]}}
+      ]
+    },
+    {
+      "model_id": "distance-force-ratio",
+      "inputs": {"base_distance": {"min": 1, "max": 20}, "distance": {"min": 1, "max": 20}},
+      "outputs": [
+        {"output_id": "force_ratio", "expression": {"op": "divide", "args": [{"op": "power", "args": [{"op": "input", "name": "base_distance"}, {"op": "literal", "value": 2}]}, {"op": "power", "args": [{"op": "input", "name": "distance"}, {"op": "literal", "value": 2}]}]}}
+      ]
+    },
+    {
+      "model_id": "mass-force-ratio",
+      "inputs": {"mass_multiplier": {"min": 0.1, "max": 10}},
+      "outputs": [
+        {"output_id": "force_ratio", "expression": {"op": "input", "name": "mass_multiplier"}}
+      ]
+    }
+  ]
+}

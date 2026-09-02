@@ -8,6 +8,7 @@
       content="物理漫游来访者档案：把一张软盘留在柜里。"
     />
     <title>来访者档案 · 物理漫游</title>
+    <link rel="icon" href="./assets/disks/newton.png" type="image/png" />
     <script>
       (() => {
         const saved = localStorage.getItem("qo-alt-theme");
@@ -20,12 +21,6 @@
         document.documentElement.dataset.theme = theme;
       })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="./styles.css?v=visitors-1" />
     <link rel="stylesheet" href="./visitors.css?v=visitors-2" />
   </head>
@@ -36,6 +31,12 @@
       <div class="shell">
         <header class="masthead">
           <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
+          <nav class="site-nav" aria-label="主导航">
+            <a href="./">展厅</a>
+            <a href="./#stage">实验</a>
+            <a href="./visitors.html" aria-current="page">档案</a>
+            <a href="./community.html">社区</a>
+          </nav>
           <div class="appearance" role="group" aria-label="外观">
             <button type="button" data-theme="light" aria-pressed="false">浅色</button>
             <button type="button" data-theme="dark" aria-pressed="true">深色</button>
@@ -108,6 +109,7 @@
       </div>
     </dialog>
 
+    <script src="./nav-motion.js" type="module"></script>
     <script src="./visitors.js?v=visitors-2" type="module"></script>
   </body>
 </html>

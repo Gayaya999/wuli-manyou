@@ -1,0 +1,26 @@
+{
+  "schema_version": "2.0.0",
+  "character": {
+    "atlas_asset": "newton-atlas",
+    "metadata_asset": "newton-atlas",
+    "render_size": 192,
+    "position": [42, 158],
+    "portraits": {
+      "neutral": "portrait-neutral",
+      "thinking": "portrait-thinking",
+      "surprised": "portrait-surprised",
+      "celebrating": "portrait-celebrating"
+    }
+  },
+  "audio_cues": {"click": "sound-click", "adjust": "sound-adjust", "landing": "sound-landing", "success": "sound-success", "failure": "sound-failure"},
+  "cues": {
+    "opening": {"background_layers": ["orbit-observatory"], "character_animation": "talk", "character_position": [42, 158], "props": [], "environment_loops": ["telescope-glint", "dust-motes"], "feedback": {"success_animation": "observe", "failure_animation": "recoil"}, "render": {"kind": "none"}},
+    "apple-fall": {"background_layers": ["apple-orchard"], "character_animation": "observe", "character_position": [42, 158], "props": [], "environment_loops": ["branch-sway", "firefly-drift"], "feedback": {"success_animation": "recoil", "failure_animation": "recoil"}, "render": {"kind": "release", "prop_asset": "apple", "x": 694, "start_y": 130, "ground_y": 378, "size": 34, "duration_output": "fall_time"}},
+    "distance-lab": {"background_layers": ["gravity-lab"], "character_animation": "idle", "character_position": [42, 158], "props": [], "environment_loops": ["instrument-blink", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "think"}, "render": {"kind": "force", "input_id": "distance", "initial": 4, "max": 8, "center_x": 706, "y": 280, "min_separation": 82, "separation_range": 170, "left_asset": "mass-ball", "right_asset": "mass-ball"}},
+    "mass-lab": {"background_layers": ["gravity-lab"], "character_animation": "think", "character_position": [42, 158], "props": [], "environment_loops": ["instrument-blink", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "think"}, "render": {"kind": "force", "input_id": "mass_multiplier", "initial": 1, "max": 2, "force_from_input": true, "force_reference": 2, "scale_right_from_input": true, "center_x": 706, "y": 280, "min_separation": 175, "separation_range": 0, "left_asset": "mass-ball", "right_asset": "mass-ball"}},
+    "newton-cannon": {"background_layers": ["orbit-observatory"], "character_animation": "observe", "character_position": [42, 158], "props": [], "environment_loops": ["star-twinkle", "instrument-blink"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "orbit", "body_asset": "central-body", "cannon_asset": "cannon", "projectile_asset": "projectile", "center": [736, 256], "path_scale": 47}},
+    "strange-planet": {"background_layers": ["orbit-observatory"], "character_animation": "think", "character_position": [42, 158], "props": [], "environment_loops": ["star-twinkle", "instrument-blink"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "orbit", "body_asset": "strange-planet", "cannon_asset": "cannon", "projectile_asset": "projectile", "center": [736, 256], "path_scale": 47}},
+    "summary": {"background_layers": ["orbit-observatory"], "character_animation": "celebrate", "character_position": [42, 158], "props": [{"asset": "manuscript-decoration", "x": 708, "y": 250, "width": 126, "height": 84}], "environment_loops": ["star-twinkle", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "none"}}
+  },
+  "motion_contract": {"camera_shake_max_px": 2, "camera_shake_max_ms": 120, "particle_max": 40, "reduced_motion_disables": ["camera-push", "camera-shake", "nonessential-particles"]}
+}

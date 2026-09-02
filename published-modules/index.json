@@ -1,0 +1,48 @@
+{
+  "schema_version": "wuli-published-modules-1",
+  "modules": [
+    {
+      "module_id": "newton-gravity",
+      "files": [
+        "assets/disk.png",
+        "assets/guide.png",
+        "game-pack/assets/audio/adjust.wav",
+        "game-pack/assets/audio/click.wav",
+        "game-pack/assets/audio/failure.wav",
+        "game-pack/assets/audio/landing.wav",
+        "game-pack/assets/audio/success.wav",
+        "game-pack/assets/backgrounds/apple-orchard.png",
+        "game-pack/assets/backgrounds/gravity-lab.png",
+        "game-pack/assets/backgrounds/orbit-observatory.png",
+        "game-pack/assets/character/newton-atlas.png",
+        "game-pack/assets/character/newton-sprite-set.json",
+        "game-pack/assets/fonts/OFL-FusionPixelFont.txt",
+        "game-pack/assets/fonts/OFL-NotoSansSC.txt",
+        "game-pack/assets/fonts/body.ttf",
+        "game-pack/assets/fonts/title.ttf",
+        "game-pack/assets/licenses/project-generated-provenance.txt",
+        "game-pack/assets/portraits/newton-celebrating.png",
+        "game-pack/assets/portraits/newton-neutral.png",
+        "game-pack/assets/portraits/newton-surprised.png",
+        "game-pack/assets/portraits/newton-thinking.png",
+        "game-pack/assets/props/apple.png",
+        "game-pack/assets/props/cannon.png",
+        "game-pack/assets/props/central-body.png",
+        "game-pack/assets/props/manuscript-decoration.png",
+        "game-pack/assets/props/mass-ball.png",
+        "game-pack/assets/props/projectile.png",
+        "game-pack/assets/props/strange-planet.png",
+        "game-pack/concept.json",
+        "game-pack/experience.json",
+        "game-pack/licenses.json",
+        "game-pack/manifest.json",
+        "game-pack/models.json",
+        "game-pack/qa/release-report.json",
+        "game-pack/scientist.json",
+        "game-pack/sources.json",
+        "game-pack/visuals.json",
+        "module.json"
+      ]
+    }
+  ]
+}

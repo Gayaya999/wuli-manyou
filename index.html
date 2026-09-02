@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-scientist-agent-api="http://127.0.0.1:8787">
+<html lang="zh-CN" data-scientist-agent-api="/api">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,7 @@
       content="物理漫游：从经典力学、电磁学、相对论到量子物理的互动知识图谱。"
     />
     <title>物理漫游</title>
+    <link rel="icon" href="./assets/disks/newton.png" type="image/png" />
     <script>
       (() => {
         const saved = localStorage.getItem("qo-alt-theme");
@@ -20,12 +21,6 @@
         document.documentElement.dataset.theme = theme;
       })();
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="./styles.css?v=compact-1" />
   </head>
   <body>
@@ -35,7 +30,16 @@
       <div class="shell">
         <div class="intro">
         <header class="masthead">
-          <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
+          <a class="wordmark" href="./" aria-label="物理漫游首页">
+            <img src="./assets/disks/newton.png" alt="" />
+            <span>物理漫游<small>PHYSICS ODYSSEY</small></span>
+          </a>
+          <nav class="site-nav" aria-label="主导航">
+            <a href="./" aria-current="page">展厅</a>
+            <a href="#stage">实验</a>
+            <a href="./visitors.html">档案</a>
+            <a href="./community.html">社区</a>
+          </nav>
           <div class="appearance" role="group" aria-label="外观">
             <button type="button" data-theme="light" aria-pressed="false">浅色</button>
             <button type="button" data-theme="dark" aria-pressed="true">深色</button>
@@ -108,11 +112,37 @@
                   alt="牛顿坐在苹果树下，作为进入实验的引导画面"
                 />
               </span>
+              <span class="mac-play-cue" aria-hidden="true">
+                <span class="mac-play-icon">▶</span>
+                <span>点击电脑<br />进入实验</span>
+              </span>
               <img class="mac-chassis" src="assets/hardware/pixel-computer.png?v=1" alt="" />
             </button>
             <div class="stage-copy">
               <h2 id="stageCaption">牛顿 · 光与引力</h2>
               <p class="stage-copy-slot" id="stageNote">经典力学 / 万有引力</p>
+              <div class="module-dock" aria-label="作品操作">
+                <button class="module-import-button" id="gameModuleImport" type="button">
+                  <img src="./assets/disks/newton.png" alt="" />
+                  <span><strong>导入小游戏</strong><small>选择 Skill 导出的 ZIP</small></span>
+                </button>
+                <input id="gameModuleInput" type="file" accept=".zip,application/zip" hidden />
+                <ol class="module-progress" id="gameModuleProgress" aria-label="导入进度">
+                  <li data-step="读取">读取</li><li data-step="验包">验包</li><li data-step="验授权">验授权</li><li data-step="验运行">验运行</li><li data-step="加入展厅">加入展厅</li>
+                </ol>
+                <p class="module-status" id="gameModuleStatus" aria-live="polite">ZIP 会先在本机验证，通过后才加入展厅。</p>
+                <details class="module-advanced">
+                  <summary>高级选项</summary>
+                  <button id="gameModuleFolderImport" type="button">开发模式：选择作品文件夹</button>
+                  <input id="gameModuleFolderInput" type="file" webkitdirectory directory multiple hidden />
+                  <div id="themeDeveloperTools" hidden>
+                    <button id="themePackImport" type="button">导入轻量主题包</button>
+                    <button id="themePackReset" type="button" hidden>还原默认主题</button>
+                    <input id="themePackInput" type="file" webkitdirectory directory multiple hidden />
+                    <p class="module-status" id="themePackStatus" aria-live="polite">仅供开发调试。</p>
+                  </div>
+                </details>
+              </div>
             </div>
           </div>
         </section>
@@ -144,6 +174,16 @@
       <form method="dialog"><button class="lightbox-close" type="submit">关闭</button></form>
     </dialog>
 
+    <dialog class="module-game" id="moduleGame" aria-labelledby="moduleGameTitle">
+      <div class="module-game-frame">
+        <header class="module-game-head">
+          <h2 id="moduleGameTitle">完整小游戏</h2>
+          <button class="portal-leave" id="moduleGameLeave" type="button">离开</button>
+        </header>
+        <iframe id="moduleGameFrame" title="完整小游戏" sandbox="allow-scripts"></iframe>
+      </div>
+    </dialog>
+
     <dialog class="portal" id="portal" aria-labelledby="portalTitle">
       <div class="portal-frame">
         <img id="portalImage" alt="" />
@@ -155,6 +195,29 @@
       </div>
     </dialog>
 
-    <script src="./script.js?v=pixel-computer-1" type="module"></script>
+    <dialog class="theme-game" id="themeGame" aria-labelledby="themeGameTitle">
+      <div class="theme-game-frame">
+        <div class="theme-game-visual" aria-hidden="true">
+          <img id="themeGameImage" alt="" />
+        </div>
+        <section class="theme-game-panel">
+          <header class="theme-game-head">
+            <div>
+              <p class="theme-game-progress" id="themeGameProgress"></p>
+              <h2 id="themeGameTitle"></h2>
+            </div>
+            <button class="theme-game-close" id="themeGameClose" type="button">离开</button>
+          </header>
+          <p class="theme-game-intro" id="themeGameIntro"></p>
+          <p class="theme-game-prompt" id="themeGamePrompt"></p>
+          <div class="theme-game-choices" id="themeGameChoices"></div>
+          <p class="theme-game-feedback" id="themeGameFeedback" aria-live="polite"></p>
+          <button class="theme-game-next" id="themeGameNext" type="button" hidden>继续</button>
+        </section>
+      </div>
+    </dialog>
+
+    <script src="./nav-motion.js" type="module"></script>
+    <script src="./script.js?v=theme-pack-1" type="module"></script>
   </body>
 </html>

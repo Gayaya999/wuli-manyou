@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "figure-discovery-demo",
+  "version": "1.0.0",
+  "target_scientist_id": "existing-figure-id",
+  "sources": [
+    {
+      "id": "direct-source-id",
+      "title": "直接支持核心科学结论的来源标题",
+      "url": "https://replace-with-authoritative-source.example"
+    }
+  ],
+  "usage": {
+    "license_status": "local-demo-only",
+    "provenance_note": "记录图片生成工具、参考素材与当前公开使用状态；未审核时保持 local-demo-only。"
+  },
+  "presentation": {
+    "title": "人物 · 科学主题",
+    "domain": "学科 / 核心发现",
+    "placeholder": "一个不会提前泄露答案的问题",
+    "guide_alt": "主题引导画面的客观描述",
+    "stage_note": "一句话说明玩家将改变什么并观察什么。",
+    "card_label": "主题包名称"
+  },
+  "assets": {
+    "disk": {
+      "path": "assets/disk.png",
+      "mime": "image/png",
+      "sha256": "replace-with-64-lowercase-hex",
+      "width": 768,
+      "height": 832
+    },
+    "guide": {
+      "path": "assets/guide.png",
+      "mime": "image/png",
+      "sha256": "replace-with-64-lowercase-hex",
+      "width": 1024,
+      "height": 576
+    }
+  },
+  "gameplay": {
+    "template_id": "choice-sequence-v1",
+    "title": "这一关要发现什么？",
+    "intro": "先观察和选择，再显示解释。",
+    "steps": [
+      {
+        "id": "observe-one",
+        "prompt": "只改变一个条件，会发生什么？",
+        "choices": [
+          { "id": "option-a", "label": "现象 A" },
+          { "id": "option-b", "label": "现象 B" }
+        ],
+        "correct_choice_id": "option-a",
+        "observation": "用一到两句话解释玩家刚看到的因果关系。",
+        "hint": "提示观察哪个条件发生了变化。"
+      },
+      {
+        "id": "transfer-two",
+        "prompt": "换一个情境，同一规律还成立吗？",
+        "choices": [
+          { "id": "option-a", "label": "迁移结果 A" },
+          { "id": "option-b", "label": "迁移结果 B" }
+        ],
+        "correct_choice_id": "option-b",
+        "observation": "解释迁移情境中的相同规律。",
+        "hint": "不要照抄上一题答案，比较规律而不是表面。"
+      }
+    ],
+    "completion": {
+      "title": "完成标题",
+      "summary": "总结玩家通过操作发现的规律。"
+    }
+  }
+}

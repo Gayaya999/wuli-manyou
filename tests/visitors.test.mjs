@@ -9,6 +9,7 @@ const script = await readFile(new URL("../visitors.js", import.meta.url), "utf8"
 
 test("visitor archive is a separate room linked from the hall", () => {
   assert.match(hall, /href="\.\/visitors\.html"/);
+  assert.match(hall, /href="\.\/community\.html"/);
   assert.match(hall, /来访者档案/);
   assert.match(html, /href="\.\/"/);
   assert.match(html, /id="cabinet"/);
@@ -16,7 +17,7 @@ test("visitor archive is a separate room linked from the hall", () => {
   assert.match(html, /存放一张档案/);
   assert.match(html, /放入展墙/);
   assert.match(html, /取回/);
-  assert.doesNotMatch(html, /社区|广场|AI 生成/);
+  assert.match(html, /href="\.\/community\.html"/);
 });
 
 test("visitor disks are composited locally and stored on this machine", () => {

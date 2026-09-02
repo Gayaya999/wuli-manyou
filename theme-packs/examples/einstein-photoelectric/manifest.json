@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "pack_id": "einstein-photoelectric-demo",
+  "version": "1.0.0",
+  "target_scientist_id": "einstein",
+  "sources": [
+    {
+      "id": "openstax-photoelectric-effect",
+      "title": "OpenStax University Physics Volume 3, 6.2 Photoelectric Effect",
+      "url": "https://openstax.org/books/university-physics-volume-3/pages/6-2-photoelectric-effect"
+    }
+  ],
+  "usage": {
+    "license_status": "local-demo-only",
+    "provenance_note": "示例复用本仓库现有爱因斯坦软盘与引导图；公开发布前仍需由项目负责人确认原始素材授权。"
+  },
+  "presentation": {
+    "title": "爱因斯坦 · 光电效应",
+    "domain": "量子物理 / 光电效应",
+    "placeholder": "为什么更亮的红光也不一定能敲出电子？",
+    "guide_alt": "爱因斯坦在实验台旁观察光照金属的主题画面",
+    "stage_note": "改变光的频率，观察金属是否放出电子。",
+    "card_label": "光电效应试玩主题"
+  },
+  "assets": {
+    "disk": {
+      "path": "assets/disk.png",
+      "mime": "image/png",
+      "sha256": "cfe80c84103ffaf0db8c787f1626c61a0324bc4cf18bbdb7dc5826c108a66d95",
+      "width": 766,
+      "height": 836
+    },
+    "guide": {
+      "path": "assets/guide.png",
+      "mime": "image/png",
+      "sha256": "f7c62d8d754bcc0b2616285ff07bcc346bd6da98435ed0bbaf944bdc39dcd2df",
+      "width": 1024,
+      "height": 576
+    }
+  },
+  "gameplay": {
+    "template_id": "choice-sequence-v1",
+    "title": "哪一种光能敲出电子？",
+    "intro": "先改变一个条件，再观察电子有没有从金属表面出来。",
+    "steps": [
+      {
+        "id": "brightness",
+        "prompt": "保持红光颜色不变，只把光调得更亮。会出现电子吗？",
+        "choices": [
+          { "id": "yes", "label": "会，亮度足够就行" },
+          { "id": "no", "label": "不会，先看光的频率" }
+        ],
+        "correct_choice_id": "no",
+        "observation": "没有电子出来。亮度增加了光子的数量，却没有提高单个光子的能量。",
+        "hint": "先别只盯着亮度，试着想想光的颜色代表什么。"
+      },
+      {
+        "id": "frequency",
+        "prompt": "换成频率更高的紫光，同时保持亮度适中。现在会怎样？",
+        "choices": [
+          { "id": "electrons", "label": "金属放出电子" },
+          { "id": "nothing", "label": "仍然什么都没有" }
+        ],
+        "correct_choice_id": "electrons",
+        "observation": "电子出现了。频率越高，单个光子的能量越高；超过材料门槛后才能放出电子。",
+        "hint": "紫光的频率比红光高，单个光子的能量也更高。"
+      },
+      {
+        "id": "transfer",
+        "prompt": "已经超过门槛后，再把紫光调亮，最明显增加的是什么？",
+        "choices": [
+          { "id": "count", "label": "放出的电子数量" },
+          { "id": "threshold", "label": "材料本身的门槛" }
+        ],
+        "correct_choice_id": "count",
+        "observation": "电子数量增加了，但材料门槛没有改变。亮度主要影响光子数量，频率决定单个光子的能量。",
+        "hint": "同一种材料的门槛不会因为光变亮而改变。"
+      }
+    ],
+    "completion": {
+      "title": "你找到了光电效应的门槛",
+      "summary": "光的频率决定单个光子的能量能否越过材料门槛；超过门槛以后，亮度主要影响放出电子的数量。"
+    }
+  }
+}

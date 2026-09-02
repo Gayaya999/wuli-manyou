@@ -1,3 +1,15 @@
+import {
+  clearThemeProgress,
+  deactivateThemePack,
+  loadActiveThemePack,
+  readThemeProgress,
+  saveThemePack,
+  validateThemePackFiles,
+  writeThemeProgress,
+} from "./theme-pack.mjs";
+import { validateGameModule } from "./game-module.mjs";
+import { filesFromZip } from "./zip-reader.mjs";
+
 const FIGURES = [
   {
     id: "newton",
@@ -109,6 +121,8 @@ const FIGURES = [
   },
 ];
 
+const FIGURE_BASELINES = new Map(FIGURES.map((figure) => [figure.id, { ...figure }]));
+
 const fan = document.querySelector("#fan");
 const heroTitle = document.querySelector("#heroTitle");
 const askForm = document.querySelector("#askForm");
@@ -136,12 +150,46 @@ const askPrompts = document.querySelector("#askPrompts");
 const askLog = document.querySelector("#askLog");
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector("#lightboxImage");
+const themePackImport = document.querySelector("#themePackImport");
+const themePackReset = document.querySelector("#themePackReset");
+const themePackInput = document.querySelector("#themePackInput");
+const themePackStatus = document.querySelector("#themePackStatus");
+const gameModuleImport = document.querySelector("#gameModuleImport");
+const gameModuleInput = document.querySelector("#gameModuleInput");
+const gameModuleFolderImport = document.querySelector("#gameModuleFolderImport");
+const gameModuleFolderInput = document.querySelector("#gameModuleFolderInput");
+const gameModuleProgress = document.querySelector("#gameModuleProgress");
+const gameModuleStatus = document.querySelector("#gameModuleStatus");
+const themeDeveloperTools = document.querySelector("#themeDeveloperTools");
+const moduleGame = document.querySelector("#moduleGame");
+const moduleGameFrame = document.querySelector("#moduleGameFrame");
+const moduleGameTitle = document.querySelector("#moduleGameTitle");
+const moduleGameLeave = document.querySelector("#moduleGameLeave");
+const themeGame = document.querySelector("#themeGame");
+const themeGameImage = document.querySelector("#themeGameImage");
+const themeGameProgress = document.querySelector("#themeGameProgress");
+const themeGameTitle = document.querySelector("#themeGameTitle");
+const themeGameIntro = document.querySelector("#themeGameIntro");
+const themeGamePrompt = document.querySelector("#themeGamePrompt");
+const themeGameChoices = document.querySelector("#themeGameChoices");
+const themeGameFeedback = document.querySelector("#themeGameFeedback");
+const themeGameNext = document.querySelector("#themeGameNext");
+const themeGameClose = document.querySelector("#themeGameClose");
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let currentId = FIGURES[0].id;
 let archive = null;
 let lastClicked = null;
 const conversations = new Map();
+let activeThemePack = null;
+let activeThemeUrls = [];
+let themeGameStep = 0;
+let themeGameCompleted = false;
+let themeGameResolved = false;
+const gameModules = new Map();
+const moduleIdToFigureId = new Map();
+let activeGameUrls = [];
+const persistentGameUrls = [];
 
 const THEME_KEY = "qo-alt-theme";
 const appearance = document.querySelector(".appearance");
@@ -202,7 +250,11 @@ function renderAskLog() {
 function applyArchivePlaceholders() {
   FIGURES.forEach((figure) => {
     const first = archive?.scientists?.[figure.id]?.prompts?.[0]?.question;
-    if (first) figure.placeholder = first;
+    if (first) {
+      figure.placeholder = first;
+      const baseline = FIGURE_BASELINES.get(figure.id);
+      if (baseline) baseline.placeholder = first;
+    }
   });
 }
 
@@ -272,7 +324,7 @@ function updateCopy() {
   askInput.placeholder = figure.placeholder;
   askInputLabel.textContent = `向${figure.name}提问`;
   stageCaption.textContent = figure.title;
-  stageNote.textContent = figure.domain;
+  stageNote.textContent = figure.stageNote ?? figure.domain;
   enterGame.setAttribute("aria-label", `进入${figure.name}的实验（演示）`);
   askChipName.textContent = figure.name;
   askPanelName.textContent = figure.name;
@@ -306,10 +358,19 @@ function selectFigure(id, { lightboxOnRepeat = false } = {}) {
   currentId = id;
   lastClicked = id;
   stopVoice();
+  if (themeGame.open && activeThemePack?.manifest.target_scientist_id !== id) themeGame.close();
   updateCopy();
 }
 
 function openPortal() {
+  if (activeThemePack?.manifest.target_scientist_id === currentId) {
+    openThemeGame();
+    return;
+  }
+  if (gameModules.has(currentId)) {
+    openGameModule(gameModules.get(currentId));
+    return;
+  }
   const figure = currentFigure();
   portalImage.src = figure.guide;
   portalImage.alt = figure.guideAlt;
@@ -319,6 +380,310 @@ function openPortal() {
 
 function closePortal() {
   if (portal.open) portal.close();
+}
+
+function setGameModuleStatus(message, state = "") {
+  gameModuleStatus.textContent = message;
+  gameModuleStatus.dataset.state = state;
+}
+
+function setGameModuleProgress(step, message, state = "pending") {
+  const order = ["读取", "验包", "验授权", "验运行", "加入展厅"];
+  const active = order.indexOf(step);
+  gameModuleProgress?.querySelectorAll("li").forEach((item, index) => {
+    item.dataset.state = index < active ? "done" : index === active ? state : "";
+  });
+  setGameModuleStatus(message, state === "error" ? "error" : active === order.length - 1 ? "success" : "pending");
+}
+
+function safeJson(value) {
+  return JSON.stringify(value).replaceAll("<", "\\u003c").replaceAll("\u2028", "\\u2028").replaceAll("\u2029", "\\u2029");
+}
+
+async function moduleBundle(entries) {
+  const bundle = {};
+  for (const relative of ["manifest.json", "scientist.json", "concept.json", "experience.json", "models.json", "visuals.json", "sources.json", "licenses.json", "qa/release-report.json"]) {
+    const key = relative === "qa/release-report.json" ? "release_report" : relative.split("/").pop().replace(".json", "");
+    bundle[key] = JSON.parse(await entries.get(`game-pack/${relative}`).text());
+  }
+  bundle.asset_metadata = {};
+  for (const asset of bundle.manifest.assets || []) {
+    if (asset.metadata) bundle.asset_metadata[asset.asset_id] = JSON.parse(await entries.get(`game-pack/${asset.metadata}`).text());
+  }
+  return bundle;
+}
+
+function releaseActiveGameUrls() {
+  activeGameUrls.forEach((url) => URL.revokeObjectURL(url));
+  activeGameUrls = [];
+}
+
+async function loadPublishedModule(record) {
+  if (record.entries) return record;
+  setGameModuleProgress("读取", `正在下载《${record.manifest.presentation.title}》的游戏内容`);
+  const files = await Promise.all(record.files.map(async (relative) => {
+    const response = await fetch(`${record.baseUrl}/${relative}`);
+    if (!response.ok) throw new Error(`服务器缺少 ${relative}`);
+    const file = new File([await response.blob()], relative.split("/").pop());
+    Object.defineProperty(file, "webkitRelativePath", { value: `${record.manifest.module_id}/${relative}` });
+    return file;
+  }));
+  const result = await validateGameModule(files, { onProgress: (step, message) => setGameModuleProgress(step, message) });
+  if (!result.ok) throw new Error(result.errors.slice(0, 4).join("；"));
+  record.entries = result.entries;
+  record.manifest = result.manifest;
+  return record;
+}
+
+async function openGameModule(record) {
+  if (!record) return;
+  moduleGameTitle.textContent = record.figure.title;
+  setGameModuleStatus("正在进入暗色实验舱……", "pending");
+  try {
+    await loadPublishedModule(record);
+    releaseActiveGameUrls();
+    const [css, runtimeTemplate, bundle] = await Promise.all([
+      fetch("./assets/pixel-science-runtime/game.css").then((response) => response.text()),
+      fetch("./assets/pixel-science-runtime/runtime.template.js").then((response) => response.text()),
+      moduleBundle(record.entries),
+    ]);
+    const assetUrls = {};
+    for (const asset of bundle.manifest.assets || []) assetUrls[asset.asset_id] = URL.createObjectURL(record.entries.get(`game-pack/${asset.path}`));
+    activeGameUrls.push(...Object.values(assetUrls));
+    const runtime = runtimeTemplate
+      .replace("__PACK_BUNDLE__", safeJson(bundle))
+      .replace("return `./pack/${record.path}`;", "return window.__WULI_PACK_ASSETS__[assetId];");
+    if (runtime.includes("__PACK_BUNDLE__")) throw new Error("网站运行器未正确装配");
+    moduleGameFrame.srcdoc = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head><body><main class="page" id="app"><section class="game-viewport" id="game-viewport"><section class="game-shell" id="game-shell" aria-label="科普游戏"><canvas id="stage-canvas" width="960" height="540" aria-hidden="true"></canvas><header class="hud"><span class="brand" id="brand">像素科学剧场</span><div class="progress" id="progress"></div><button class="quiet-button" id="settings-button" type="button">设置</button></header><section class="stage-copy" id="stage-copy" hidden><span class="stage-count" id="stage-count"></span><h1 id="stage-title"></h1><p id="stage-prompt"></p><div class="journey-steps" id="journey-steps" hidden></div></section><section class="control-deck" id="control-deck" hidden><div class="control-main" id="control-main"></div><div class="feedback-row" id="feedback-row"><img class="scientist-portrait" id="scientist-portrait" alt="人物当前表情" hidden><div class="feedback-copy" aria-live="polite"><span id="result-label"></span><span id="feedback-label"></span></div><div class="secondary-actions"><button class="quiet-button" id="hint-button" type="button">提示 0/0</button><button class="quiet-button deeper-button" id="deeper-button" type="button" hidden>深入一步</button><button class="primary-button compact" id="continue-button" type="button" disabled>继续</button></div></div></section><section class="start-card" id="start-card"><span class="eyebrow">3—5分钟 · 一次一个科学发现</span><h1 id="start-title"></h1><p id="start-description"></p><button class="primary-button" id="start-button" type="button" disabled>正在准备素材…</button></section><aside class="modal-card" id="modal-card" role="dialog" aria-modal="true" hidden><span class="eyebrow" id="modal-eyebrow"></span><h2 id="modal-title"></h2><div id="modal-body"></div><button class="primary-button compact" id="modal-close" type="button">完成</button></aside><footer class="subtitle" id="subtitle"></footer><div class="rotate-notice" role="status"><strong>请把平板横过来</strong><span>横屏能完整看到实验舞台</span></div><div class="fatal-error" id="fatal-error" hidden><h1>内容加载失败</h1><p id="fatal-message"></p></div></section></section><p class="browser-note">物理漫游安全运行器</p></main><script>window.__WULI_PACK_ASSETS__=${safeJson(assetUrls)};<\/script><script>${runtime}<\/script></body></html>`;
+    moduleGame.classList.add("is-entering");
+    moduleGame.showModal();
+    requestAnimationFrame(() => moduleGame.classList.remove("is-entering"));
+    setGameModuleStatus(`已导入：${record.manifest.presentation.title}。软盘已加入滑块。`, "success");
+  } catch (error) {
+    setGameModuleStatus(`小游戏未能启动：${error.message}`, "error");
+  }
+}
+
+function registerGameModule(manifest, { entries = null, files = [], baseUrl = "", select = true, published = false } = {}) {
+  const existingFigure = FIGURES.find((item) => item.fullName === manifest.presentation.scientist_name || item.name === manifest.presentation.scientist_name);
+  const knownFigureId = moduleIdToFigureId.get(manifest.module_id);
+  const figure = FIGURES.find((item) => item.id === knownFigureId) ?? existingFigure;
+  const figureId = figure?.id ?? `module-${manifest.module_id}`;
+  if (figure?._moduleObjectUrls) figure._moduleObjectUrls.forEach((url) => URL.revokeObjectURL(url));
+  const disk = entries?.get(manifest.assets.disk.path);
+  const guide = entries?.get(manifest.assets.guide.path);
+  const avatar = disk ? URL.createObjectURL(disk) : `${baseUrl}/${manifest.assets.disk.path}`;
+  const guideUrl = guide ? URL.createObjectURL(guide) : `${baseUrl}/${manifest.assets.guide.path}`;
+  const modulePresentation = {
+    name: manifest.presentation.scientist_name,
+    fullName: manifest.presentation.scientist_name,
+    title: manifest.presentation.title,
+    domain: manifest.presentation.domain,
+    stageNote: `版本 ${manifest.version}${manifest.creator?.display_name ? ` · ${manifest.creator.display_name}` : ""}`,
+    avatar,
+    guide: guideUrl,
+    alt: manifest.presentation.disk_alt,
+    guideAlt: manifest.presentation.guide_alt,
+    placeholder: manifest.presentation.placeholder,
+    _moduleObjectUrls: disk ? [avatar, guideUrl] : [],
+  };
+  const registeredFigure = figure ? Object.assign(figure, modulePresentation) : { id: figureId, ...modulePresentation };
+  if (!figure) FIGURES.push(registeredFigure);
+  moduleIdToFigureId.set(manifest.module_id, registeredFigure.id);
+  gameModules.set(registeredFigure.id, { manifest, entries, files, baseUrl, figure: registeredFigure, published });
+  renderFan();
+  if (select) selectFigure(registeredFigure.id);
+  else updateCopy();
+  return registeredFigure;
+}
+
+async function importGameModule(files, { quiet = false, select = true } = {}) {
+  if (!quiet) setGameModuleProgress("读取", "正在读取作品包");
+  const result = await validateGameModule(files, { onProgress: quiet ? () => {} : (step, message) => setGameModuleProgress(step, message) });
+  if (!result.ok) throw new Error(result.errors.slice(0, 3).join("；"));
+  const { manifest, entries } = result;
+  const figure = registerGameModule(manifest, { entries, select });
+  if (!quiet) setGameModuleStatus(`已导入：${figure.title}。点击下方电脑即可游玩。`, "success");
+}
+
+function focusRequestedModule() {
+  const moduleId = new URLSearchParams(location.search).get("module");
+  if (!moduleId) return;
+  const figureId = moduleIdToFigureId.get(moduleId);
+  if (!figureId) { setGameModuleStatus("这个社区作品尚未发布或已经下架。", "error"); return; }
+  selectFigure(figureId);
+  stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+  enterGame.classList.remove("community-cue");
+  requestAnimationFrame(() => enterGame.classList.add("community-cue"));
+  enterGame.focus({ preventScroll: true });
+  setGameModuleStatus("已从社区选中作品：请点击发光的电脑进入游戏。", "success");
+  window.setTimeout(() => enterGame.classList.remove("community-cue"), 2800);
+}
+
+async function loadPublishedModules() {
+  try {
+    const indexResponse = await fetch("./published-modules/index.json", { cache: "no-store" });
+    if (!indexResponse.ok) return;
+    const index = await indexResponse.json();
+    if (!Array.isArray(index.modules)) throw new Error("公开作品目录无效");
+    let loaded = 0;
+    for (const record of index.modules) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(record?.module_id ?? "") || !Array.isArray(record.files)) continue;
+      const baseUrl = `./published-modules/${record.module_id}`;
+      const response = await fetch(`${baseUrl}/module.json`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`公开作品缺少 module.json`);
+      const manifest = await response.json();
+      if (manifest.schema_version !== "wuli-science-module-2" || manifest.module_id !== record.module_id) throw new Error(`公开作品 ${record.module_id} 版本过旧`);
+      registerGameModule(manifest, { files: record.files, baseUrl, select: false, published: true });
+      loaded += 1;
+    }
+    if (loaded) setGameModuleStatus(`已加载 ${loaded} 个作品简介；完整游戏会在点击电脑后加载。`, "success");
+    focusRequestedModule();
+  } catch (error) {
+    console.warn("公开小游戏目录未加载", error);
+  }
+}
+
+function releaseThemeUrls() {
+  activeThemeUrls.forEach((url) => URL.revokeObjectURL(url));
+  activeThemeUrls = [];
+}
+
+function restoreFigure(id) {
+  const figure = FIGURES.find((item) => item.id === id);
+  const baseline = FIGURE_BASELINES.get(id);
+  if (figure && baseline) Object.assign(figure, baseline);
+}
+
+function setThemePackStatus(message, state = "") {
+  themePackStatus.textContent = message;
+  themePackStatus.dataset.tooltip = message;
+  themePackStatus.dataset.state = state;
+}
+
+function activateThemePackRecord(record) {
+  const { manifest, assets } = record;
+  const figure = FIGURES.find((item) => item.id === manifest.target_scientist_id);
+  if (!figure) throw new Error(`当前展厅没有人物：${manifest.target_scientist_id}`);
+  if (!assets?.disk || !assets?.guide) throw new Error("主题包素材记录不完整");
+  if (activeThemePack) restoreFigure(activeThemePack.manifest.target_scientist_id);
+  releaseThemeUrls();
+  const diskUrl = URL.createObjectURL(assets.disk);
+  const guideUrl = URL.createObjectURL(assets.guide);
+  activeThemeUrls.push(diskUrl, guideUrl);
+  Object.assign(figure, {
+    title: manifest.presentation.title,
+    domain: manifest.presentation.domain,
+    stageNote: manifest.presentation.stage_note,
+    placeholder: manifest.presentation.placeholder,
+    avatar: diskUrl,
+    guide: guideUrl,
+    alt: `${figure.fullName}${manifest.presentation.card_label}`,
+    guideAlt: manifest.presentation.guide_alt,
+  });
+  activeThemePack = record;
+  themePackReset.hidden = false;
+  renderFan();
+  selectFigure(figure.id);
+  setThemePackStatus(`已启用：${manifest.presentation.card_label}`, "success");
+}
+
+function restoreDefaultTheme() {
+  const target = activeThemePack?.manifest.target_scientist_id;
+  if (target) restoreFigure(target);
+  releaseThemeUrls();
+  activeThemePack = null;
+  if (themeGame.open) themeGame.close();
+  deactivateThemePack();
+  themePackReset.hidden = true;
+  renderFan();
+  updateCopy();
+  setThemePackStatus("已恢复展厅默认主题。导入记录仍保存在本机，可再次选择文件夹覆盖。", "success");
+}
+
+function currentThemeGameplay() {
+  return activeThemePack?.manifest.gameplay ?? null;
+}
+
+function renderThemeGame() {
+  const gameplay = currentThemeGameplay();
+  if (!gameplay) return;
+  themeGameImage.src = currentFigure().guide;
+  themeGameChoices.replaceChildren();
+  themeGameFeedback.textContent = "";
+  themeGameResolved = false;
+  if (themeGameCompleted) {
+    themeGameProgress.textContent = "完成";
+    themeGameTitle.textContent = gameplay.completion.title;
+    themeGameIntro.textContent = gameplay.completion.summary;
+    themeGamePrompt.textContent = "这次记录已保存在这台设备上。";
+    themeGameNext.textContent = "重新试玩";
+    themeGameNext.hidden = false;
+    return;
+  }
+  const step = gameplay.steps[themeGameStep];
+  themeGameProgress.textContent = `第 ${themeGameStep + 1} / ${gameplay.steps.length} 步`;
+  themeGameTitle.textContent = gameplay.title;
+  themeGameIntro.textContent = gameplay.intro;
+  themeGamePrompt.textContent = step.prompt;
+  for (const choice of step.choices) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = choice.label;
+    button.dataset.choiceId = choice.id;
+    button.addEventListener("click", () => chooseThemeAnswer(button, step));
+    themeGameChoices.append(button);
+  }
+  themeGameNext.textContent = themeGameStep === gameplay.steps.length - 1 ? "查看结论" : "继续";
+  themeGameNext.hidden = true;
+}
+
+function chooseThemeAnswer(button, step) {
+  if (themeGameResolved) return;
+  if (button.dataset.choiceId !== step.correct_choice_id) {
+    button.classList.remove("is-wrong");
+    requestAnimationFrame(() => button.classList.add("is-wrong"));
+    themeGameFeedback.textContent = step.hint;
+    return;
+  }
+  themeGameResolved = true;
+  themeGameChoices.querySelectorAll("button").forEach((item) => {
+    item.disabled = true;
+    item.classList.toggle("is-correct", item === button);
+  });
+  themeGameFeedback.textContent = step.observation;
+  themeGameNext.hidden = false;
+}
+
+function openThemeGame() {
+  const gameplay = currentThemeGameplay();
+  if (!gameplay) return;
+  const progress = readThemeProgress(activeThemePack.manifest.pack_id, gameplay.steps.length);
+  themeGameStep = progress.step;
+  themeGameCompleted = progress.completed;
+  renderThemeGame();
+  themeGame.showModal();
+}
+
+function advanceThemeGame() {
+  const gameplay = currentThemeGameplay();
+  if (!gameplay) return;
+  if (themeGameCompleted) {
+    clearThemeProgress(activeThemePack.manifest.pack_id);
+    themeGameStep = 0;
+    themeGameCompleted = false;
+    renderThemeGame();
+    return;
+  }
+  if (!themeGameResolved) return;
+  if (themeGameStep >= gameplay.steps.length - 1) {
+    themeGameCompleted = true;
+    writeThemeProgress(activeThemePack.manifest.pack_id, { step: themeGameStep, completed: true });
+  } else {
+    themeGameStep += 1;
+    writeThemeProgress(activeThemePack.manifest.pack_id, { step: themeGameStep, completed: false });
+  }
+  renderThemeGame();
 }
 
 function openAsk() {
@@ -381,15 +746,16 @@ async function sendQuestion(raw) {
 
   if (scientistAgentApiRoot) {
     try {
-      const response = await fetch(`${scientistAgentApiRoot}/api/scientists/${scientistId}/chat`, {
+      const response = await fetch(`${scientistAgentApiRoot}/scientists/${scientistId}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
       });
       if (!response.ok) throw new Error(`agent ${response.status}`);
       const payload = await response.json();
-      appendMessage("figure", payload.answer, scientistId);
-      setStatus(scientistId, payload.source === "archive" ? "" : "");
+      const label = payload.source === "qwen" ? "【AI 生成 · 依据本站科学档案】\n" : "";
+      appendMessage("figure", `${label}${payload.answer}`, scientistId);
+      setStatus(scientistId, payload.source === "qwen" ? "这条回答由 AI 生成，请结合馆藏来源理解。" : "");
       return;
     } catch {
       setStatus(scientistId, "模型通信暂时接不上，先用档案回答。");
@@ -554,6 +920,61 @@ portal.addEventListener("click", (event) => {
   if (event.target === portal) closePortal();
 });
 
+themeDeveloperTools.hidden = !new URLSearchParams(location.search).has("dev");
+themePackImport?.addEventListener("click", () => themePackInput.click());
+themePackInput.addEventListener("change", async () => {
+  if (!themePackInput.files?.length) return;
+  setThemePackStatus("正在检查主题包文件、尺寸和指纹……", "pending");
+  try {
+    const result = await validateThemePackFiles(themePackInput.files);
+    if (!result.ok) throw new Error(result.errors.slice(0, 3).join("；"));
+    if (!FIGURES.some((figure) => figure.id === result.manifest.target_scientist_id)) {
+      throw new Error(`展厅中不存在人物：${result.manifest.target_scientist_id}`);
+    }
+    const record = await saveThemePack(result);
+    activateThemePackRecord(record);
+  } catch (error) {
+    setThemePackStatus(`导入失败：${error.message}。已保留当前页面和原主题。`, "error");
+  } finally {
+    themePackInput.value = "";
+  }
+});
+themePackReset.addEventListener("click", restoreDefaultTheme);
+gameModuleImport.addEventListener("click", () => gameModuleInput.click());
+gameModuleInput.addEventListener("change", async () => {
+  if (!gameModuleInput.files?.length) return;
+  try {
+    const files = await filesFromZip(gameModuleInput.files[0]);
+    await importGameModule(files);
+  } catch (error) {
+    setGameModuleProgress("读取", error.message, "error");
+    setGameModuleStatus(`导入失败：${error.message}。已保留当前展厅。`, "error");
+  } finally {
+    gameModuleInput.value = "";
+  }
+});
+gameModuleFolderImport.addEventListener("click", () => gameModuleFolderInput.click());
+gameModuleFolderInput.addEventListener("change", async () => {
+  if (!gameModuleFolderInput.files?.length) return;
+  try { await importGameModule(gameModuleFolderInput.files); }
+  catch (error) { setGameModuleStatus(`文件夹导入失败：${error.message}。`, "error"); }
+  finally { gameModuleFolderInput.value = ""; }
+});
+themeGameClose.addEventListener("click", () => themeGame.close());
+themeGameNext.addEventListener("click", advanceThemeGame);
+themeGame.addEventListener("click", (event) => {
+  if (event.target === themeGame) themeGame.close();
+});
+function closeModuleGame() {
+  if (moduleGame.open) moduleGame.close();
+  moduleGameFrame.srcdoc = "";
+  releaseActiveGameUrls();
+}
+moduleGameLeave.addEventListener("click", closeModuleGame);
+moduleGame.addEventListener("click", (event) => {
+  if (event.target === moduleGame) closeModuleGame();
+});
+
 askChip.addEventListener("click", () => {
   if (askPanel.hidden) openAsk();
   else closeAsk();
@@ -580,4 +1001,13 @@ applyTheme(preferredTheme(), false);
 
 renderFan();
 updateCopy();
-ensureArchive();
+loadPublishedModules();
+ensureArchive().finally(async () => {
+  try {
+    const savedTheme = await loadActiveThemePack();
+    if (savedTheme) activateThemePackRecord(savedTheme);
+  } catch {
+    deactivateThemePack();
+    setThemePackStatus("上次主题包无法读取，已安全回到默认展厅。", "error");
+  }
+});

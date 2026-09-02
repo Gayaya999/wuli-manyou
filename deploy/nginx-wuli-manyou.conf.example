@@ -1,0 +1,50 @@
+limit_req_zone $binary_remote_addr zone=wuli_api:10m rate=10r/m;
+
+server {
+    listen 80;
+    server_name example.com www.example.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name example.com www.example.com;
+
+    ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+    root /srv/wuli-manyou;
+    index index.html;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    add_header X-Content-Type-Options nosniff always;
+    add_header Referrer-Policy same-origin always;
+    add_header Permissions-Policy "camera=(), geolocation=(), payment=(), usb=()" always;
+    add_header Cross-Origin-Opener-Policy same-origin always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; font-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' blob:; connect-src 'self'; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'" always;
+
+    location /api/ {
+        limit_req zone=wuli_api burst=5 nodelay;
+        proxy_pass http://127.0.0.1:8787/api/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Request-ID $request_id;
+        proxy_read_timeout 25s;
+        proxy_connect_timeout 3s;
+        client_max_body_size 16k;
+    }
+
+    location /published-modules/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=3600";
+    }
+
+    location ~* \.(?:png|jpg|jpeg|webp|woff2|ttf|wav|mp3|ogg)$ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
