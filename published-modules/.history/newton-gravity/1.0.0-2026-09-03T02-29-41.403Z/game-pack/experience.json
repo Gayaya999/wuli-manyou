@@ -1,0 +1,84 @@
+{
+  "experience_id": "newton-gravity-local",
+  "estimated_minutes": "3—5",
+  "progress_segments": 7,
+  "stages": [
+    {
+      "stage_id": "opening",
+      "title": "一颗苹果，一个大问题",
+      "prompt": "苹果为什么落向地面？拉住它的力，会不会也拉住月亮？",
+      "progress_index": 1,
+      "interaction": {"primitive": "dialogue", "config": {"button": "从苹果开始"}},
+      "learning": {"observation": "先从苹果开始观察，不急着背结论。", "core": "先观察，再用实验追问同一种力能影响多远。", "deeper": "牛顿比较了地面附近物体的下落与月球的向心加速度，把它们放进同一套引力问题中。", "fact_ids": ["H3", "F1"]},
+      "hints": [],
+      "feedback": {"initial": "点击开始第一项实验。", "success": "带着问题去看苹果怎样运动。", "retry": "", "success_sound": "click", "failure_sound": "failure"},
+      "visual_cue": "opening"
+    },
+    {
+      "stage_id": "apple-fall",
+      "title": "释放苹果",
+      "prompt": "从10米高处释放苹果，观察引力怎样改变它的运动。",
+      "progress_index": 2,
+      "interaction": {"primitive": "release-object", "config": {"button": "释放苹果", "model_id": "fall-time", "inputs": {"height": 10, "gravity": 9.81}, "result_format": "理想模型下约 {fall_time:2} 秒落地"}},
+      "learning": {"observation": "先释放苹果，看它是不是匀速向下。", "core": "忽略空气阻力时，引力让苹果持续向下加速。", "deeper": "均匀重力近似下，落下时间 t=√(2h/g)；这里的g取9.81米每二次方秒。", "fact_ids": ["F6", "F7", "M1"]},
+      "hints": ["点击释放，再观察苹果的位置变化。"],
+      "feedback": {"initial": "苹果还在树枝上。", "success": "苹果的落地时间来自公式计算，不是预录动画。", "retry": "", "success_sound": "landing", "failure_sound": "failure"},
+      "visual_cue": "apple-fall"
+    },
+    {
+      "stage_id": "distance-lab",
+      "title": "距离怎样改变引力",
+      "prompt": "把中心距离从4调到两倍，观察引力还剩多少。",
+      "progress_index": 3,
+      "interaction": {"primitive": "slider-model", "config": {"model_id": "distance-force-ratio", "input_id": "distance", "fixed_inputs": {"base_distance": 4}, "label": "中心距离", "min": 2, "max": 8, "step": 1, "initial": 4, "target_value": 8, "button": "检查结果", "result_format": "相对引力 {force_ratio:2}"}},
+      "learning": {"observation": "拖动中心距离，先看连线和数值怎样变化。", "core": "距离加倍，引力变成原来的约四分之一。", "deeper": "万有引力与中心距离的平方成反比：F∝1/r²。", "fact_ids": ["F2", "M2"]},
+      "hints": ["两倍就是把4调到8。", "距离指中心到中心。", "距离变成2倍，平方会变成4倍。"],
+      "feedback": {"initial": "拖动滑杆，连线会随距离改变。", "success": "距离加倍，引力变成原来的四分之一。", "retry": "还没到初始距离的两倍。", "success_sound": "success", "failure_sound": "failure"},
+      "visual_cue": "distance-lab"
+    },
+    {
+      "stage_id": "mass-lab",
+      "title": "质量怎样改变引力",
+      "prompt": "距离不变，只改一个物体的质量，让引力变成两倍。",
+      "progress_index": 4,
+      "interaction": {"primitive": "choice-model", "config": {"model_id": "mass-force-ratio", "input_id": "mass_multiplier", "target_value": 2, "result_format": "相对引力 {force_ratio:1} 倍", "options": [{"label": "质量 × 0.5", "value": 0.5}, {"label": "质量 × 1.0", "value": 1}, {"label": "质量 × 2.0", "value": 2}]}},
+      "learning": {"observation": "只改变右侧质量，比较球体和引力连线的反馈。", "core": "其他条件不变，一个物体质量加倍，引力也加倍。", "deeper": "F=Gm₁m₂/r²；保持r和另一个质量不变时，F与被改变的质量成正比。", "fact_ids": ["F3", "M2"]},
+      "hints": ["这次距离不变。", "只改变一个物体。", "要让结果变成两倍，试着把质量也变成两倍。"],
+      "feedback": {"initial": "选择质量倍率，再看引力结果。", "success": "一个物体质量加倍，引力也加倍。", "retry": "结果还不是两倍，再比较一次。", "success_sound": "success", "failure_sound": "failure"},
+      "visual_cue": "mass-lab"
+    },
+    {
+      "stage_id": "newton-cannon",
+      "title": "让下落一直错过地面",
+      "prompt": "选择横向速度，让炮弹不撞地、也不逃走，而是绕行。",
+      "progress_index": 5,
+      "interaction": {"primitive": "orbit-launch", "config": {"mu": 1, "body_radius": 1, "start_radius": 2, "stable_min_radius_ratio": 1.1, "stable_radius_ratio": 1.2, "escape_radius": 6, "time_limit": 40, "expected_outcome": "stable_orbit", "options": [{"label": "速度 0.15", "speed": 0.15}, {"label": "速度 0.71", "speed": 0.70710678}, {"label": "速度 1.20", "speed": 1.2}]}},
+      "learning": {"observation": "先发射并比较轨迹：撞击、绕行还是逃逸？", "core": "轨道不是没有引力，而是物体一直下落又一直错过地面。", "deeper": "理想圆轨道速度为√(μ/r)，逃逸速度为√(2μ/r)。", "fact_ids": ["F4", "F5", "M3"]},
+      "hints": ["低速时，炮弹来不及错过地面。", "轨道上仍然有引力。", "比较三个速度造成的轨迹。"],
+      "feedback": {"initial": "每次发射都会现场计算轨迹。", "success": "炮弹持续下落，却一直错过弯曲的地面。", "retry": "这个速度会坠落或逃逸，观察轨迹再试。", "success_sound": "success", "failure_sound": "failure"},
+      "visual_cue": "newton-cannon"
+    },
+    {
+      "stage_id": "strange-planet",
+      "title": "陌生星球挑战",
+      "prompt": "星球参数变了。别照抄上一关数字，找出这里能稳定绕行的速度。",
+      "progress_index": 6,
+      "interaction": {"primitive": "orbit-launch", "config": {"mu": 1.6, "body_radius": 1.2, "start_radius": 2.4, "stable_min_radius_ratio": 1.083, "stable_radius_ratio": 1.2, "escape_radius": 7.2, "time_limit": 40, "expected_outcome": "stable_orbit", "options": [{"label": "方案 A：0.40", "speed": 0.4}, {"label": "方案 B：1.25", "speed": 1.25}, {"label": "方案 C：0.82", "speed": 0.81649658}]}},
+      "learning": {"observation": "参数换了，先比较三次发射的轨迹，不要照抄上一关位置。", "core": "同一条规律能迁移到参数不同的新星球。", "deeper": "这里μ/r改变，所以圆轨道速度不再是上一关的0.71。", "fact_ids": ["F5", "M3"]},
+      "hints": ["上一关的数字不能直接照搬。", "过低会撞击，过高会逃逸。", "比较三条现场计算的轨迹。"],
+      "feedback": {"initial": "用规律判断，而不是记按钮位置。", "success": "你把规律迁移到了陌生星球。", "retry": "这个方案没有稳定绕行，再看轨迹。", "success_sound": "success", "failure_sound": "failure"},
+      "visual_cue": "strange-planet"
+    },
+    {
+      "stage_id": "summary",
+      "title": "今天带走三件事",
+      "prompt": "把实验结果连成一条完整的科学解释。",
+      "progress_index": 7,
+      "interaction": {"primitive": "summary", "config": {"points": ["有质量的物体会互相吸引。", "质量越大引力越强；距离加倍，引力约为四分之一。", "轨道是持续下落，并不断错过地面。"], "button": "再玩一次"}},
+      "learning": {"observation": "回看三条结论，再打开模型边界了解它不能解释什么。", "core": "这是忽略空气阻力等现实细节的理想模型。", "deeper": "模型边界：苹果采用均匀重力并忽略空气；天体按质点或球对称处理；轨道只算两个物体并使用固定数值步长。真实航天还要考虑大气、其他天体、非球形引力场与误差，本游戏不能用于任务设计。", "fact_ids": ["F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3"]},
+      "hints": [],
+      "feedback": {"initial": "", "success": "实验完成。", "retry": "", "success_sound": "success", "failure_sound": "failure"},
+      "visual_cue": "summary"
+    }
+  ]
+}

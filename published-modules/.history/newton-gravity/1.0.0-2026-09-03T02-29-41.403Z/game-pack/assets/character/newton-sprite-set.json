@@ -1,0 +1,21 @@
+{
+  "cell_size": [128, 128],
+  "atlas_size": [768, 768],
+  "atlas_grid": [6, 6],
+  "pivot": [64, 112],
+  "frame_total": 28,
+  "portrait_sources": {
+    "neutral": {"row": 0, "frame": 0, "crop": [30, 20, 98, 88]},
+    "thinking": {"row": 3, "frame": 2, "crop": [30, 20, 98, 88]},
+    "surprised": {"row": 4, "frame": 2, "crop": [30, 20, 98, 88]},
+    "celebrating": {"row": 5, "frame": 3, "crop": [30, 20, 98, 88]}
+  },
+  "animations": {
+    "idle": {"row": 0, "frames": 4, "fps": 6, "loop": true, "kind": "common"},
+    "talk": {"row": 1, "frames": 4, "fps": 8, "loop": true, "kind": "common"},
+    "observe": {"row": 2, "frames": 6, "fps": 10, "loop": true, "kind": "discovery-specific"},
+    "think": {"row": 3, "frames": 4, "fps": 6, "loop": true, "kind": "common"},
+    "recoil": {"row": 4, "frames": 4, "fps": 8, "loop": true, "kind": "discovery-specific"},
+    "celebrate": {"row": 5, "frames": 6, "fps": 10, "loop": true, "kind": "common"}
+  }
+}

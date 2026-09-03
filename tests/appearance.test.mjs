@@ -24,7 +24,7 @@ test("alt scientist conversations are isolated per figure", () => {
   assert.match(script, /function conversationFor\(/);
   assert.match(script, /function renderAskLog\(/);
   assert.match(script, /const scientistId = currentId/);
-  assert.match(script, /\/api\/scientists\/\$\{scientistId\}\/chat/);
+  assert.match(script, /\$\{scientistAgentApiRoot\}\/scientists\/\$\{scientistId\}\/chat/);
 });
 
 test("alt scientist chat posts to the local agent and never embeds secrets", () => {

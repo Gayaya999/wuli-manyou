@@ -1,8 +1,12 @@
 {
-  "schema_version": "wuli-published-modules-1",
+  "schema_version": "wuli-published-modules-2",
   "modules": [
     {
       "module_id": "newton-gravity",
+      "version": "2.0.0",
+      "title": "牛顿与万有引力",
+      "scientist_name": "艾萨克·牛顿",
+      "disk_path": "assets/disk.png",
       "files": [
         "assets/disk.png",
         "assets/guide.png",

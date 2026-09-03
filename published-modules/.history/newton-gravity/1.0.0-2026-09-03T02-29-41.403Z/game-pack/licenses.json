@@ -1,0 +1,10 @@
+{
+  "schema_version": "2.0.0",
+  "licenses": [
+    {"license_id": "project-generated-v1", "license_type": "custom", "holder": "像素科学剧场项目", "basis": "项目委托的ImageGen生成图与确定性像素处理、项目原创波形音效", "evidence_path": "assets/licenses/project-generated-provenance.txt", "adaptation_allowed": true, "local_distribution_allowed": true, "public_release_allowed": true, "conditions": "受适用的OpenAI条款与当地法律约束"},
+    {"license_id": "ofl-1.1-fusion", "license_type": "spdx", "spdx_id": "OFL-1.1", "holder": "TakWolf and Fusion Pixel Font contributors", "basis": "SIL Open Font License 1.1", "evidence_path": "assets/fonts/OFL-FusionPixelFont.txt", "adaptation_allowed": true, "local_distribution_allowed": true, "public_release_allowed": true, "conditions": "随字体保留OFL许可、版权信息与保留字体名称要求"},
+    {"license_id": "ofl-1.1-noto", "license_type": "spdx", "spdx_id": "OFL-1.1", "holder": "Adobe and Noto Sans SC contributors", "basis": "SIL Open Font License 1.1", "evidence_path": "assets/fonts/OFL-NotoSansSC.txt", "adaptation_allowed": true, "local_distribution_allowed": true, "public_release_allowed": true, "conditions": "随字体保留OFL许可、版权信息与保留字体名称Source"}
+  ],
+  "provenance_policy": "每个素材都必须在manifest中登记工具、用途、许可、文件指纹；批准后冻结指纹。",
+  "approval_state": "VISUAL_UX_APPROVED_AND_FINAL_ASSETS_APPROVED_FROM_M5_5_BASELINE"
+}

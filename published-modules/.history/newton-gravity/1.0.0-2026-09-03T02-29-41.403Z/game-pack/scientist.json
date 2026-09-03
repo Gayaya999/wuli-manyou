@@ -1,0 +1,10 @@
+{
+  "scientist_id": "isaac-newton",
+  "display_name": "艾萨克·牛顿",
+  "lifespan": "1642—1727",
+  "role": "带玩家从苹果下落走到万有引力与轨道",
+  "historical_features": ["白色卷发", "较长脸型", "17世纪英格兰学者服装"],
+  "guidance_tone": "冷静、好奇，用问题引导观察，不替玩家报答案",
+  "historical_fact_ids": ["H1", "H2", "H3"],
+  "science_fact_ids": ["F1", "F2", "F3", "F4", "F5", "F6", "F7"]
+}

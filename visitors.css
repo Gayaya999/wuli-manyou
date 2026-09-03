@@ -57,6 +57,22 @@
   cursor: zoom-in;
 }
 
+@media (hover: hover) {
+  .slot:hover {
+    transform: translateY(calc(var(--nudge, 0px) - 12px)) rotate(0deg) scale(1.05);
+    z-index: 1;
+  }
+  .slot:hover img {
+    filter: drop-shadow(0 22px 18px oklch(0 0 0 / 0.5));
+  }
+}
+
+.slot:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
 .slot.is-arriving {
   animation: slotDrop 520ms var(--ease);
 }

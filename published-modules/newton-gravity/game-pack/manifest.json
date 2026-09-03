@@ -12,11 +12,36 @@
       128,
       128
     ],
-    "sprite_frames": 28,
+    "sprite_frames": 26,
     "portrait_size": [
       160,
       160
-    ]
+    ],
+    "brand_profile": "pixel-science-theater-v2",
+    "atlas_grid": [
+      6,
+      6
+    ],
+    "logical_background_size": [
+      480,
+      270
+    ],
+    "character_palette_max": 20,
+    "environment_palette_max": 48,
+    "prop_palette_max": 12,
+    "sprite_alpha": "binary",
+    "sprite_character_height": [
+      80,
+      90
+    ],
+    "sprite_pivot_tolerance": 1,
+    "sprite_palette_max": 20,
+    "background_logical_size": [
+      480,
+      270
+    ],
+    "background_palette_max": 48,
+    "binary_sprite_alpha": true
   },
   "files": {
     "scientist": "scientist.json",
@@ -41,7 +66,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + approved M5 atlas + deterministic 128px cell padding",
-      "sha256": "ef69e0db2d07b3f778b5d39e5d4c37242a0049973e007b60a85f1d38b3453ec7"
+      "sha256": "48ea862c30f00a3e5b4de366725b69f24bf69b28eb83e878d5fa1a9dd610ce57"
     },
     {
       "asset_id": "newton-sprite-metadata",
@@ -49,7 +74,7 @@
       "media_type": "application/json",
       "license_id": "project-generated-v1",
       "source": "project-authored metadata",
-      "sha256": "dc81b6bf89ae97b27a2251200f84fe1c5efa71c1ff094a3b4136938ea328bfce"
+      "sha256": "e9616a851dd545471d5ed2d95ce5ef3cbf0dc371717d6a74d9a9be5b09459b9d"
     },
     {
       "asset_id": "portrait-neutral",
@@ -114,7 +139,7 @@
       "requires_alpha": false,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "2f773633bdc6c9e32e1aca73696238405d4380b5df90dbf91ab74c4a291671f4"
+      "sha256": "f0d777a6327279176a56e1ef673e5d669fcbb7994626029405098570b382dbd5"
     },
     {
       "asset_id": "gravity-lab",
@@ -127,7 +152,7 @@
       "requires_alpha": false,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "93f039f16d52c9d2c1c845bf70a7973fd34198876f8df98ba3cb6699ed98c27f"
+      "sha256": "e8e74f47835286ef486a294229ab3acc614577276ca536f722159edede1703de"
     },
     {
       "asset_id": "orbit-observatory",
@@ -140,7 +165,7 @@
       "requires_alpha": false,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "83e3267b456cc32d5f233737daa8029777098a2fd9f87089917d05ad419375c6"
+      "sha256": "e2445214d567952c231b8573f5a43de78974abecfdb895349aa1406cae72af0b"
     },
     {
       "asset_id": "apple",
@@ -153,7 +178,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "50ef6bb01890c6651ca0e2e90b22ddeb5c1f82cf21a0cf30b4318b060819eb19"
+      "sha256": "fd90fa81e49a8d44e5c2c9ff8d98d79ba53f92660bb56e4b2c7fa2bca00ae5ae"
     },
     {
       "asset_id": "mass-ball",
@@ -166,7 +191,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "7a82242be277a96f54b35a9c40110c86e7f486065258da906d0e31156c471b35"
+      "sha256": "42fa4072e0d3f1d9e14b06eb09466d0cfcd306f2226e0a741894d60c9cb152c2"
     },
     {
       "asset_id": "cannon",
@@ -179,7 +204,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "d547d002e16bb0d1c5f85d2a75c647343a03159e72895f434ff724bc6df08a5c"
+      "sha256": "554177f7e14efc51ac27aba080cc9e5aa806fdf60a8a6888e0ddfb272d2489ef"
     },
     {
       "asset_id": "projectile",
@@ -192,7 +217,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "3cbb67c00a6fd7ec4f448ac9d64d1d1fd2ae7baad7c2866c9a7aae865d110445"
+      "sha256": "f4905748deb0d2ba8f19f157965657499dd52c552d983ac210c3ac3657213f84"
     },
     {
       "asset_id": "central-body",
@@ -205,7 +230,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "b68285118ff88b2442a8b768962f006732c1476a315f0216145bffde647a8a84"
+      "sha256": "03a41e38332c7915c8db9a7541a3959827e7aff4a124ecf4ed4a3affede17e51"
     },
     {
       "asset_id": "strange-planet",
@@ -218,7 +243,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "58b7cd50a34fb6f40b815a38c5aeb0af1ca53ec4df3021ab08b3a1444df4be75"
+      "sha256": "b5370877a3ead570ec1ac51fe1b5dcf622d61ffbe0e836b4dc80eb615f8a6089"
     },
     {
       "asset_id": "manuscript-decoration",
@@ -231,7 +256,7 @@
       "requires_alpha": true,
       "license_id": "project-generated-v1",
       "source": "OpenAI ImageGen + deterministic project processing",
-      "sha256": "2fbb6a87286c38496248395a8a46b4e2bcdd552700aa98f4534de0a7a2d32d69"
+      "sha256": "de3f86ca71fe5966654435f356f1154643467b9a23dff6d20ee2157c0943f189"
     },
     {
       "asset_id": "sound-click",

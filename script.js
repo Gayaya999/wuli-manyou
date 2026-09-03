@@ -413,6 +413,15 @@ async function moduleBundle(entries) {
   return bundle;
 }
 
+async function fileToDataUrl(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  let binary = "";
+  for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
+  }
+  return `data:${file.type || "application/octet-stream"};base64,${btoa(binary)}`;
+}
+
 function releaseActiveGameUrls() {
   activeGameUrls.forEach((url) => URL.revokeObjectURL(url));
   activeGameUrls = [];
@@ -448,16 +457,29 @@ async function openGameModule(record) {
       moduleBundle(record.entries),
     ]);
     const assetUrls = {};
-    for (const asset of bundle.manifest.assets || []) assetUrls[asset.asset_id] = URL.createObjectURL(record.entries.get(`game-pack/${asset.path}`));
-    activeGameUrls.push(...Object.values(assetUrls));
+    for (const asset of bundle.manifest.assets || []) {
+      const fontAsset = String(asset.media_type || "").startsWith("font/");
+      assetUrls[asset.asset_id] = record.published && !fontAsset
+        ? `${record.baseUrl}/game-pack/${asset.path}`
+        : await fileToDataUrl(record.entries.get(`game-pack/${asset.path}`));
+    }
     const runtime = runtimeTemplate
       .replace("__PACK_BUNDLE__", safeJson(bundle))
       .replace("return `./pack/${record.path}`;", "return window.__WULI_PACK_ASSETS__[assetId];");
     if (runtime.includes("__PACK_BUNDLE__")) throw new Error("网站运行器未正确装配");
-    moduleGameFrame.srcdoc = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head><body><main class="page" id="app"><section class="game-viewport" id="game-viewport"><section class="game-shell" id="game-shell" aria-label="科普游戏"><canvas id="stage-canvas" width="960" height="540" aria-hidden="true"></canvas><header class="hud"><span class="brand" id="brand">像素科学剧场</span><div class="progress" id="progress"></div><button class="quiet-button" id="settings-button" type="button">设置</button></header><section class="stage-copy" id="stage-copy" hidden><span class="stage-count" id="stage-count"></span><h1 id="stage-title"></h1><p id="stage-prompt"></p><div class="journey-steps" id="journey-steps" hidden></div></section><section class="control-deck" id="control-deck" hidden><div class="control-main" id="control-main"></div><div class="feedback-row" id="feedback-row"><img class="scientist-portrait" id="scientist-portrait" alt="人物当前表情" hidden><div class="feedback-copy" aria-live="polite"><span id="result-label"></span><span id="feedback-label"></span></div><div class="secondary-actions"><button class="quiet-button" id="hint-button" type="button">提示 0/0</button><button class="quiet-button deeper-button" id="deeper-button" type="button" hidden>深入一步</button><button class="primary-button compact" id="continue-button" type="button" disabled>继续</button></div></div></section><section class="start-card" id="start-card"><span class="eyebrow">3—5分钟 · 一次一个科学发现</span><h1 id="start-title"></h1><p id="start-description"></p><button class="primary-button" id="start-button" type="button" disabled>正在准备素材…</button></section><aside class="modal-card" id="modal-card" role="dialog" aria-modal="true" hidden><span class="eyebrow" id="modal-eyebrow"></span><h2 id="modal-title"></h2><div id="modal-body"></div><button class="primary-button compact" id="modal-close" type="button">完成</button></aside><footer class="subtitle" id="subtitle"></footer><div class="rotate-notice" role="status"><strong>请把平板横过来</strong><span>横屏能完整看到实验舞台</span></div><div class="fatal-error" id="fatal-error" hidden><h1>内容加载失败</h1><p id="fatal-message"></p></div></section></section><p class="browser-note">物理漫游安全运行器</p></main><script>window.__WULI_PACK_ASSETS__=${safeJson(assetUrls)};<\/script><script>${runtime}<\/script></body></html>`;
+    let framedHtml = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${css}</style></head><body><main class="page" id="app"><section class="game-viewport" id="game-viewport"><section class="game-shell" id="game-shell" aria-label="科普游戏"><canvas id="stage-canvas" width="960" height="540" aria-hidden="true"></canvas><header class="hud"><span class="brand" id="brand">像素科学剧场</span><div class="progress" id="progress"></div><button class="quiet-button" id="settings-button" type="button">设置</button></header><section class="stage-copy" id="stage-copy" hidden><span class="stage-count" id="stage-count"></span><h1 id="stage-title"></h1><p id="stage-prompt"></p><div class="journey-steps" id="journey-steps" hidden></div></section><section class="control-deck" id="control-deck" hidden><div class="control-main" id="control-main"></div><div class="feedback-row" id="feedback-row"><img class="scientist-portrait" id="scientist-portrait" alt="人物当前表情" hidden><div class="feedback-copy" aria-live="polite"><span id="result-label"></span><span id="feedback-label"></span></div><div class="secondary-actions"><button class="quiet-button" id="hint-button" type="button">提示 0/0</button><button class="quiet-button deeper-button" id="deeper-button" type="button" hidden>深入一步</button><button class="primary-button compact" id="continue-button" type="button" disabled>继续</button></div></div></section><section class="start-card" id="start-card"><span class="eyebrow">3—5分钟 · 一次一个科学发现</span><h1 id="start-title"></h1><p id="start-description"></p><button class="primary-button" id="start-button" type="button" disabled>正在准备素材…</button></section><aside class="modal-card" id="modal-card" role="dialog" aria-modal="true" hidden><span class="eyebrow" id="modal-eyebrow"></span><h2 id="modal-title"></h2><div id="modal-body"></div><button class="primary-button compact" id="modal-close" type="button">完成</button></aside><footer class="subtitle" id="subtitle"></footer><div class="rotate-notice" role="status"><strong>请把平板横过来</strong><span>横屏能完整看到实验舞台</span></div><div class="fatal-error" id="fatal-error" hidden><h1>内容加载失败</h1><p id="fatal-message"></p></div></section></section><p class="browser-note">物理漫游安全运行器</p></main><script>window.__WULI_PACK_ASSETS__=${safeJson(assetUrls)};<\/script><script>${runtime}<\/script></body></html>`;
+    framedHtml = framedHtml.replace("<body>", "<body><script>parent.postMessage(\"wuli-game-boot\",\"*\")<\/script>");
     moduleGame.classList.add("is-entering");
     moduleGame.showModal();
     requestAnimationFrame(() => moduleGame.classList.remove("is-entering"));
+    let gameBooted = false;
+    const onGameBoot = (event) => { if (event.data === "wuli-game-boot") gameBooted = true; };
+    window.addEventListener("message", onGameBoot);
+    moduleGameFrame.srcdoc = framedHtml;
+    window.setTimeout(() => {
+      if (!gameBooted) moduleGameFrame.srcdoc = framedHtml;
+      window.setTimeout(() => window.removeEventListener("message", onGameBoot), 6000);
+    }, 3500);
     setGameModuleStatus(`已导入：${record.manifest.presentation.title}。软盘已加入滑块。`, "success");
   } catch (error) {
     setGameModuleStatus(`小游戏未能启动：${error.message}`, "error");

@@ -1,0 +1,30 @@
+{
+  "checked_on": "2026-08-26",
+  "sources": [
+    {"source_id": "S1", "title": "OpenStax Astronomy 2e 3.3: Newton's Universal Law of Gravitation", "publisher": "OpenStax", "source_type": "open-textbook", "accessed_date": "2026-08-26", "url": "https://openstax.org/books/astronomy-2e/pages/3-3-newtons-universal-law-of-gravitation", "supports": ["任何两个有质量的物体相互吸引", "万有引力公式", "质量与距离关系"]},
+    {"source_id": "S2", "title": "NASA Space Place: What Is an Orbit?", "publisher": "NASA", "source_type": "official-education", "accessed_date": "2026-08-26", "url": "https://spaceplace.nasa.gov/orbits/en/", "supports": ["轨道是持续自由下落"]},
+    {"source_id": "S3", "title": "NASA Basics of Space Flight: Gravity and Mechanics", "publisher": "NASA", "source_type": "official-education", "accessed_date": "2026-08-26", "url": "https://science.nasa.gov/learn/basics-of-space-flight/chapter3-2/", "supports": ["反平方关系", "牛顿力学背景"]},
+    {"source_id": "S4", "title": "OpenStax University Physics 13.3", "publisher": "OpenStax", "source_type": "open-textbook", "accessed_date": "2026-08-26", "url": "https://openstax.org/books/university-physics-volume-1/pages/13-3-gravitational-potential-energy-and-total-energy", "supports": ["逃逸速度公式"]},
+    {"source_id": "S5", "title": "OpenStax University Physics 13.4", "publisher": "OpenStax", "source_type": "open-textbook", "accessed_date": "2026-08-26", "url": "https://openstax.org/books/university-physics-volume-1/pages/13-4-satellite-orbits-and-energy", "supports": ["圆轨道速度公式"]},
+    {"source_id": "S6", "title": "NIST 2022 CODATA recommended values", "publisher": "NIST", "source_type": "official-constants", "accessed_date": "2026-08-26", "url": "https://physics.nist.gov/cuu/pdf/all.pdf", "supports": ["万有引力常数"]},
+    {"source_id": "S7", "title": "OpenStax University Physics 3.5: Free Fall", "publisher": "OpenStax", "source_type": "open-textbook", "accessed_date": "2026-08-27", "url": "https://openstax.org/books/university-physics-volume-1/pages/3-5-free-fall", "supports": ["自由落体位移公式", "忽略空气阻力的近地自由落体"]},
+    {"source_id": "S8", "title": "NIST Guide to the SI: standard acceleration of free fall", "publisher": "NIST", "source_type": "official-standard", "accessed_date": "2026-08-27", "url": "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8", "supports": ["标准重力加速度9.80665米每二次方秒"]},
+    {"source_id": "S9", "title": "Portrait of Isaac Newton, 1725-1726", "publisher": "The Royal Society", "source_type": "museum-collection", "accessed_date": "2026-08-27", "url": "https://pictures.royalsociety.org/image-rs-9253", "supports": ["牛顿生卒年", "晚年肖像中的卷发、外套、白色领巾和袖口"]},
+    {"source_id": "S10", "title": "OpenStax University Physics 13.1: Newton's Law of Universal Gravitation", "publisher": "OpenStax", "source_type": "open-textbook", "accessed_date": "2026-08-27", "url": "https://openstax.org/books/university-physics-volume-1/pages/13-1-newtons-law-of-universal-gravitation", "supports": ["质点和球对称近似", "中心到中心距离"]}
+  ],
+  "claims": [
+    {"claim_id": "F1", "claim": "任何两个有质量的物体都会相互吸引", "source_ids": ["S1"]},
+    {"claim_id": "F2", "claim": "距离加倍，引力变成约四分之一", "source_ids": ["S1", "S3"]},
+    {"claim_id": "F3", "claim": "一个物体质量加倍，引力也加倍", "source_ids": ["S1"]},
+    {"claim_id": "F4", "claim": "轨道是持续下落并不断错过地面", "source_ids": ["S2"]},
+    {"claim_id": "F5", "claim": "圆轨道速度为√(μ/r)，逃逸速度为√(2μ/r)", "source_ids": ["S4", "S5"]},
+    {"claim_id": "F6", "claim": "从静止开始的均匀自由落体满足h=gt²/2，因此t=√(2h/g)", "source_ids": ["S7"]},
+    {"claim_id": "F7", "claim": "游戏取g=9.81米每二次方秒，接近标准值9.80665", "source_ids": ["S8"]},
+    {"claim_id": "H1", "claim": "英国皇家学会馆藏页将艾萨克·牛顿的生卒年记为1642—1727，并记载其曾任学会主席", "source_ids": ["S9"]},
+    {"claim_id": "H2", "claim": "牛顿晚年肖像可见卷发、深色外套、白色领巾和袖口", "source_ids": ["S9"]},
+    {"claim_id": "H3", "claim": "牛顿比较了地面附近物体的重力加速度与月球的向心加速度，用反平方关系解释二者", "source_ids": ["S10"]},
+    {"claim_id": "M1", "claim": "苹果关使用近地均匀重力并忽略空气阻力", "source_ids": ["S7"]},
+    {"claim_id": "M2", "claim": "引力实验使用质点或球对称近似，距离取中心到中心", "source_ids": ["S10"]},
+    {"claim_id": "M3", "claim": "轨道关使用理想二体关系；真实任务还需处理本游戏忽略的环境与数值因素", "source_ids": ["S4", "S5"]}
+  ]
+}

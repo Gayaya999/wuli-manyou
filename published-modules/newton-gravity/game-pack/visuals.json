@@ -1,26 +1,366 @@
 {
   "schema_version": "2.0.0",
   "character": {
-    "atlas_asset": "newton-atlas",
-    "metadata_asset": "newton-atlas",
-    "render_size": 192,
-    "position": [42, 158],
+    "render_role": "stage-guide",
+    "render_height_ratio": 0.4,
+    "render_height_ratio_range": [
+      0.34,
+      0.44
+    ],
+    "secondary_render_height_ratio_range": [
+      0.2,
+      0.28
+    ],
+    "position": [
+      24,
+      100
+    ],
+    "position_mode": "atlas-top-left",
+    "render_size": 320,
+    "think_after_ms": 0,
+    "trigger_priority": [
+      "celebrate",
+      "surprise",
+      "talk",
+      "point",
+      "think",
+      "idle"
+    ],
+    "base_animation_contract": {
+      "cell_size": [
+        128,
+        128
+      ],
+      "atlas_grid": [
+        6,
+        6
+      ],
+      "atlas_size": [
+        768,
+        768
+      ],
+      "pivot": [
+        64,
+        112
+      ],
+      "total_frames": 26,
+      "animations": {
+        "idle": {
+          "row": 0,
+          "frames": 4,
+          "fps": 2,
+          "loop": true,
+          "trigger": "no-higher-priority-event"
+        },
+        "talk": {
+          "row": 1,
+          "frames": 4,
+          "fps": 8,
+          "loop": false,
+          "trigger": "dialogue-or-explanation-open"
+        },
+        "point": {
+          "row": 2,
+          "frames": 4,
+          "fps": 8,
+          "loop": false,
+          "trigger": "hotspot-focused-140ms-or-visible-hint"
+        },
+        "think": {
+          "row": 3,
+          "frames": 4,
+          "fps": 6,
+          "loop": false,
+          "trigger": "explicit-hint-or-wrong-result"
+        },
+        "surprise": {
+          "row": 4,
+          "frames": 4,
+          "fps": 8,
+          "loop": false,
+          "trigger": "first-false-to-true-scientific-activation"
+        },
+        "celebrate": {
+          "row": 5,
+          "frames": 6,
+          "fps": 10,
+          "loop": false,
+          "trigger": "stage-success-unlocks-continuation"
+        }
+      },
+      "non_idle_return": "idle",
+      "waiting_triggers_large_action": false,
+      "unused_cells": "fully-transparent"
+    },
     "portraits": {
       "neutral": "portrait-neutral",
       "thinking": "portrait-thinking",
       "surprised": "portrait-surprised",
       "celebrating": "portrait-celebrating"
+    },
+    "atlas_asset": "newton-atlas",
+    "metadata_asset": "newton-atlas"
+  },
+  "audio_cues": {
+    "click": "sound-click",
+    "adjust": "sound-adjust",
+    "landing": "sound-landing",
+    "success": "sound-success",
+    "failure": "sound-failure"
+  },
+  "cues": {
+    "opening": {
+      "background_layers": [
+        "orbit-observatory"
+      ],
+      "character_animation": "talk",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "telescope-glint",
+        "dust-motes"
+      ],
+      "feedback": {
+        "success_animation": "point",
+        "failure_animation": "surprise"
+      },
+      "render": {
+        "kind": "none"
+      }
+    },
+    "apple-fall": {
+      "background_layers": [
+        "apple-orchard"
+      ],
+      "character_animation": "point",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "branch-sway",
+        "firefly-drift"
+      ],
+      "feedback": {
+        "success_animation": "surprise",
+        "failure_animation": "surprise"
+      },
+      "render": {
+        "kind": "release",
+        "prop_asset": "apple",
+        "x": 694,
+        "start_y": 130,
+        "ground_y": 378,
+        "size": 34,
+        "duration_output": "fall_time"
+      }
+    },
+    "distance-lab": {
+      "background_layers": [
+        "gravity-lab"
+      ],
+      "character_animation": "idle",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "instrument-blink",
+        "dust-motes"
+      ],
+      "feedback": {
+        "success_animation": "celebrate",
+        "failure_animation": "think"
+      },
+      "render": {
+        "kind": "force",
+        "input_id": "distance",
+        "initial": 4,
+        "max": 8,
+        "center_x": 706,
+        "y": 280,
+        "min_separation": 82,
+        "separation_range": 170,
+        "left_asset": "mass-ball",
+        "right_asset": "mass-ball"
+      }
+    },
+    "mass-lab": {
+      "background_layers": [
+        "gravity-lab"
+      ],
+      "character_animation": "think",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "instrument-blink",
+        "dust-motes"
+      ],
+      "feedback": {
+        "success_animation": "celebrate",
+        "failure_animation": "think"
+      },
+      "render": {
+        "kind": "force",
+        "input_id": "mass_multiplier",
+        "initial": 1,
+        "max": 2,
+        "force_from_input": true,
+        "force_reference": 2,
+        "scale_right_from_input": true,
+        "center_x": 706,
+        "y": 280,
+        "min_separation": 175,
+        "separation_range": 0,
+        "left_asset": "mass-ball",
+        "right_asset": "mass-ball"
+      }
+    },
+    "newton-cannon": {
+      "background_layers": [
+        "orbit-observatory"
+      ],
+      "character_animation": "point",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "star-twinkle",
+        "instrument-blink"
+      ],
+      "feedback": {
+        "success_animation": "celebrate",
+        "failure_animation": "surprise"
+      },
+      "render": {
+        "kind": "orbit",
+        "body_asset": "central-body",
+        "cannon_asset": "cannon",
+        "projectile_asset": "projectile",
+        "center": [
+          736,
+          256
+        ],
+        "path_scale": 47
+      }
+    },
+    "strange-planet": {
+      "background_layers": [
+        "orbit-observatory"
+      ],
+      "character_animation": "think",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [],
+      "environment_loops": [
+        "star-twinkle",
+        "instrument-blink"
+      ],
+      "feedback": {
+        "success_animation": "celebrate",
+        "failure_animation": "surprise"
+      },
+      "render": {
+        "kind": "orbit",
+        "body_asset": "strange-planet",
+        "cannon_asset": "cannon",
+        "projectile_asset": "projectile",
+        "center": [
+          736,
+          256
+        ],
+        "path_scale": 47
+      }
+    },
+    "summary": {
+      "background_layers": [
+        "orbit-observatory"
+      ],
+      "character_animation": "celebrate",
+      "character_position": [
+        42,
+        158
+      ],
+      "props": [
+        {
+          "asset": "manuscript-decoration",
+          "x": 708,
+          "y": 250,
+          "width": 126,
+          "height": 84
+        }
+      ],
+      "environment_loops": [
+        "star-twinkle",
+        "dust-motes"
+      ],
+      "feedback": {
+        "success_animation": "celebrate",
+        "failure_animation": "surprise"
+      },
+      "render": {
+        "kind": "none"
+      }
     }
   },
-  "audio_cues": {"click": "sound-click", "adjust": "sound-adjust", "landing": "sound-landing", "success": "sound-success", "failure": "sound-failure"},
-  "cues": {
-    "opening": {"background_layers": ["orbit-observatory"], "character_animation": "talk", "character_position": [42, 158], "props": [], "environment_loops": ["telescope-glint", "dust-motes"], "feedback": {"success_animation": "observe", "failure_animation": "recoil"}, "render": {"kind": "none"}},
-    "apple-fall": {"background_layers": ["apple-orchard"], "character_animation": "observe", "character_position": [42, 158], "props": [], "environment_loops": ["branch-sway", "firefly-drift"], "feedback": {"success_animation": "recoil", "failure_animation": "recoil"}, "render": {"kind": "release", "prop_asset": "apple", "x": 694, "start_y": 130, "ground_y": 378, "size": 34, "duration_output": "fall_time"}},
-    "distance-lab": {"background_layers": ["gravity-lab"], "character_animation": "idle", "character_position": [42, 158], "props": [], "environment_loops": ["instrument-blink", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "think"}, "render": {"kind": "force", "input_id": "distance", "initial": 4, "max": 8, "center_x": 706, "y": 280, "min_separation": 82, "separation_range": 170, "left_asset": "mass-ball", "right_asset": "mass-ball"}},
-    "mass-lab": {"background_layers": ["gravity-lab"], "character_animation": "think", "character_position": [42, 158], "props": [], "environment_loops": ["instrument-blink", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "think"}, "render": {"kind": "force", "input_id": "mass_multiplier", "initial": 1, "max": 2, "force_from_input": true, "force_reference": 2, "scale_right_from_input": true, "center_x": 706, "y": 280, "min_separation": 175, "separation_range": 0, "left_asset": "mass-ball", "right_asset": "mass-ball"}},
-    "newton-cannon": {"background_layers": ["orbit-observatory"], "character_animation": "observe", "character_position": [42, 158], "props": [], "environment_loops": ["star-twinkle", "instrument-blink"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "orbit", "body_asset": "central-body", "cannon_asset": "cannon", "projectile_asset": "projectile", "center": [736, 256], "path_scale": 47}},
-    "strange-planet": {"background_layers": ["orbit-observatory"], "character_animation": "think", "character_position": [42, 158], "props": [], "environment_loops": ["star-twinkle", "instrument-blink"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "orbit", "body_asset": "strange-planet", "cannon_asset": "cannon", "projectile_asset": "projectile", "center": [736, 256], "path_scale": 47}},
-    "summary": {"background_layers": ["orbit-observatory"], "character_animation": "celebrate", "character_position": [42, 158], "props": [{"asset": "manuscript-decoration", "x": 708, "y": 250, "width": 126, "height": 84}], "environment_loops": ["star-twinkle", "dust-motes"], "feedback": {"success_animation": "celebrate", "failure_animation": "recoil"}, "render": {"kind": "none"}}
+  "motion_contract": {
+    "camera_shake_max_px": 2,
+    "camera_shake_max_ms": 120,
+    "screen_flash_max_alpha": 0.12,
+    "screen_flash_max_ms": 100,
+    "particle_max": 16,
+    "value_feedback_cooldown_ms": 60,
+    "failure_feedback_cooldown_ms": 600,
+    "strong_event_deduplication": "stage-id-plus-outcome-plus-result-signature",
+    "reduced_motion_disables": [
+      "camera-shake",
+      "screen-flash",
+      "nonessential-particles",
+      "continuous-pulsing",
+      "large-ambient-loops"
+    ]
   },
-  "motion_contract": {"camera_shake_max_px": 2, "camera_shake_max_ms": 120, "particle_max": 40, "reduced_motion_disables": ["camera-push", "camera-shake", "nonessential-particles"]}
+  "brand_profile": {
+    "id": "pixel-science-theater-v2",
+    "runtime_size": [
+      960,
+      540
+    ],
+    "scene_logical_size": [
+      480,
+      270
+    ],
+    "scene_scale": 2,
+    "scene_composition": "single-coherent-scene",
+    "attention_order": [
+      "character-cue",
+      "active-control",
+      "experiment-change",
+      "scientific-result"
+    ],
+    "semantic_colors": {
+      "action": "#C6E46A",
+      "result": "#F2B45F",
+      "failure": "#E36B68",
+      "brass": "#B87924",
+      "primary_text": "#F0E9E1",
+      "body_text": "#D8C9BC"
+    },
+    "one_action_focus": true,
+    "high_saturation_area_max_ratio": 0.08,
+    "ui_rendered_by_runtime": true,
+    "static_apparatus_recomposition": "forbidden"
+  }
 }

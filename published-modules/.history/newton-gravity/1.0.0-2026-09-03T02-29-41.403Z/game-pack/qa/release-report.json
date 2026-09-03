@@ -1,0 +1,22 @@
+{
+  "schema_version": "2.0.0",
+  "pack_id": "newton-gravity",
+  "status": "independent-review-passed-awaiting-user-approval",
+  "approvals_inherited": ["ART_ANCHOR_APPROVED", "M5_5_BROWSER_REVIEW_PASS"],
+  "required_current_approval": "FINAL_PACK_APPROVED",
+  "tests": [
+    "sources-valid: 10 sources, 13 claims",
+    "content-pack-valid: 7 stages, 26 assets",
+    "asset-valid: 128px cells, 28 frames, 160px portraits",
+    "pack-gates: missing asset, hash, primitive, model, script, license, symlink and title injection blocked",
+    "workflow-state: stage order, canonical approval, fingerprints and two-review limit",
+    "Chrome file protocol full playthrough",
+    "WebKit file protocol full playthrough",
+    "560px narrow desktop full playthrough",
+    "844x390 landscape touch full playthrough with 44px targets",
+    "ZIP relocation full playthrough",
+    "missing required image shows actionable error"
+  ],
+  "review": {"p0": 0, "p1": 0, "p2": 0, "independent_review_pending": false, "rounds": 2, "reviewers": ["skill-framework-reviewer", "local-release-reviewer", "science-learning-visual-reviewer"]},
+  "known_limits": ["真人3—5分钟计时仍是公开发布前门槛", "本次128像素单格由已批准96像素图集无损留白迁移，不是重新生成人物"]
+}

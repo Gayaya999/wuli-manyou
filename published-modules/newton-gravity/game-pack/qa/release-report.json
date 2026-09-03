@@ -1,22 +1,41 @@
 {
   "schema_version": "2.0.0",
   "pack_id": "newton-gravity",
-  "status": "independent-review-passed-awaiting-user-approval",
-  "approvals_inherited": ["ART_ANCHOR_APPROVED", "M5_5_BROWSER_REVIEW_PASS"],
+  "status": "final-pack-approved",
+  "approvals_inherited": [
+    "ART_ANCHOR_APPROVED",
+    "M5_5_BROWSER_REVIEW_PASS"
+  ],
   "required_current_approval": "FINAL_PACK_APPROVED",
   "tests": [
     "sources-valid: 10 sources, 13 claims",
     "content-pack-valid: 7 stages, 26 assets",
-    "asset-valid: 128px cells, 28 frames, 160px portraits",
-    "pack-gates: missing asset, hash, primitive, model, script, license, symlink and title injection blocked",
-    "workflow-state: stage order, canonical approval, fingerprints and two-review limit",
-    "Chrome file protocol full playthrough",
-    "WebKit file protocol full playthrough",
-    "560px narrow desktop full playthrough",
-    "844x390 landscape touch full playthrough with 44px targets",
+    "asset-valid: 26 assets, v2 palette and alpha gates",
+    "visual-system-valid: pixel-science-theater-v2, 26 frames",
+    "pack-gates: missing asset, hash mismatch, undeclared asset/root/nested file, unknown primitive, malformed threshold, unsafe/malformed model, content script, invalid license, symlink escape, title injection all blocked",
+    "workflow-state: run-state-valid mode=legacy current_stage=complete approvals=8 reviews=2",
+    "Chrome file protocol full playthrough (1200x800)",
+    "WebKit file protocol full playthrough (1200x800)",
+    "Chrome 560px narrow desktop full playthrough",
+    "WebKit 844x390 landscape touch full playthrough with 44px targets",
+    "host-runtime-full-playthrough: site pixel-science runtime, 7 stages, animations talk point idle think surprise celebrate, 0 console/network errors",
     "ZIP relocation full playthrough",
     "missing required image shows actionable error"
   ],
-  "review": {"p0": 0, "p1": 0, "p2": 0, "independent_review_pending": false, "rounds": 2, "reviewers": ["skill-framework-reviewer", "local-release-reviewer", "science-learning-visual-reviewer"]},
-  "known_limits": ["真人3—5分钟计时仍是公开发布前门槛", "本次128像素单格由已批准96像素图集无损留白迁移，不是重新生成人物"]
+  "review": {
+    "p0": 0,
+    "p1": 0,
+    "p2": 0,
+    "independent_review_pending": false,
+    "rounds": 2,
+    "reviewers": [
+      "skill-framework-reviewer",
+      "local-release-reviewer",
+      "science-learning-visual-reviewer"
+    ]
+  },
+  "known_limits": [
+    "真人3—5分钟计时仍是公开发布前门槛",
+    "本次26帧图集由已批准28帧基线确定性迁移而来，空白2格，不是重新生成人物"
+  ]
 }
