@@ -21,7 +21,7 @@ server {
     add_header Referrer-Policy same-origin always;
     add_header Permissions-Policy "camera=(), geolocation=(), payment=(), usb=()" always;
     add_header Cross-Origin-Opener-Policy same-origin always;
-    add_header Content-Security-Policy "default-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; font-src 'self' blob:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' blob:; connect-src 'self'; frame-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'" always;
+    add_header Content-Security-Policy "default-src 'self'; img-src 'self' blob: data:; media-src 'self' blob:; font-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' blob:; connect-src 'self'; frame-src 'self' blob:; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'" always;
 
     location /api/ {
         limit_req zone=wuli_api burst=5 nodelay;
@@ -44,7 +44,18 @@ server {
         add_header Cache-Control "public, max-age=31536000, immutable";
     }
 
+    location ~* \.html$ {
+        try_files $uri =404;
+        add_header Cache-Control "no-cache";
+    }
+
+    location ~* \.(?:js|mjs|css)$ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
     location / {
         try_files $uri $uri/ =404;
+        add_header Cache-Control "no-cache";
     }
 }

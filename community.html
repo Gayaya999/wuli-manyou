@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="物理漫游社区：已发布科学小游戏展板。" />
+    <meta name="description" content="物理漫游社区：刷一刷大家做的科学家游戏，点赞、评论、下载素材包。" />
     <title>社区 · 物理漫游</title>
     <link rel="icon" href="./assets/disks/newton.png" type="image/png" />
     <script>
@@ -12,9 +12,9 @@
         document.documentElement.dataset.theme = saved === "dark" || (!saved && !matchMedia("(prefers-color-scheme: light)").matches) ? "dark" : "light";
       })();
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260903-2" />
+    <link rel="stylesheet" href="./styles.css?v=20260904-2" />
   </head>
-  <body class="community-page">
+  <body class="feed-page">
     <main>
       <div class="shell">
         <header class="masthead">
@@ -34,17 +34,13 @@
           </div>
         </header>
 
-        <section class="community-hero" aria-labelledby="communityTitle">
-          <p class="community-kicker">COMMUNITY ARCHIVE</p>
-          <h1 id="communityTitle">科学小游戏展板</h1>
-          <p>在这里发现已经发布的科学家实验。当前由站长精选发布，后续再开放创作者投稿。</p>
-        </section>
+        <p class="feed-slogan">刷一刷大家做的科学家游戏。点赞、评论、下载素材包，导入自己的软件玩。</p>
 
-        <section class="community-grid" id="communityGrid" aria-live="polite"></section>
+        <section class="feed" id="feed" aria-live="polite" aria-label="社区信息流"></section>
       </div>
     </main>
     <footer class="colophon"><a href="./">返回展厅</a><span>物理漫游</span></footer>
-    <script src="./nav-motion.js?v=20260903-2" type="module"></script>
-    <script src="./community.js?v=20260903-2" type="module"></script>
+    <script src="./nav-motion.js?v=20260904-2" type="module"></script>
+    <script src="./community.js?v=20260904-2" type="module"></script>
   </body>
 </html>

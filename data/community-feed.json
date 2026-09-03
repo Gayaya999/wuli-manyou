@@ -1,0 +1,49 @@
+{
+  "schema_version": "wuli-community-feed-1",
+  "posts": [
+    {
+      "id": "newton-gravity",
+      "author": { "nick": "站长", "tag": "精选" },
+      "title": "牛顿与万有引力",
+      "summary": "释放苹果、改变质量和距离，再亲手把炮弹送入轨道。",
+      "cover": "./published-modules/newton-gravity/assets/disk.png",
+      "version": "2.0.0",
+      "likes": 128,
+      "comments": [
+        { "nick": "林晓秋", "text": "炮弹入轨那一下，全班都在屏息。", "at": "2026-08-30" },
+        { "nick": "江一帆", "text": "轨道是持续下落，想通了就起鸡皮疙瘩。", "at": "2026-09-02" }
+      ],
+      "download": "./published-modules/newton-gravity.zip",
+      "play": "./?module=newton-gravity#stage",
+      "at": "2026-09-03"
+    },
+    {
+      "id": "einstein-photoelectric",
+      "author": { "nick": "马小北", "tag": "创作者" },
+      "title": "爱因斯坦·光电效应",
+      "summary": "三步试玩：光打到金属上，为什么电子会飞出来？",
+      "cover": "./assets/guides/einstein.png",
+      "version": "0.9.0",
+      "likes": 64,
+      "comments": [
+        { "nick": "陈予安", "text": "讲解员说这个最常被问，期待上线。", "at": "2026-09-01" }
+      ],
+      "download": null,
+      "play": null,
+      "at": "2026-09-02"
+    },
+    {
+      "id": "maxwell-waves",
+      "author": { "nick": "顾晚晴", "tag": "创作者" },
+      "title": "麦克斯韦·电磁波",
+      "summary": "电和磁如何互相产生？一段可视化的波。",
+      "cover": "./assets/guides/maxwell.png",
+      "version": "0.5.0",
+      "likes": 31,
+      "comments": [],
+      "download": null,
+      "play": null,
+      "at": "2026-09-01"
+    }
+  ]
+}

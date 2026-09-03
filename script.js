@@ -931,7 +931,7 @@ askForm.addEventListener("submit", (event) => {
   sendQuestion(askInput.value);
 });
 
-watchLink.addEventListener("click", () => {
+watchLink?.addEventListener("click", () => {
   stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
   enterGame.focus();
 });
