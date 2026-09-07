@@ -1,177 +1,351 @@
-const feed = document.querySelector("#feed");
-const appearance = document.querySelector(".appearance");
+import {
+  SHELLS,
+  pixelate,
+  generatedFace,
+  composeDisk,
+  waitForFonts,
+} from "./disk-compose.js";
+import { api, apiEnabled, mediaUrl, migrateLocalIfNeeded } from "./api.js";
 
-const LIKES_KEY = "qo-feed-likes";
-const COMMENTS_KEY = "qo-feed-comments";
-const MAX_TEXT = 140;
-const MAX_NICK = 12;
+const STORAGE_KEY = "qo-community-posts";
+const MAX_POSTS = 18;
 
-let posts = [];
+const SEEDS = [
+  {
+    id: "seed-chen",
+    name: "陈麦",
+    latin: "Chen Mai",
+    years: "2026",
+    keywords: "苹果 · 下落",
+    note: "苹果落下的时候，我也在场。",
+    when: "昨日",
+    shellId: "ivory",
+  },
+  {
+    id: "seed-jiang",
+    name: "江河",
+    latin: "Jiang He",
+    years: "2026",
+    keywords: "电梯 · 时间",
+    note: "把怀表放进电梯，指针还在走。",
+    when: "三日前",
+    shellId: "cobalt",
+  },
+  {
+    id: "seed-mulan",
+    name: "木兰",
+    latin: "Mu Lan",
+    years: "2026",
+    keywords: "箱子 · 猫",
+    note: "薛定谔的箱子，盖子先别开。",
+    when: "上周",
+    shellId: "forest",
+  },
+  {
+    id: "seed-alo",
+    name: "阿洛",
+    latin: "Alo",
+    years: "2026",
+    keywords: "相互作用",
+    note: "费曼图画在手心，洗不掉。",
+    when: "上周",
+    shellId: "orange",
+  },
+  {
+    id: "seed-lin",
+    name: "林晓秋",
+    latin: "Lin Xiaoqiu",
+    years: "2026",
+    keywords: "左右",
+    note: "镜子里的左右，和这边不一样。",
+    when: "更早",
+    shellId: "burgundy",
+  },
+];
 
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  localStorage.setItem("qo-alt-theme", theme);
-  appearance.querySelectorAll("[data-theme]").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.theme === theme)));
-}
-appearance.querySelectorAll("[data-theme]").forEach((button) => button.addEventListener("click", () => applyTheme(button.dataset.theme)));
-applyTheme(document.documentElement.dataset.theme);
+const wall = document.querySelector("#communityWall");
+const openUpload = document.querySelector("#openUpload");
+const uploadRoom = document.querySelector("#uploadRoom");
+const uploadLeave = document.querySelector("#uploadLeave");
+const uploadForm = document.querySelector("#uploadForm");
+const uploadName = document.querySelector("#uploadName");
+const uploadNote = document.querySelector("#uploadNote");
+const uploadPortrait = document.querySelector("#uploadPortrait");
+const uploadHint = document.querySelector("#uploadHint");
+const uploadPreview = document.querySelector("#uploadPreview");
+const uploadShells = document.querySelector("#uploadShells");
+const uploadStatus = document.querySelector("#uploadStatus");
+const lightbox = document.querySelector("#lightbox");
+const lightboxImage = document.querySelector("#lightboxImage");
+const retrieveButton = document.querySelector("#retrieve");
 
-function readStore(key, fallback) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key) ?? "null");
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-function likedPosts() {
-  const stored = readStore(LIKES_KEY, []);
-  return new Set(Array.isArray(stored) ? stored.filter((x) => typeof x === "string") : []);
-}
-function localComments() {
-  const stored = readStore(COMMENTS_KEY, {});
-  return stored && typeof stored === "object" && !Array.isArray(stored) ? stored : {};
-}
-function stripUrls(text) {
-  return String(text).replace(/https?:\/\/\S+/gi, "").replace(/www\.\S+/gi, "").replace(/\s{2,}/g, " ").trim();
-}
-function likeCount(post) {
-  const base = Number(post.likes);
-  return (Number.isFinite(base) ? base : 0) + (likedPosts().has(post.id) ? 1 : 0);
-}
-function commentCount(post) {
-  return (Array.isArray(post.comments) ? post.comments.length : 0) + ((localComments()[post.id]) || []).length;
-}
+let portraitImage = null;
+let selectedShell = "graphite";
+let wallInspectId = null;
+let usingServer = false;
 
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text != null) node.textContent = text;
-  return node;
-}
-
-function commentList(post) {
-  const merged = [
-    ...(Array.isArray(post.comments) ? post.comments : []).map((c) => ({ ...c, tag: "展板" })),
-    ...((localComments()[post.id]) || []).map((c) => ({ ...c, tag: "本机" })),
-  ].sort((a, b) => String(a.at || "").localeCompare(String(b.at || "")));
-  const ol = el("ol", "feed-comments");
-  if (!merged.length) ol.append(el("li", "feed-comment-empty", "还没有评论，来写第一条。"));
-  merged.forEach((c) => {
-    const li = el("li", "feed-comment");
-    const head = el("p", "feed-comment-head");
-    head.append(el("strong", null, c.nick || "访客"), el("span", "feed-tag", c.tag), el("time", null, c.at || ""));
-    li.append(head, el("p", "feed-comment-text", c.text));
-    ol.append(li);
+function displayImage(post) {
+  if (post.image) return post.image;
+  if (post.imageUrl) return mediaUrl(post.imageUrl);
+  return composeDisk({
+    name: post.name,
+    latin: post.latin || (post.name || "?").slice(0, 1).toUpperCase(),
+    years: post.years || "2026",
+    keywords: post.keywords || "观察 · 停留",
+    archive: post.archiveLabel || post.archive || "BOARD",
+    shellId: post.shellId || "graphite",
+    portrait: generatedFace(post.name),
   });
-  return ol;
 }
 
-function card(post) {
-  const article = el("article", "feed-card");
-
-  const head = el("header", "feed-head");
-  const av = el("span", "feed-avatar");
-  av.textContent = (post.author?.nick || "访").slice(0, 1);
-  const who = el("div", "feed-who");
-  who.append(el("strong", "feed-nick", post.author?.nick || "访客"));
-  const sub = el("span", "feed-sub");
-  sub.append(el("span", "feed-tag", post.author?.tag || "创作者"), el("time", null, post.at || ""));
-  who.append(sub);
-  head.append(av, who);
-  article.append(head);
-
-  article.append(el("h2", "feed-title", post.title));
-  article.append(el("p", "feed-summary", post.summary));
-
-  if (post.cover) {
-    const img = el("img", "feed-cover");
-    img.src = post.cover;
-    img.alt = post.title;
-    img.loading = "lazy";
-    article.append(img);
-  }
-
-  const actions = el("div", "feed-actions");
-  const like = el("button", "feed-like");
-  like.type = "button";
-  const renderLike = () => {
-    const liked = likedPosts().has(post.id);
-    like.classList.toggle("is-liked", liked);
-    like.setAttribute("aria-pressed", String(liked));
-    like.textContent = `赞 ${likeCount(post)}`;
+function adaptServerPost(post) {
+  return {
+    ...post,
+    owned: Boolean(post.mine),
+    image: post.imageUrl ? mediaUrl(post.imageUrl) : "",
+    when: post.when ?? "刚刚",
   };
-  renderLike();
-  like.addEventListener("click", () => {
-    const set = likedPosts();
-    if (set.has(post.id)) set.delete(post.id);
-    else set.add(post.id);
-    localStorage.setItem(LIKES_KEY, JSON.stringify([...set]));
-    renderLike();
-  });
-  actions.append(like);
+}
+function loadPosts() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+    return Array.isArray(parsed) ? parsed.filter((item) => item?.id && item?.image) : [];
+  } catch {
+    return [];
+  }
+}
 
-  const commentBtn = el("button", "feed-comment-toggle");
-  commentBtn.type = "button";
-  commentBtn.textContent = `评论 ${commentCount(post)}`;
-  actions.append(commentBtn);
+function savePosts(posts) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts.slice(0, MAX_POSTS)));
+}
 
-  if (post.download) {
-    const dl = el("a", "feed-download", "下载");
-    dl.href = post.download;
-    dl.download = "";
-    actions.append(dl);
+function mintPost(entry, index) {
+  return {
+    ...entry,
+    owned: Boolean(entry.owned),
+    archive: entry.archive ?? `BOARD ${String(index + 1).padStart(2, "0")}`,
+    image: composeDisk({
+      name: entry.name,
+      latin: entry.latin,
+      years: entry.years,
+      keywords: entry.keywords,
+      archive: entry.archive ?? `BOARD ${String(index + 1).padStart(2, "0")}`,
+      shellId: entry.shellId,
+      portrait: entry.portrait ?? generatedFace(entry.name),
+    }),
+  };
+}
+
+async function ensureSeeds() {
+  const existing = loadPosts();
+  if (existing.length) return existing;
+  await waitForFonts();
+  const seeded = SEEDS.map((seed, index) => mintPost(seed, index));
+  savePosts(seeded);
+  return seeded;
+}
+
+function renderWall(posts) {
+  if (!wall) return;
+  wall.replaceChildren(
+    ...posts.map((post) => {
+      const imageSrc = post.image || displayImage(post);
+      const article = document.createElement("article");
+      article.className = "board-post";
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "board-disk";
+      button.dataset.image = imageSrc;
+      button.dataset.id = post.id || "";
+      button.dataset.mine = post.owned || post.mine ? "1" : "";
+      button.setAttribute("aria-label", `${post.name}的档案软盘`);
+      const image = document.createElement("img");
+      image.src = imageSrc;
+      image.alt = `${post.name}的档案软盘`;
+      button.append(image);
+      const name = document.createElement("p");
+      name.className = "board-name";
+      name.textContent = post.name;
+      const note = document.createElement("p");
+      note.className = "board-note";
+      note.textContent = post.note;
+      const when = document.createElement("p");
+      when.className = "board-when";
+      when.textContent = post.when ?? "刚刚";
+      article.append(button, name, note, when);
+      return article;
+    }),
+  );
+}
+
+function renderSwatches() {
+  if (!uploadShells) return;
+  uploadShells.replaceChildren(
+    ...SHELLS.map((shell) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.shell = shell.id;
+      button.style.background = shell.body;
+      button.setAttribute("aria-label", shell.label);
+      button.setAttribute("aria-pressed", String(shell.id === selectedShell));
+      return button;
+    }),
+  );
+}
+
+function setStatus(text) {
+  if (uploadStatus) uploadStatus.textContent = text;
+}
+
+function openUploadRoom() {
+  renderSwatches();
+  setStatus("");
+  uploadRoom?.showModal();
+  uploadName?.focus();
+}
+
+function closeUploadRoom() {
+  uploadRoom?.close();
+}
+
+function showPortrait(file) {
+  const url = URL.createObjectURL(file);
+  const image = new Image();
+  image.onload = () => {
+    portraitImage = image;
+    uploadPreview.src = url;
+    uploadPreview.hidden = false;
+    uploadHint.hidden = true;
+  };
+  image.src = url;
+}
+
+async function refreshWallFromServer() {
+  const payload = await api("/api/community/posts");
+  usingServer = true;
+  await waitForFonts();
+  renderWall((payload.posts ?? []).map(adaptServerPost));
+}
+
+async function submitUpload(event) {
+  event.preventDefault();
+  const name = uploadName?.value.trim();
+  const note = uploadNote?.value.trim();
+  if (!name) {
+    setStatus("先写下名字。");
+    uploadName?.focus();
+    return;
+  }
+  if (!note) {
+    setStatus("留下一句观察。");
+    uploadNote?.focus();
+    return;
+  }
+  await waitForFonts();
+  const portrait = portraitImage ? pixelate(portraitImage) : generatedFace(name);
+  const posts = loadPosts();
+  const post = mintPost(
+    {
+      id: `user-${Date.now()}`,
+      owned: true,
+      name,
+      latin: name.slice(0, 1).toUpperCase(),
+      years: String(new Date().getFullYear()),
+      keywords: "观察 · 停留",
+      note,
+      when: "刚刚",
+      shellId: selectedShell,
+      portrait,
+      archive: `BOARD ${String(posts.length + 1).padStart(2, "0")}`,
+    },
+    0,
+  );
+  if (apiEnabled()) {
+    try {
+      await api("/api/community/posts", {
+        method: "POST",
+        json: {
+          name,
+          note,
+          shellId: selectedShell,
+          latin: name.slice(0, 1).toUpperCase(),
+          image: post.image,
+        },
+      });
+      await refreshWallFromServer();
+    } catch {
+      savePosts([post, ...posts]);
+      renderWall(loadPosts());
+      setStatus("展墙暂时离线，先存在这台机器。");
+    }
   } else {
-    actions.append(el("span", "feed-disabled", "下载·整理中"));
+    savePosts([post, ...posts]);
+    renderWall(loadPosts());
   }
-  if (post.play) {
-    const play = el("a", "feed-play", "试玩");
-    play.href = post.play;
-    actions.append(play);
+  uploadForm?.reset();
+  portraitImage = null;
+  if (uploadPreview) {
+    uploadPreview.hidden = true;
+    uploadPreview.removeAttribute("src");
   }
-  article.append(actions);
-
-  const drawer = el("div", "feed-drawer");
-  drawer.hidden = true;
-  const form = el("form", "feed-comment-form");
-  const nick = el("input"); nick.maxLength = MAX_NICK; nick.placeholder = "昵称（选填）"; nick.autocomplete = "off";
-  const text = el("input"); text.maxLength = MAX_TEXT; text.required = true; text.placeholder = "写条评论（140 字内，不含链接）"; text.autocomplete = "off";
-  const submit = el("button", "primary-button compact", "发送"); submit.type = "submit";
-  form.append(nick, text, submit);
-  const status = el("p", "feed-status"); status.setAttribute("aria-live", "polite");
-  const rebuild = () => {
-    drawer.replaceChildren(commentList(post), form, status);
-    commentBtn.textContent = `评论 ${commentCount(post)}`;
-  };
-  rebuild();
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const clean = stripUrls(text.value).slice(0, MAX_TEXT);
-    if (!clean) { status.textContent = "评论不能为空，链接会被去掉。"; return; }
-    const all = localComments();
-    (all[post.id] ||= []).push({ nick: stripUrls(nick.value).slice(0, MAX_NICK), text: clean, at: new Date().toISOString().slice(0, 10) });
-    localStorage.setItem(COMMENTS_KEY, JSON.stringify(all));
-    text.value = "";
-    status.textContent = "已发送，保存在本机。";
-    rebuild();
-  });
-  commentBtn.addEventListener("click", () => { drawer.hidden = !drawer.hidden; });
-  article.append(drawer);
-
-  return article;
+  if (uploadHint) uploadHint.hidden = false;
+  closeUploadRoom();
 }
 
-async function loadFeed() {
+openUpload?.addEventListener("click", openUploadRoom);
+uploadLeave?.addEventListener("click", closeUploadRoom);
+uploadRoom?.addEventListener("click", (event) => {
+  if (event.target === uploadRoom) closeUploadRoom();
+});
+uploadForm?.addEventListener("submit", submitUpload);
+uploadPortrait?.addEventListener("change", (event) => {
+  const file = event.target.files?.[0];
+  if (file) showPortrait(file);
+});
+uploadShells?.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-shell]");
+  if (!button) return;
+  selectedShell = button.dataset.shell;
+  renderSwatches();
+});
+wall?.addEventListener("click", (event) => {
+  const button = event.target.closest(".board-disk");
+  if (!button || !lightbox || !lightboxImage) return;
+  wallInspectId = button.dataset.id || null;
+  lightboxImage.src = button.dataset.image;
+  lightboxImage.alt = button.getAttribute("aria-label") ?? "";
+  if (retrieveButton) {
+    retrieveButton.hidden = !button.dataset.mine;
+    retrieveButton.dataset.scope = button.dataset.mine ? "wall" : "";
+  }
+  lightbox.showModal();
+});
+
+retrieveButton?.addEventListener("click", async () => {
+  if (!wallInspectId || !usingServer || retrieveButton?.dataset.scope !== "wall") return;
+  const id = wallInspectId;
   try {
-    const response = await fetch("./data/community-feed.json", { cache: "no-store" });
-    if (!response.ok) throw new Error();
-    const data = await response.json();
-    posts = Array.isArray(data.posts) ? data.posts : [];
-    if (!posts.length) throw new Error();
-    feed.replaceChildren(...posts.map(card));
+    await api(`/api/community/posts/${id}`, { method: "DELETE" });
+    wallInspectId = null;
+    lightbox.close();
+    await refreshWallFromServer();
   } catch {
-    feed.replaceChildren(el("p", "feed-empty", "还没有人发布。用 Skill 做出第一个科学家游戏吧。"));
+    wallInspectId = null;
   }
+});
+
+async function bootWall() {
+  renderSwatches();
+  if (apiEnabled()) {
+    try {
+      await migrateLocalIfNeeded();
+      await refreshWallFromServer();
+      return;
+    } catch {
+      usingServer = false;
+    }
+  }
+  ensureSeeds().then(renderWall);
 }
 
-loadFeed();
+bootWall();

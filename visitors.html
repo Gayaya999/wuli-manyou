@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-scientist-agent-api="/api">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,6 @@
       content="物理漫游来访者档案：把一张软盘留在柜里。"
     />
     <title>来访者档案 · 物理漫游</title>
-    <link rel="icon" href="./assets/disks/newton.png" type="image/png" />
     <script>
       (() => {
         const saved = localStorage.getItem("qo-alt-theme");
@@ -21,8 +20,14 @@
         document.documentElement.dataset.theme = theme;
       })();
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260904-2" />
-    <link rel="stylesheet" href="./visitors.css?v=20260904-2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=play-talk-1" />
+    <link rel="stylesheet" href="./visitors.css?v=play-talk-1" />
   </head>
   <body class="cabinet-page">
     <a class="skip" href="#openBench">跳到制盘</a>
@@ -31,11 +36,11 @@
       <div class="shell">
         <header class="masthead">
           <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
-          <nav class="site-nav" aria-label="主导航">
-            <a href="./">展厅</a>
+          <nav class="site-nav" aria-label="展厅">
+            <a href="./">门厅</a>
             <a href="./#stage">实验</a>
-            <a href="./visitors.html" aria-current="page">档案</a>
-            <a href="./community.html">社区</a>
+            <a href="./visitors.html" aria-current="page">来访者</a>
+            <a href="./me.html">我的</a>
           </nav>
           <div class="appearance" role="group" aria-label="外观">
             <button type="button" data-theme="light" aria-pressed="false">浅色</button>
@@ -45,9 +50,9 @@
 
         <section class="room" aria-labelledby="roomTitle">
           <h1 id="roomTitle">来访者档案</h1>
-          <p class="lede">九位科学家的盘在门厅。这里留给来访者。</p>
+          <p class="lede">九位物理学家的档案软盘。你也可以留下一张。</p>
           <button class="text-link" id="openBench" type="button">存放一张档案</button>
-          <div class="cabinet" id="cabinet" aria-label="来访者软盘柜"></div>
+          <div class="cabinet" id="cabinet" aria-label="物理学家档案软盘"></div>
         </section>
 
         <section class="bench" id="bench" hidden>
@@ -93,6 +98,22 @@
           </div>
           <p class="cta-status" id="benchStatus" aria-live="polite"></p>
         </section>
+
+        <section class="board" id="community" aria-labelledby="communityTitle">
+          <header class="board-head">
+            <h2 id="communityTitle">社区动态</h2>
+            <button class="text-link" id="openUpload" type="button">上传软盘</button>
+          </header>
+          <p class="board-lede">来访者把盘留在墙上。点开一张就能看清标签。</p>
+          <div class="board-wall" id="communityWall" aria-label="社区软盘墙"></div>
+        </section>
+
+        <section class="works" id="works" aria-labelledby="worksTitle">
+          <p class="essay-kicker">来访者作品</p>
+          <h2 id="worksTitle">社区里留下的游戏</h2>
+          <p class="works-lede">试玩和下载都在这面墙上，不另开一站。</p>
+          <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json"></div>
+        </section>
       </div>
     </main>
 
@@ -109,7 +130,36 @@
       </div>
     </dialog>
 
-    <script src="./nav-motion.js" type="module"></script>
-    <script src="./visitors.js?v=20260904-2" type="module"></script>
+    <dialog class="board-room" id="uploadRoom" aria-labelledby="uploadTitle">
+      <form class="board-frame" id="uploadForm">
+        <header class="talk-head">
+          <h2 id="uploadTitle">上传软盘</h2>
+          <button class="talk-leave" id="uploadLeave" type="button">离开</button>
+        </header>
+        <label class="board-drop">
+          <input id="uploadPortrait" type="file" accept="image/*" class="sr-only" />
+          <span id="uploadHint">肖像可空，空则用生成的像素脸</span>
+          <img id="uploadPreview" alt="" hidden />
+        </label>
+        <label>
+          名字
+          <input id="uploadName" type="text" maxlength="16" autocomplete="off" placeholder="林晓秋" />
+        </label>
+        <label>
+          一句观察
+          <input id="uploadNote" type="text" maxlength="36" autocomplete="off" placeholder="苹果落下的时候，我也在场。" />
+        </label>
+        <fieldset class="shells">
+          <legend>盘壳</legend>
+          <div class="shell-swatches" id="uploadShells"></div>
+        </fieldset>
+        <button class="board-submit" type="submit">放入展墙</button>
+        <p class="cta-status" id="uploadStatus" aria-live="polite"></p>
+      </form>
+    </dialog>
+
+    <script src="./visitors.js?v=play-talk-1" type="module"></script>
+    <script src="./community.js?v=play-talk-1" type="module"></script>
+    <script src="./works.js?v=play-talk-1" type="module"></script>
   </body>
 </html>

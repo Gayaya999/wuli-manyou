@@ -1,0 +1,361 @@
+.identity {
+  text-align: left;
+  padding-top: var(--space-10);
+}
+
+.identity-row {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: end;
+}
+
+.portrait {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #111;
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.portrait-empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  margin: 0;
+  padding: var(--space-4);
+  color: #f4efe6;
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.portrait img:not([hidden]) + .portrait-empty {
+  display: none;
+}
+
+.room-kicker {
+  margin: 0 0 var(--space-3);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.identity-name {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.identity-lede {
+  max-width: 36rem;
+  margin-top: var(--space-4);
+  color: var(--ink);
+  text-align: left;
+}
+
+.ledger {
+  margin: var(--space-5) 0 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.sign {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 14rem) auto;
+  gap: var(--space-4);
+  align-items: end;
+  margin-top: var(--space-8);
+}
+
+.sign label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--ink);
+  font-size: 0.78rem;
+}
+
+.sign input {
+  width: 100%;
+  min-height: 2.6rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+}
+
+.sign input::placeholder {
+  color: #4a4a4e;
+}
+
+.sign button {
+  min-height: 2.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  cursor: pointer;
+  box-shadow: inset 0 -1px 0 var(--ink);
+}
+
+.portrait-make {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.portrait-drop {
+  display: grid;
+  place-items: center;
+  min-height: 2.6rem;
+  padding: 0 0.2rem;
+  color: var(--ink);
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: inset 0 -1px 0 var(--ink);
+}
+
+.portrait-drop.is-hot,
+.portrait-drop:hover {
+  color: var(--muted);
+}
+
+.portrait-make button {
+  min-height: 2.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  cursor: pointer;
+}
+
+.portrait-make button[hidden] {
+  display: none;
+}
+
+.sign-status {
+  min-height: 1.4rem;
+  margin: var(--space-3) 0 0;
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+
+.sign-status:empty {
+  display: none;
+}
+
+.atlas,
+.mine-disks,
+.mine-talks {
+  margin-top: var(--space-12);
+  padding-top: var(--space-8);
+  text-align: left;
+  box-shadow: inset 0 1px 0 var(--hairline);
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.atlas h2,
+.mine-disks h2,
+.mine-talks h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  font-weight: 400;
+}
+
+.atlas-count {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.atlas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.4rem 1rem;
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.atlas-cell {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.atlas-cell img {
+  width: min(100%, 8.6rem);
+  height: auto;
+  filter: grayscale(1) opacity(0.32);
+  transition: filter 240ms var(--ease);
+}
+
+.atlas-cell.is-met img {
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.14));
+}
+
+.atlas-cell.is-empty span {
+  opacity: 0.45;
+}
+
+.atlas-cell span {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+}
+
+.section-head .text-link {
+  margin: 0;
+}
+
+.section-note {
+  margin: var(--space-3) 0 0;
+  max-width: 36rem;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.section-note[hidden] {
+  display: none;
+}
+
+.cabinet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.4rem 1rem;
+  min-height: 0;
+}
+
+.slot {
+  display: grid;
+  justify-items: center;
+  width: clamp(7rem, 13vw, 9.2rem);
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.slot img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 14px 12px oklch(0 0 0 / 0.42));
+}
+
+html[data-theme="light"] .slot img {
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.14));
+}
+
+.slot span {
+  margin-top: 0.55rem;
+  font-family: var(--font-serif);
+  font-size: 0.92rem;
+}
+
+.mine-cabinet {
+  justify-content: flex-start;
+  width: 100%;
+  margin-top: var(--space-6);
+}
+
+.talk-list {
+  display: grid;
+  gap: var(--space-8);
+  margin: var(--space-8) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.talk-list a {
+  display: grid;
+  gap: 0.35rem;
+  color: inherit;
+}
+
+.talk-list a:hover .who {
+  box-shadow: inset 0 -1px 0 currentColor;
+}
+
+.talk-list .latin {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.talk-list .who {
+  margin: 0;
+  justify-self: start;
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+}
+
+.talk-list .last {
+  margin: 0;
+  max-width: 38rem;
+  font-family: var(--font-serif);
+  font-size: 1.02rem;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.talk-list .count {
+  margin: 0.15rem 0 0;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 767px) {
+  .identity {
+    padding-top: var(--space-8);
+  }
+
+  .identity-row {
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+
+  .sign {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .sign button {
+    justify-self: start;
+  }
+
+  .atlas-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

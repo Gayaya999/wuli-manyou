@@ -8,7 +8,6 @@
       content="物理漫游：从经典力学、电磁学、相对论到量子物理的互动知识图谱。"
     />
     <title>物理漫游</title>
-    <link rel="icon" href="./assets/disks/newton.png" type="image/png" />
     <script>
       (() => {
         const saved = localStorage.getItem("qo-alt-theme");
@@ -21,24 +20,28 @@
         document.documentElement.dataset.theme = theme;
       })();
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260904-2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=play-talk-1" />
   </head>
   <body>
-    <a class="skip" href="#ask-input">跳到提问</a>
+    <a class="skip" href="#pressStart">跳到游戏</a>
 
     <main>
-      <div class="shell">
+      <div class="sky">
+        <div class="shell">
         <div class="intro">
         <header class="masthead">
-          <a class="wordmark" href="./" aria-label="物理漫游首页">
-            <img src="./assets/disks/newton.png" alt="" />
-            <span>物理漫游<small>PHYSICS ODYSSEY</small></span>
-          </a>
-          <nav class="site-nav" aria-label="主导航">
-            <a href="./" aria-current="page">展厅</a>
+          <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
+          <nav class="site-nav" aria-label="展厅">
+            <a href="./" aria-current="page">门厅</a>
             <a href="#stage">实验</a>
-            <a href="./visitors.html">档案</a>
-            <a href="./community.html">社区</a>
+            <a href="./visitors.html">来访者</a>
+            <a href="./me.html">我的</a>
           </nav>
           <div class="appearance" role="group" aria-label="外观">
             <button type="button" data-theme="light" aria-pressed="false">浅色</button>
@@ -62,124 +65,161 @@
           </div>
 
           <h1 id="heroTitle">牛顿</h1>
-          <p class="lede">
-            从经典力学走到量子概率。影像在前，文字只做标签。
+          <p class="lede" id="heroLede">
+            苹果落下，月亮却没有。同一条万有引力把它们拴在同一种下落里。
           </p>
 
-          <form class="cta" id="askForm" novalidate>
-            <label class="sr-only" for="ask-input" id="askInputLabel">向牛顿提问</label>
-            <input
-              id="ask-input"
-              name="question"
-              type="text"
-              autocomplete="off"
-              maxlength="200"
-              placeholder="为什么苹果落下，月亮却没有掉下来？"
-            />
-            <button type="button" class="cta-mic" id="voiceInput" aria-pressed="false" aria-label="语音输入">
-              <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-                <rect x="6" y="1.8" width="4" height="7.2" rx="2" fill="none" stroke="currentColor" stroke-width="1.4" />
-                <path d="M3.8 8.4a4.2 4.2 0 0 0 8.4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-                <path d="M8 12.6v1.6M5.4 14.2h5.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+          <button class="press-start" id="pressStart" type="button" aria-label="进入牛顿的游戏">
+            <span class="press-start-shadow" aria-hidden="true"></span>
+            <span class="press-start-rim" aria-hidden="true"></span>
+            <span class="press-start-face">
+              <svg class="press-start-play" viewBox="0 0 7 9" width="14" height="18" aria-hidden="true">
+                <path fill="currentColor" d="M0 0h2v9H0V0zm2 1h1v7H2V1zm1 1h1v5H3V2zm1 1h1v3H4V3zm1 1h1v1H5V4z" />
               </svg>
-            </button>
-            <button type="submit" id="askSubmit" disabled>
-              <span>开始对话</span>
-              <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true">
-                <path
-                  d="M2.2 8h10.2M8.6 3.8 13 8l-4.4 4.2"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-          </form>
+              Press start
+            </span>
+          </button>
           <p class="cta-status" id="ctaStatus" aria-live="polite"></p>
         </section>
         </div>
+        </div>
+      </div>
 
+      <div class="floor">
+      <div class="shell">
         <section class="stage" id="stage" aria-label="实验终端">
-          <div class="terminal">
-            <button class="mac" id="enterGame" type="button" aria-label="进入牛顿的实验（演示）">
-              <span class="mac-screen">
-                <img
-                  id="guideImage"
-                  src="assets/guides/newton.png"
-                  alt="牛顿坐在苹果树下，作为进入实验的引导画面"
-                />
-              </span>
-              <span class="mac-play-cue" aria-hidden="true">
-                <span class="mac-play-icon">▶</span>
-                <span>点击电脑<br />进入实验</span>
-              </span>
-              <img class="mac-chassis" src="assets/hardware/pixel-computer.png?v=1" alt="" />
-            </button>
-            <div class="stage-copy">
-              <h2 id="stageCaption">牛顿 · 光与引力</h2>
-              <p class="stage-copy-slot" id="stageNote">经典力学 / 万有引力</p>
-              <div class="module-dock" aria-label="作品操作">
-                <button class="module-import-button" id="gameModuleImport" type="button">
-                  <img src="./assets/disks/newton.png" alt="" />
-                  <span><strong>导入小游戏</strong><small>选择 Skill 导出的 ZIP</small></span>
+          <div class="dossier">
+            <div class="dossier-stage">
+              <h2 class="dungeon-title" id="dungeonTitle">
+                <span class="dungeon-zh" id="dungeonZh">坠落之月</span>
+                <span class="dungeon-en" id="dungeonEn">Falling Moon</span>
+              </h2>
+              <button class="mac" id="enterGame" type="button" aria-label="开始与牛顿的对话">
+                <span class="mac-screen">
+                  <img
+                    id="guideImage"
+                    src="./assets/guides/newton.png"
+                    alt="牛顿坐在苹果树下，作为进入实验的引导画面"
+                  />
+                </span>
+                <img class="mac-chassis" src="./assets/hardware/macintosh.png?v=crt-1" alt="" />
+              </button>
+            </div>
+            <article class="dossier-bio" id="scientistBio" aria-label="人物介绍">
+              <p class="bio-latin" id="bioLatin">Isaac Newton</p>
+              <h3 class="bio-name" id="bioName">牛顿</h3>
+              <div class="bio-body" id="bioBody">
+                <p>牛顿研究的问题其实都很日常：苹果为什么会掉下来？东西为什么会运动？月亮为什么不会飞走？</p>
+                <p>最后，他发现地上的苹果和天上的月亮，其实都遵循同一套规律。</p>
+              </div>
+              <p class="bio-line" id="bioLine">他让人类第一次能够用一套规则去理解运动和引力。</p>
+              <div class="bio-actions">
+                <button class="press-start press-start-sub" id="openTalk" type="button" aria-label="开始与牛顿的对话">
+                  <span class="press-start-shadow" aria-hidden="true"></span>
+                  <span class="press-start-rim" aria-hidden="true"></span>
+                  <span class="press-start-face">
+                    <svg class="press-start-play" viewBox="0 0 7 9" width="12" height="15" aria-hidden="true">
+                      <path fill="currentColor" d="M0 0h2v9H0V0zm2 1h1v7H2V1zm1 1h1v5H3V2zm1 1h1v3H4V3zm1 1h1v1H5V4z" />
+                    </svg>
+                    开始对话
+                  </span>
                 </button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="essay" id="hallEssay" aria-labelledby="essayTitle">
+          <p class="essay-kicker">观看</p>
+          <h2 id="essayTitle">苹果落下之后，光还在跑，时间也会弯。</h2>
+          <p>
+            这间展厅把经典力学、电磁学、相对论和量子物理连成一条可以走的路。九张软盘是九个人，不是九个章节标题。
+          </p>
+          <p>翻到谁，介绍和楼下的机器就属于谁。文字只做标签。</p>
+        </section>
+      </div>
+
+        <section class="relics" id="relics" aria-roledescription="carousel" aria-label="展柜">
+          <button class="carousel-step" id="relicPrev" type="button" aria-label="上一件展品">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M10.2 3.2 5.4 8l4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="relics-window" id="relicsWindow">
+            <div class="relics-track" id="relicsTrack"></div>
+          </div>
+          <button class="carousel-step" id="relicNext" type="button" aria-label="下一件展品">
+            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+              <path d="M5.8 3.2 10.6 8l-4.8 4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </section>
+
+        <section class="works" id="works" aria-labelledby="worksTitle">
+          <div class="shell">
+            <p class="essay-kicker">来访者作品</p>
+            <h2 id="worksTitle">社区里留下的游戏</h2>
+            <p class="works-lede">试玩和下载都在这面墙上，不另开一站。</p>
+            <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json"></div>
+            <details class="works-import">
+              <summary>导入自己的游戏包</summary>
+              <div class="module-dock" aria-label="作品导入">
+                <button id="gameModuleImport" type="button">选择 Skill 导出的 ZIP</button>
                 <input id="gameModuleInput" type="file" accept=".zip,application/zip" hidden />
                 <ol class="module-progress" id="gameModuleProgress" aria-label="导入进度">
-                  <li data-step="读取">读取</li><li data-step="验包">验包</li><li data-step="验授权">验授权</li><li data-step="验运行">验运行</li><li data-step="加入展厅">加入展厅</li>
+                  <li data-step="读取">读取</li>
+                  <li data-step="验包">验包</li>
+                  <li data-step="验授权">验授权</li>
+                  <li data-step="验运行">验运行</li>
+                  <li data-step="加入展厅">加入展厅</li>
                 </ol>
                 <p class="module-status" id="gameModuleStatus" aria-live="polite">ZIP 会先在本机验证，通过后才加入展厅。</p>
-                <details class="module-advanced">
-                  <summary>高级选项</summary>
+                <div id="themeDeveloperTools" hidden>
                   <button id="gameModuleFolderImport" type="button">开发模式：选择作品文件夹</button>
                   <input id="gameModuleFolderInput" type="file" webkitdirectory directory multiple hidden />
-                  <div id="themeDeveloperTools" hidden>
-                    <button id="themePackImport" type="button">导入轻量主题包</button>
-                    <button id="themePackReset" type="button" hidden>还原默认主题</button>
-                    <input id="themePackInput" type="file" webkitdirectory directory multiple hidden />
-                    <p class="module-status" id="themePackStatus" aria-live="polite">仅供开发调试。</p>
-                  </div>
-                </details>
+                  <button id="themePackImport" type="button">导入轻量主题包</button>
+                  <button id="themePackReset" type="button" hidden>还原默认主题</button>
+                  <input id="themePackInput" type="file" webkitdirectory directory multiple hidden />
+                  <p class="module-status" id="themePackStatus" aria-live="polite">仅供开发调试。</p>
+                </div>
               </div>
-            </div>
+            </details>
           </div>
         </section>
       </div>
     </main>
 
     <footer class="colophon">
-      <a href="#stage">实验</a>
-      <a href="./visitors.html">来访者档案</a>
+      <a href="./">门厅</a>
+      <span>挑战杯原型</span>
     </footer>
 
-    <div class="ask" id="askDock">
-      <button class="ask-chip" id="askChip" type="button" aria-expanded="false" aria-controls="askPanel">
-        问<span id="askChipName">牛顿</span>
-      </button>
-      <section class="ask-panel" id="askPanel" hidden>
-        <header class="ask-panel-head">
-          <p>与<span id="askPanelName">牛顿</span>通信</p>
-          <button class="ask-close" id="askClose" type="button" aria-label="收起对话">关闭</button>
+    <dialog class="talk" id="talkRoom" aria-labelledby="talkTitle">
+      <div class="talk-frame">
+        <header class="talk-head">
+          <p class="talk-latin" id="talkLatin">Isaac Newton</p>
+          <h2 id="talkTitle">与牛顿对话</h2>
+          <button class="talk-leave" id="talkLeave" type="button">离开</button>
         </header>
-        <div class="ask-prompts" id="askPrompts" aria-label="推荐问题"></div>
-        <div class="ask-log" id="askLog" aria-live="polite"></div>
-      </section>
-    </div>
+        <div class="talk-prompts" id="askPrompts" aria-label="推荐问题"></div>
+        <div class="talk-log" id="askLog" aria-live="polite"></div>
+        <form class="talk-compose" id="talkForm">
+          <label class="sr-only" for="talkInput">向这位科学家提问</label>
+          <input
+            id="talkInput"
+            type="text"
+            maxlength="200"
+            autocomplete="off"
+            placeholder="为什么苹果落下，月亮却没有掉下来？"
+          />
+          <button type="submit">发送</button>
+        </form>
+      </div>
+    </dialog>
 
     <dialog class="lightbox" id="lightbox" aria-label="放大肖像">
       <img id="lightboxImage" alt="" />
       <form method="dialog"><button class="lightbox-close" type="submit">关闭</button></form>
-    </dialog>
-
-    <dialog class="module-game" id="moduleGame" aria-labelledby="moduleGameTitle">
-      <div class="module-game-frame">
-        <header class="module-game-head">
-          <h2 id="moduleGameTitle">完整小游戏</h2>
-          <button class="portal-leave" id="moduleGameLeave" type="button">离开</button>
-        </header>
-        <iframe id="moduleGameFrame" title="完整小游戏" sandbox="allow-scripts"></iframe>
-      </div>
     </dialog>
 
     <dialog class="portal" id="portal" aria-labelledby="portalTitle">
@@ -190,6 +230,16 @@
           <h2 id="portalTitle">牛顿 · 光与引力</h2>
           <button class="portal-leave" id="portalLeave" type="button">离开</button>
         </div>
+      </div>
+    </dialog>
+
+    <dialog class="module-game" id="moduleGame" aria-labelledby="moduleGameTitle">
+      <div class="module-game-frame">
+        <header class="module-game-head">
+          <h2 id="moduleGameTitle">完整小游戏</h2>
+          <button class="portal-leave" id="moduleGameLeave" type="button">离开</button>
+        </header>
+        <iframe id="moduleGameFrame" title="完整小游戏" sandbox="allow-scripts"></iframe>
       </div>
     </dialog>
 
@@ -215,7 +265,7 @@
       </div>
     </dialog>
 
-    <script src="./nav-motion.js?v=20260904-2" type="module"></script>
-    <script src="./script.js?v=20260904-2" type="module"></script>
+    <script src="./script.js?v=play-talk-1" type="module"></script>
+    <script src="./works.js?v=play-talk-1" type="module"></script>
   </body>
 </html>

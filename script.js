@@ -1,3 +1,4 @@
+import { api, apiEnabled, migrateLocalIfNeeded } from "./api.js";
 import {
   clearThemeProgress,
   deactivateThemePack,
@@ -17,11 +18,22 @@ const FIGURES = [
     fullName: "艾萨克·牛顿",
     title: "牛顿 · 光与引力",
     domain: "经典力学 / 万有引力",
-    avatar: "assets/disks/newton.png",
-    guide: "assets/guides/newton.png",
+    avatar: "./assets/disks/newton.png",
+    guide: "./assets/guides/newton.png",
     alt: "牛顿档案软盘",
     guideAlt: "牛顿坐在苹果树下，作为进入实验的引导画面",
     placeholder: "为什么苹果落下，月亮却没有掉下来？",
+    lead: "苹果落下，月亮却没有。同一条[[万有引力]]把它们拴在同一种下落里。",
+    asideA: "[[1687]]年《原理》写出三条运动定律。惯性不是推力，是物体不肯无故改变运动的性质。",
+    asideB: "白光是复合的。棱镜并不制造颜色，只把各色光线[[分开]]。",
+    dungeon: "坠落之月",
+    dungeonEn: "Falling Moon",
+    latin: "Isaac Newton",
+    bio: [
+      "牛顿研究的问题其实都很日常：苹果为什么会掉下来？东西为什么会运动？月亮为什么不会飞走？",
+      "最后，他发现地上的苹果和天上的月亮，其实都遵循同一套规律。",
+    ],
+    line: "他让人类第一次能够用一套规则去理解运动和引力。",
   },
   {
     id: "einstein",
@@ -29,11 +41,22 @@ const FIGURES = [
     fullName: "阿尔伯特·爱因斯坦",
     title: "爱因斯坦 · 时空",
     domain: "相对论 / 时空",
-    avatar: "assets/disks/einstein.png",
-    guide: "assets/guides/einstein.png",
+    avatar: "./assets/disks/einstein.png",
+    guide: "./assets/guides/einstein.png",
     alt: "爱因斯坦档案软盘",
     guideAlt: "爱因斯坦坐在阳台上握着怀表，作为进入实验的引导画面",
     placeholder: "为什么对所有观察者光速都一样？",
+    lead: "同时发生的事情，换一个观察者可能并不同时。[[时空]]会随运动一起改写。",
+    asideA: "[[1905]]年，光速对所有观察者相同。质量与能量可以互换。",
+    asideB: "电梯里的失重，和弯曲时空里的自由落体，是同一种经验。",
+    dungeon: "时间弯曲之后",
+    dungeonEn: "After Time Bends",
+    latin: "Albert Einstein",
+    bio: [
+      "爱因斯坦重新改变了我们对时间、空间和引力的理解。他告诉我们：时间并不是永远一样快，空间也不是永远平直的。",
+      "速度越接近光速，时间和空间都会发生变化。",
+    ],
+    line: "他让宇宙从一个固定的舞台，变成了一个会弯曲、会变化的世界。",
   },
   {
     id: "dirac",
@@ -41,11 +64,22 @@ const FIGURES = [
     fullName: "保罗·狄拉克",
     title: "狄拉克 · 反物质",
     domain: "量子物理 / 反物质",
-    avatar: "assets/disks/dirac.png",
-    guide: "assets/guides/dirac.png",
+    avatar: "./assets/disks/dirac.png",
+    guide: "./assets/guides/dirac.png",
     alt: "狄拉克档案软盘",
     guideAlt: "狄拉克坐在洒满阳光的书房里，作为进入实验的引导画面",
     placeholder: "电子为什么需要相对论性方程？",
+    lead: "电子要同时服从相对论与量子规则，方程里会自己长出[[自旋]]。",
+    asideA: "[[1928]]年的相对论性电子方程给出负能解。后来那被读成正电子。",
+    asideB: "空穴一度被想成质子。那是一次诚实的误读，不是后来的夸克模型。",
+    dungeon: "反物质回廊",
+    dungeonEn: "Antimatter Hall",
+    latin: "Paul Dirac",
+    bio: [
+      "狄拉克是一个非常安静、非常相信数学的人。他写出了一个描述电子的方程，结果这个方程竟然提前预言了一种当时还没人发现的东西：反物质。",
+      "后来，实验真的发现了它。",
+    ],
+    line: "很像是数学先告诉人类：“这里还有一个你们没见过的世界。”",
   },
   {
     id: "feynman",
@@ -53,11 +87,21 @@ const FIGURES = [
     fullName: "理查德·费曼",
     title: "费曼 · 相互作用",
     domain: "粒子物理 / 相互作用",
-    avatar: "assets/disks/feynman.png",
-    guide: "assets/guides/feynman.png",
+    avatar: "./assets/disks/feynman.png",
+    guide: "./assets/guides/feynman.png",
     alt: "费曼档案软盘",
     guideAlt: "费曼在教室里擦黑板，作为进入实验的引导画面",
     placeholder: "粒子从 A 到 B，真的只走一条路吗？",
+    lead: "粒子从 A 到 B，并不只走一条路。所有路径加起来，才是它[[真正走的路]]。",
+    asideA: "费曼图把相互作用画成线条。光子在图里传递电磁力。",
+    asideB: "路径积分先让人看见所有可能，再把振幅加总。",
+    dungeon: "粒子的秘密路线",
+    dungeonEn: "Secret Particle Path",
+    latin: "Richard Feynman",
+    bio: [
+      "费曼特别擅长把复杂的物理讲得很直白。他研究粒子之间是怎么互相作用的，还发明了“费曼图”，把原本很难懂的量子过程画成一条条简单的线。",
+    ],
+    line: "很会把复杂世界讲明白的人。",
   },
   {
     id: "yang",
@@ -65,11 +109,21 @@ const FIGURES = [
     fullName: "杨振宁",
     title: "杨振宁 · 对称性",
     domain: "量子场 / 对称性",
-    avatar: "assets/disks/yang.png",
-    guide: "assets/guides/yang.png",
+    avatar: "./assets/disks/yang.png",
+    guide: "./assets/guides/yang.png",
     alt: "杨振宁档案软盘",
     guideAlt: "杨振宁站在窗边望向山野，作为进入实验的引导画面",
     placeholder: "什么是规范对称性？",
+    lead: "对称性不只是好看。它[[支配]]粒子之间如何相互作用。",
+    asideA: "杨-米尔斯场把规范对称性写成动力学。弱作用的宇称可以不守恒。",
+    asideB: "提到实验，必须归功[[吴健雄]]。标准模型不是一个人完成的。",
+    dungeon: "破碎的镜像",
+    dungeonEn: "Broken Mirror",
+    latin: "Chen-Ning Yang",
+    bio: [
+      "杨振宁研究的是自然界很深层的一种规律：对称性。我们看到的世界很多地方看起来左右、正反都很对称，但在微观粒子的世界里，有些规律并不是完全对称的。",
+    ],
+    line: "他帮助人们理解了自然界为什么有些地方对称，有些地方却不对称。",
   },
   {
     id: "bohr",
@@ -77,11 +131,21 @@ const FIGURES = [
     fullName: "尼尔斯·玻尔",
     title: "玻尔 · 原子跃迁",
     domain: "量子物理 / 原子能级",
-    avatar: "assets/disks/bohr.png",
-    guide: "assets/guides/bohr.png",
+    avatar: "./assets/disks/bohr.png",
+    guide: "./assets/guides/bohr.png",
     alt: "玻尔档案软盘",
     guideAlt: "玻尔蹲在池塘边触碰水面，作为进入实验的引导画面",
     placeholder: "电子为什么不会掉进原子核？",
+    lead: "电子不会掉进原子核。它只能待在若干[[定态]]上，跃迁时放出一条光谱。",
+    asideA: "[[1913]]年的氢原子模型用轨道图说话。那是模型，不是微型太阳系。",
+    asideB: "互补原理说：波动图景与粒子图景，不能同时说满。",
+    dungeon: "原子跃迁塔",
+    dungeonEn: "Atomic Jump Tower",
+    latin: "Niels Bohr",
+    bio: [
+      "玻尔帮助人们第一次比较直观地理解了原子的内部。电子并不是想在哪里就在哪里，而是只能待在特定的“能量层级”上，还会在不同层级之间跳来跳去。",
+    ],
+    line: "可以把电子想成住在一栋有固定楼层的房子里。",
   },
   {
     id: "debroglie",
@@ -89,11 +153,20 @@ const FIGURES = [
     fullName: "路易·德布罗意",
     title: "德布罗意 · 物质波",
     domain: "量子物理 / 物质波",
-    avatar: "assets/disks/debroglie.png",
-    guide: "assets/guides/debroglie.png",
+    avatar: "./assets/disks/debroglie.png",
+    guide: "./assets/guides/debroglie.png",
     alt: "德布罗意档案软盘",
     guideAlt: "德布罗意的物质波实验引导画面",
     placeholder: "粒子怎么会有波长？",
+    lead: "物质也可以有波长。运动越慢，[[物质波]]铺得越开。",
+    asideA: "粒子的动量与波长成反比。电子也能像光一样干涉。",
+    asideB: "这不是比喻。衍射实验把波长写进了实物本身。",
+    latin: "Louis de Broglie",
+    bio: [
+      "物质也可以有波长。德布罗意提出，运动越慢，这种波动铺得越开。",
+      "后来的电子衍射实验证明，这不是比喻，波长写进了实物本身。",
+    ],
+    line: "粒子也可以像波一样铺开。",
   },
   {
     id: "schrodinger",
@@ -101,11 +174,22 @@ const FIGURES = [
     fullName: "埃尔温·薛定谔",
     title: "薛定谔 · 叠加态",
     domain: "量子物理 / 叠加态",
-    avatar: "assets/disks/schrodinger.png",
-    guide: "assets/guides/schrodinger.png",
+    avatar: "./assets/disks/schrodinger.png",
+    guide: "./assets/guides/schrodinger.png",
     alt: "薛定谔档案软盘",
     guideAlt: "薛定谔侧耳倾听桌上的木箱，作为进入实验的引导画面",
     placeholder: "波函数到底描述什么？",
+    lead: "波函数同时写出多种可能。猫的故事是归谬，不是一只[[既死又活]]的吉祥物。",
+    asideA: "[[1926]]年的波动方程让微观状态可以叠加。概率读法来自玻恩。",
+    asideB: "打开箱子之前，方程描述的是振幅，不是已经发生的事实。",
+    dungeon: "未打开的箱子",
+    dungeonEn: "Unopened Box",
+    latin: "Erwin Schrödinger",
+    bio: [
+      "薛定谔研究的是一个很奇妙的问题：在量子世界里，我们不能总是确定一个粒子到底在哪里，只能知道它“可能出现在哪里”。",
+      "他还提出了著名的“薛定谔的猫”，让人们感受到量子世界到底有多反直觉。",
+    ],
+    line: "在量子世界里，很多事情不是“确定发生”，而是“有多大可能发生”。",
   },
   {
     id: "maxwell",
@@ -113,39 +197,64 @@ const FIGURES = [
     fullName: "詹姆斯·麦克斯韦",
     title: "麦克斯韦 · 电磁波",
     domain: "电磁学 / 光",
-    avatar: "assets/disks/maxwell.png",
-    guide: "assets/guides/maxwell.png",
+    avatar: "./assets/disks/maxwell.png",
+    guide: "./assets/guides/maxwell.png",
     alt: "麦克斯韦档案软盘",
     guideAlt: "麦克斯韦在书桌前调试仪器，作为进入实验的引导画面",
     placeholder: "电和磁如何互相产生？",
+    lead: "变化的电场会生磁，变化的磁场会生电。光就是这样跑起来的[[电磁波]]。",
+    asideA: "位移电流补上了方程的缺口。真空里的波速正好是光速。",
+    asideB: "法拉第看见力线。麦克斯韦把它们写成式子。赫兹的证实在他身后。",
+    dungeon: "光的第四扇门",
+    dungeonEn: "Fourth Door of Light",
+    latin: "James Clerk Maxwell",
+    bio: [
+      "麦克斯韦把电、磁和光联系到了一起。以前人们觉得它们是不同的现象，但他发现，其实它们都属于同一个电磁世界。",
+    ],
+    line: "他让人们知道，光其实也是一种电磁波。",
   },
 ];
 
 const FIGURE_BASELINES = new Map(FIGURES.map((figure) => [figure.id, { ...figure }]));
 
+const RELICS = [
+  { id: "apple", src: "./assets/relics/apple.png?v=cutout-1", label: "苹果", alt: "一颗像素红苹果" },
+  { id: "magnet", src: "./assets/relics/magnet.png?v=cutout-1", label: "电磁", alt: "蹄形磁铁与线圈" },
+  { id: "radio", src: "./assets/relics/radio.png?v=cutout-1", label: "电波", alt: "发着电波的无线电仪" },
+  { id: "watch", src: "./assets/relics/watch.png?v=cutout-1", label: "时计", alt: "怀表压在弯曲的时空格网上" },
+  { id: "atom", src: "./assets/relics/atom.png?v=cutout-1", label: "原子", alt: "木座上的金色原子仪" },
+  { id: "chalkboard", src: "./assets/relics/chalkboard.png?v=cutout-1", label: "相互作用", alt: "画着费曼图的黑板" },
+  { id: "parity", src: "./assets/relics/parity.png?v=cutout-1", label: "宇称", alt: "镜子两边颜色对调的实验装置" },
+  { id: "cat", src: "./assets/relics/cat.png?v=cutout-1", label: "猫", alt: "箱子里探出头的黑猫" },
+  { id: "charge", src: "./assets/relics/charge.png?v=cutout-1", label: "电荷", alt: "正负电荷相碰" },
+];
+
 const fan = document.querySelector("#fan");
 const heroTitle = document.querySelector("#heroTitle");
-const askForm = document.querySelector("#askForm");
-const askInput = document.querySelector("#ask-input");
-const askSubmit = document.querySelector("#askSubmit");
-const voiceInput = document.querySelector("#voiceInput");
-const askInputLabel = document.querySelector("#askInputLabel");
+const heroLede = document.querySelector("#heroLede");
+const pressStart = document.querySelector("#pressStart");
 const ctaStatus = document.querySelector("#ctaStatus");
-const watchLink = document.querySelector("#watchLink");
-const stage = document.querySelector("#stage");
 const enterGame = document.querySelector("#enterGame");
 const guideImage = document.querySelector("#guideImage");
-const stageCaption = document.querySelector("#stageCaption");
-const stageNote = document.querySelector("#stageNote");
+const dungeonTitle = document.querySelector("#dungeonTitle");
+const dungeonZh = document.querySelector("#dungeonZh");
+const dungeonEn = document.querySelector("#dungeonEn");
+const scientistBio = document.querySelector("#scientistBio");
+const bioLatin = document.querySelector("#bioLatin");
+const bioName = document.querySelector("#bioName");
+const bioBody = document.querySelector("#bioBody");
+const bioLine = document.querySelector("#bioLine");
 const portal = document.querySelector("#portal");
 const portalImage = document.querySelector("#portalImage");
 const portalTitle = document.querySelector("#portalTitle");
 const portalLeave = document.querySelector("#portalLeave");
-const askChip = document.querySelector("#askChip");
-const askChipName = document.querySelector("#askChipName");
-const askPanel = document.querySelector("#askPanel");
-const askPanelName = document.querySelector("#askPanelName");
-const askClose = document.querySelector("#askClose");
+const openTalk = document.querySelector("#openTalk");
+const talkRoom = document.querySelector("#talkRoom");
+const talkLatin = document.querySelector("#talkLatin");
+const talkTitle = document.querySelector("#talkTitle");
+const talkLeave = document.querySelector("#talkLeave");
+const talkForm = document.querySelector("#talkForm");
+const talkInput = document.querySelector("#talkInput");
 const askPrompts = document.querySelector("#askPrompts");
 const askLog = document.querySelector("#askLog");
 const lightbox = document.querySelector("#lightbox");
@@ -175,12 +284,14 @@ const themeGameChoices = document.querySelector("#themeGameChoices");
 const themeGameFeedback = document.querySelector("#themeGameFeedback");
 const themeGameNext = document.querySelector("#themeGameNext");
 const themeGameClose = document.querySelector("#themeGameClose");
-
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 let currentId = FIGURES[0].id;
 let archive = null;
 let lastClicked = null;
 const conversations = new Map();
+const TALKS_KEY = "qo-visitor-talks";
+const TALKS_LIMIT = 40;
 let activeThemePack = null;
 let activeThemeUrls = [];
 let themeGameStep = 0;
@@ -189,7 +300,6 @@ let themeGameResolved = false;
 const gameModules = new Map();
 const moduleIdToFigureId = new Map();
 let activeGameUrls = [];
-const persistentGameUrls = [];
 
 const THEME_KEY = "qo-alt-theme";
 const appearance = document.querySelector(".appearance");
@@ -197,6 +307,10 @@ const scientistAgentApiRoot = (document.documentElement.dataset.scientistAgentAp
 
 function compact(text) {
   return text.replace(/\s+/g, "");
+}
+
+function wallLabel(text) {
+  return (text ?? "").replace(/\[\[([^\]]+)\]\]/g, "$1");
 }
 
 function preferredTheme() {
@@ -225,6 +339,34 @@ function profileFor(scientistId) {
   return archive?.scientists?.[scientistId] ?? null;
 }
 
+function loadTalks() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(TALKS_KEY) ?? "{}");
+    if (!parsed || typeof parsed !== "object") return;
+    Object.entries(parsed).forEach(([id, log]) => {
+      if (!Array.isArray(log)) return;
+      conversations.set(
+        id,
+        log.filter((item) => item?.role && typeof item.text === "string"),
+      );
+    });
+  } catch {
+    /* keep an empty in-memory log */
+  }
+}
+
+function saveTalks() {
+  const data = {};
+  conversations.forEach((log, id) => {
+    data[id] = log.slice(-TALKS_LIMIT);
+  });
+  try {
+    localStorage.setItem(TALKS_KEY, JSON.stringify(data));
+  } catch {
+    /* quota or private mode */
+  }
+}
+
 function conversationFor(scientistId) {
   let log = conversations.get(scientistId);
   if (!log) {
@@ -232,6 +374,21 @@ function conversationFor(scientistId) {
     conversations.set(scientistId, log);
   }
   return log;
+}
+
+async function loadThread(scientistId) {
+  if (!apiEnabled()) return;
+  try {
+    const payload = await api(`/api/scientists/${scientistId}/thread`);
+    conversations.set(
+      scientistId,
+      (payload.messages ?? []).map((item) => ({ role: item.role, text: item.text })),
+    );
+    saveTalks();
+    if (scientistId === currentId) renderAskLog();
+  } catch {
+    /* keep the local cache */
+  }
 }
 
 function renderAskLog() {
@@ -318,16 +475,49 @@ function renderPrompts() {
   );
 }
 
+function updateBio(figure) {
+  if (!scientistBio || !bioLatin || !bioName || !bioBody || !bioLine) return;
+  bioLatin.textContent = figure.latin || "";
+  bioName.textContent = figure.name;
+  bioBody.replaceChildren(
+    ...(figure.bio ?? []).map((text) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = text;
+      return paragraph;
+    }),
+  );
+  if (figure.line) {
+    bioLine.hidden = false;
+    bioLine.textContent = figure.line;
+  } else {
+    bioLine.hidden = true;
+    bioLine.textContent = "";
+  }
+}
+
 function updateCopy() {
   const figure = currentFigure();
   heroTitle.textContent = figure.name;
-  askInput.placeholder = figure.placeholder;
-  askInputLabel.textContent = `向${figure.name}提问`;
-  stageCaption.textContent = figure.title;
-  stageNote.textContent = figure.stageNote ?? figure.domain;
-  enterGame.setAttribute("aria-label", `进入${figure.name}的实验（演示）`);
-  askChipName.textContent = figure.name;
-  askPanelName.textContent = figure.name;
+  if (heroLede) heroLede.textContent = wallLabel(figure.lead);
+  if (dungeonTitle && dungeonZh && dungeonEn) {
+    if (figure.dungeon) {
+      dungeonTitle.hidden = false;
+      dungeonZh.textContent = figure.dungeon;
+      dungeonEn.textContent = figure.dungeonEn || "";
+      dungeonEn.hidden = !figure.dungeonEn;
+    } else {
+      dungeonTitle.hidden = true;
+      dungeonZh.textContent = "";
+      dungeonEn.textContent = "";
+    }
+  }
+  updateBio(figure);
+  enterGame.setAttribute("aria-label", `开始与${figure.name}的对话`);
+  pressStart?.setAttribute("aria-label", `进入${figure.name}的游戏`);
+  if (talkLatin) talkLatin.textContent = figure.latin || "";
+  if (talkTitle) talkTitle.textContent = `与${figure.name}对话`;
+  openTalk?.setAttribute("aria-label", `开始与${figure.name}的对话`);
+  if (talkInput) talkInput.placeholder = figure.placeholder;
   updateFanSlots();
   renderPrompts();
   showGuide(figure);
@@ -357,9 +547,9 @@ function selectFigure(id, { lightboxOnRepeat = false } = {}) {
 
   currentId = id;
   lastClicked = id;
-  stopVoice();
-  if (themeGame.open && activeThemePack?.manifest.target_scientist_id !== id) themeGame.close();
+  if (themeGame?.open && activeThemePack?.manifest.target_scientist_id !== id) themeGame.close();
   updateCopy();
+  loadThread(id);
 }
 
 function openPortal() {
@@ -376,10 +566,6 @@ function openPortal() {
   portalImage.alt = figure.guideAlt;
   portalTitle.textContent = figure.title;
   portal.showModal();
-}
-
-function closePortal() {
-  if (portal.open) portal.close();
 }
 
 function setGameModuleStatus(message, state = "") {
@@ -525,7 +711,7 @@ async function importGameModule(files, { quiet = false, select = true } = {}) {
   if (!result.ok) throw new Error(result.errors.slice(0, 3).join("；"));
   const { manifest, entries } = result;
   const figure = registerGameModule(manifest, { entries, select });
-  if (!quiet) setGameModuleStatus(`已导入：${figure.title}。点击下方电脑即可游玩。`, "success");
+  if (!quiet) setGameModuleStatus(`已导入：${figure.title}。点击上方 Press start 即可游玩。`, "success");
 }
 
 function focusRequestedModule() {
@@ -534,12 +720,13 @@ function focusRequestedModule() {
   const figureId = moduleIdToFigureId.get(moduleId);
   if (!figureId) { setGameModuleStatus("这个社区作品尚未发布或已经下架。", "error"); return; }
   selectFigure(figureId);
-  stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-  enterGame.classList.remove("community-cue");
-  requestAnimationFrame(() => enterGame.classList.add("community-cue"));
-  enterGame.focus({ preventScroll: true });
-  setGameModuleStatus("已从社区选中作品：请点击发光的电脑进入游戏。", "success");
-  window.setTimeout(() => enterGame.classList.remove("community-cue"), 2800);
+  pressStart?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+  pressStart?.classList.remove("community-cue");
+  requestAnimationFrame(() => pressStart?.classList.add("community-cue"));
+  pressStart?.focus({ preventScroll: true });
+  setGameModuleStatus("已从社区选中作品，正在进入游戏。", "success");
+  openPortal();
+  window.setTimeout(() => pressStart?.classList.remove("community-cue"), 2800);
 }
 
 async function loadPublishedModules() {
@@ -559,7 +746,7 @@ async function loadPublishedModules() {
       registerGameModule(manifest, { files: record.files, baseUrl, select: false, published: true });
       loaded += 1;
     }
-    if (loaded) setGameModuleStatus(`已加载 ${loaded} 个作品简介；完整游戏会在点击电脑后加载。`, "success");
+    if (loaded) setGameModuleStatus(`已加载 ${loaded} 个作品简介；完整游戏会在点击 Press start 后加载。`, "success");
     focusRequestedModule();
   } catch (error) {
     console.warn("公开小游戏目录未加载", error);
@@ -708,18 +895,34 @@ function advanceThemeGame() {
   renderThemeGame();
 }
 
-function openAsk() {
-  askPanel.hidden = false;
-  askChip.setAttribute("aria-expanded", "true");
+function closeModuleGame() {
+  if (moduleGame?.open) moduleGame.close();
+  if (moduleGameFrame) moduleGameFrame.srcdoc = "";
+  releaseActiveGameUrls();
 }
 
-function closeAsk() {
-  askPanel.hidden = true;
-  askChip.setAttribute("aria-expanded", "false");
+
+function closePortal() {
+  if (portal.open) portal.close();
+}
+
+function openTalkRoom() {
+  if (!talkRoom) return;
+  if (!talkRoom.open) talkRoom.showModal();
+  loadThread(currentId).then(() => {
+    renderAskLog();
+    talkInput?.focus();
+  });
+  talkInput?.focus();
+}
+
+function closeTalkRoom() {
+  if (talkRoom?.open) talkRoom.close();
 }
 
 function appendMessage(role, text, scientistId = currentId) {
   conversationFor(scientistId).push({ role, text });
+  saveTalks();
   if (scientistId === currentId) renderAskLog();
 }
 
@@ -745,16 +948,13 @@ async function sendQuestion(raw) {
   if (!message) return;
   const scientistId = currentId;
 
-  stopVoice();
-  askInput.value = "";
-  askSubmit.disabled = true;
   setStatus(scientistId, scientistAgentApiRoot ? "正在通信" : "正在翻档案");
-  openAsk();
+  openTalkRoom();
   appendMessage("user", message, scientistId);
 
   if (!archive) {
     try {
-      const response = await fetch("data/scientist-agents.json");
+      const response = await fetch("./data/scientist-agents.json");
       if (!response.ok) throw new Error("archive missing");
       archive = await response.json();
       applyArchivePlaceholders();
@@ -768,16 +968,12 @@ async function sendQuestion(raw) {
 
   if (scientistAgentApiRoot) {
     try {
-      const response = await fetch(`${scientistAgentApiRoot}/scientists/${scientistId}/chat`, {
+      const payload = await api(`/api/scientists/${scientistId}/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        json: { message },
       });
-      if (!response.ok) throw new Error(`agent ${response.status}`);
-      const payload = await response.json();
-      const label = payload.source === "qwen" ? "【AI 生成 · 依据本站科学档案】\n" : "";
-      appendMessage("figure", `${label}${payload.answer}`, scientistId);
-      setStatus(scientistId, payload.source === "qwen" ? "这条回答由 AI 生成，请结合馆藏来源理解。" : "");
+      appendMessage("figure", payload.answer, scientistId);
+      setStatus(scientistId, payload.source === "archive" ? "" : "");
       return;
     } catch {
       setStatus(scientistId, "模型通信暂时接不上，先用档案回答。");
@@ -797,7 +993,7 @@ function setStatus(scientistId, text) {
 async function ensureArchive() {
   if (archive) return;
   try {
-    const response = await fetch("data/scientist-agents.json");
+    const response = await fetch("./data/scientist-agents.json");
     if (!response.ok) return;
     archive = await response.json();
     applyArchivePlaceholders();
@@ -820,12 +1016,19 @@ fanPrev.addEventListener("click", () => stepFigure(-1));
 fanNext.addEventListener("click", () => stepFigure(1));
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && listening) {
-    event.preventDefault();
-    stopVoice();
+  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
+  if (talkRoom?.open) return;
+  if (relicsRoot?.contains(event.target)) {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      stepRelic(1);
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      stepRelic(-1);
+    }
     return;
   }
-  if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) return;
   if (event.key === "ArrowRight") {
     event.preventDefault();
     stepFigure(1);
@@ -835,114 +1038,45 @@ document.addEventListener("keydown", (event) => {
     stepFigure(-1);
   }
   if (event.key === "Escape") {
+    if (talkRoom?.open) {
+      closeTalkRoom();
+      return;
+    }
+    if (moduleGame?.open) {
+      closeModuleGame();
+      return;
+    }
+    if (themeGame?.open) {
+      themeGame.close();
+      return;
+    }
     if (portal.open) {
       closePortal();
-      return;
     }
-    closeAsk();
   }
 });
 
-function syncAskSubmit() {
-  askSubmit.disabled = askInput.value.trim().length === 0;
-}
-
-const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition = null;
-let listening = false;
-let voiceBase = "";
-
-function setListening(on) {
-  listening = on;
-  voiceInput?.classList.toggle("is-listening", on);
-  voiceInput?.setAttribute("aria-pressed", String(on));
-  voiceInput?.setAttribute("aria-label", on ? "停止语音输入" : "语音输入");
-}
-
-function stopVoice() {
-  if (!recognition || !listening) return;
-  recognition.stop();
-}
-
-function startVoice() {
-  if (!recognition) return;
-  voiceBase = askInput.value.trim();
-  try {
-    recognition.start();
-  } catch {
-    /* already started */
-  }
-}
-
-if (voiceInput && SpeechRecognitionAPI) {
-  recognition = new SpeechRecognitionAPI();
-  recognition.lang = "zh-CN";
-  recognition.interimResults = true;
-  recognition.continuous = false;
-
-  recognition.addEventListener("start", () => {
-    setListening(true);
-    setStatus(currentId, "正在听");
-  });
-
-  recognition.addEventListener("result", (event) => {
-    let finalText = "";
-    let interim = "";
-    for (const result of event.results) {
-      if (result.isFinal) finalText += result[0].transcript;
-      else interim += result[0].transcript;
-    }
-    const spoken = `${finalText}${interim}`.trim();
-    askInput.value = [voiceBase, spoken].filter(Boolean).join("");
-    syncAskSubmit();
-  });
-
-  recognition.addEventListener("error", (event) => {
-    setListening(false);
-    if (event.error === "not-allowed") {
-      setStatus(currentId, "需要允许麦克风才能语音提问。");
-      return;
-    }
-    if (event.error === "no-speech" || event.error === "aborted") {
-      if (ctaStatus.textContent === "正在听") setStatus(currentId, "");
-      return;
-    }
-    setStatus(currentId, "这轮没听清，再试一次。");
-  });
-
-  recognition.addEventListener("end", () => {
-    setListening(false);
-    if (ctaStatus.textContent === "正在听") setStatus(currentId, "");
-    syncAskSubmit();
-  });
-
-  voiceInput.addEventListener("click", () => {
-    if (listening) stopVoice();
-    else startVoice();
-  });
-} else if (voiceInput) {
-  voiceInput.hidden = true;
-}
-
-askInput.addEventListener("input", syncAskSubmit);
-
-askForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  sendQuestion(askInput.value);
-});
-
-watchLink?.addEventListener("click", () => {
-  stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-  enterGame.focus();
-});
-
-enterGame.addEventListener("click", openPortal);
+pressStart?.addEventListener("click", openPortal);
+enterGame.addEventListener("click", openTalkRoom);
 portalLeave.addEventListener("click", closePortal);
 portal.addEventListener("click", (event) => {
   if (event.target === portal) closePortal();
 });
 
-themeDeveloperTools.hidden = !new URLSearchParams(location.search).has("dev");
+openTalk?.addEventListener("click", openTalkRoom);
+talkLeave?.addEventListener("click", closeTalkRoom);
+talkRoom?.addEventListener("click", (event) => {
+  if (event.target === talkRoom) closeTalkRoom();
+});
+talkForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!talkInput) return;
+  const message = talkInput.value;
+  talkInput.value = "";
+  sendQuestion(message);
+});
+
+if (themeDeveloperTools) themeDeveloperTools.hidden = !new URLSearchParams(location.search).has("dev");
 themePackImport?.addEventListener("click", () => themePackInput.click());
 themePackInput.addEventListener("change", async () => {
   if (!themePackInput.files?.length) return;
@@ -987,22 +1121,11 @@ themeGameNext.addEventListener("click", advanceThemeGame);
 themeGame.addEventListener("click", (event) => {
   if (event.target === themeGame) themeGame.close();
 });
-function closeModuleGame() {
-  if (moduleGame.open) moduleGame.close();
-  moduleGameFrame.srcdoc = "";
-  releaseActiveGameUrls();
-}
 moduleGameLeave.addEventListener("click", closeModuleGame);
 moduleGame.addEventListener("click", (event) => {
   if (event.target === moduleGame) closeModuleGame();
 });
 
-askChip.addEventListener("click", () => {
-  if (askPanel.hidden) openAsk();
-  else closeAsk();
-});
-
-askClose.addEventListener("click", closeAsk);
 
 lightbox.addEventListener("click", (event) => {
   if (event.target === lightbox) lightbox.close();
@@ -1014,22 +1137,109 @@ appearance?.addEventListener("click", (event) => {
   applyTheme(button.dataset.theme, true);
 });
 
+const relicsRoot = document.querySelector("#relics");
+const relicsTrack = document.querySelector("#relicsTrack");
+let relicIndex = 0;
+
+function wrapRelic(index) {
+  const length = RELICS.length;
+  return ((index % length) + length) % length;
+}
+
+function makeRelicButton(relic) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "relic";
+  button.dataset.id = relic.id;
+  button.setAttribute("aria-label", relic.label);
+  button.tabIndex = -1;
+  const image = document.createElement("img");
+  image.src = relic.src;
+  image.alt = relic.alt;
+  button.append(image);
+  return button;
+}
+
+function renderRelics() {
+  if (!relicsTrack) return;
+  relicsTrack.replaceChildren(
+    ...[0, 1].map((copy) => {
+      const set = document.createElement("div");
+      set.className = "relics-set";
+      if (copy === 1) set.setAttribute("aria-hidden", "true");
+      set.append(...RELICS.map(makeRelicButton));
+      return set;
+    }),
+  );
+}
+
+function stepRelic(delta) {
+  relicIndex = wrapRelic(relicIndex + delta);
+  relicsRoot?.classList.toggle("is-reverse", delta < 0);
+}
+
+relicsTrack?.addEventListener("click", (event) => {
+  const button = event.target.closest(".relic");
+  if (!button) return;
+  const next = RELICS.findIndex((relic) => relic.id === button.dataset.id);
+  if (next < 0) return;
+  relicIndex = next;
+});
+
+document.querySelector("#relicPrev")?.addEventListener("click", () => stepRelic(-1));
+document.querySelector("#relicNext")?.addEventListener("click", () => stepRelic(1));
+
+let relicTouchX = null;
+relicsTrack?.addEventListener("touchstart", (event) => {
+  relicTouchX = event.changedTouches[0]?.clientX ?? null;
+}, { passive: true });
+relicsTrack?.addEventListener("touchend", (event) => {
+  if (relicTouchX == null) return;
+  const x = event.changedTouches[0]?.clientX;
+  const delta = (x ?? relicTouchX) - relicTouchX;
+  relicTouchX = null;
+  if (Math.abs(delta) < 40) return;
+  stepRelic(delta < 0 ? 1 : -1);
+}, { passive: true });
+
+
 window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (event) => {
   if (localStorage.getItem(THEME_KEY)) return;
   applyTheme(event.matches ? "light" : "dark", false);
 });
 
-applyTheme(preferredTheme(), false);
+function applyRoute() {
+  const params = new URLSearchParams(location.search);
+  const figureId = params.get("figure");
+  if (figureId) selectFigure(figureId);
+  if (params.get("talk") === "1") {
+    openTalkRoom();
+  } else if (params.get("play") === "1") {
+    openPortal();
+  }
+}
 
+applyTheme(preferredTheme(), false);
+loadTalks();
 renderFan();
+renderRelics();
 updateCopy();
-loadPublishedModules();
-ensureArchive().finally(async () => {
+ensureArchive().then(async () => {
   try {
     const savedTheme = await loadActiveThemePack();
     if (savedTheme) activateThemePackRecord(savedTheme);
   } catch {
     deactivateThemePack();
     setThemePackStatus("上次主题包无法读取，已安全回到默认展厅。", "error");
+  }
+  await loadPublishedModules();
+  applyRoute();
+  if (apiEnabled()) {
+    try {
+      await migrateLocalIfNeeded();
+    } catch {
+      /* keep local talks */
+    }
+    await loadThread(currentId);
   }
 });

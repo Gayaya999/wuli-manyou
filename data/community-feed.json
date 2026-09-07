@@ -14,7 +14,7 @@
         { "nick": "江一帆", "text": "轨道是持续下落，想通了就起鸡皮疙瘩。", "at": "2026-09-02" }
       ],
       "download": "./published-modules/newton-gravity.zip",
-      "play": "./?module=newton-gravity#stage",
+      "play": "./?module=newton-gravity",
       "at": "2026-09-03"
     },
     {

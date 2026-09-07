@@ -2,8 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const html = await readFile(new URL("../community.html", import.meta.url), "utf8");
-const script = await readFile(new URL("../community.js", import.meta.url), "utf8");
+const visitors = await readFile(new URL("../visitors.html", import.meta.url), "utf8");
+const hall = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const script = await readFile(new URL("../works.js", import.meta.url), "utf8");
 const feed = JSON.parse(await readFile(new URL("../data/community-feed.json", import.meta.url), "utf8"));
 
 test("feed seed is a valid zero-backend social timeline", () => {
@@ -14,19 +15,24 @@ test("feed seed is a valid zero-backend social timeline", () => {
     assert.equal(typeof post.title, "string");
     assert.equal(typeof post.summary, "string");
     if (post.download) assert.match(post.download, /\.zip$/);
-    for (const c of post.comments || []) {
-      assert.ok(!/https?:\/\//.test(c.text), "seed comment must not contain URLs");
+    for (const comment of post.comments || []) {
+      assert.ok(!/https?:\/\//.test(comment.text), "seed comment must not contain URLs");
     }
   }
 });
 
-test("community page is a single-column feed", () => {
-  assert.match(html, /id="feed"/);
-  assert.match(html, /class="feed-page"/);
+test("game works hang below the hall relics and the visitor cabinet", () => {
+  assert.match(hall, /id="works"/);
+  assert.match(hall, /社区里留下的游戏/);
+  assert.match(visitors, /id="works"/);
+  assert.match(visitors, /id="worksList"/);
+  assert.match(visitors, /src="\.\/works\.js/);
+  assert.doesNotMatch(visitors, /href="\.\/community\.html"/);
+  assert.doesNotMatch(hall, /class="feed-page"/);
 });
 
-test("feed renders user input as text only and strips URLs", () => {
-  assert.match(script, /el\("p", "feed-comment-text", c\.text\)/);
+test("works wall renders user input as text only and strips URLs", () => {
+  assert.match(script, /el\("p", "works-note-text", item\.text\)/);
   assert.match(script, /https\?:\\\/\\\/\\S\+/);
   assert.match(script, /slice\(0, MAX_TEXT\)/);
   assert.match(script, /MAX_TEXT = 140/);
@@ -37,16 +43,16 @@ test("feed renders user input as text only and strips URLs", () => {
   }
 });
 
-test("feed two-layer likes and comments persist locally", () => {
+test("works two-layer likes and comments persist locally", () => {
   assert.match(script, /qo-feed-likes/);
   assert.match(script, /qo-feed-comments/);
   assert.match(script, /likeCount/);
   assert.match(script, /commentCount/);
 });
 
-test("feed provides real download and play actions", () => {
-  assert.match(script, /feed-download/);
+test("works provides real download and play actions", () => {
   assert.match(script, /dl\.download = ""/);
-  assert.match(script, /feed-play/);
-  assert.match(script, /feed-disabled/);
+  assert.match(script, /试玩/);
+  assert.match(script, /下载尚未备好/);
+  assert.match(feed.posts[0].play, /\?module=newton-gravity/);
 });
