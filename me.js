@@ -173,12 +173,12 @@ function renderIdentity() {
 function renderLedger() {
   if (serverMe?.ledger) {
     const { disks, talks, atlas } = serverMe.ledger;
-    ledger.textContent = `软盘 ${disks} 张 · 通信 ${talks} 人 · 图鉴 ${atlas} / 9`;
+    ledger.textContent = `软盘 ${disks} 张 · 通信 ${talks} 人`;
     return;
   }
   const disks = loadOwnedDisks().length;
   const talks = talkRows().length;
-  ledger.textContent = `软盘 ${disks} 张 · 通信 ${talks} 人 · 图鉴 ${talks} / 9`;
+  ledger.textContent = `软盘 ${disks} 张 · 通信 ${talks} 人`;
 }
 
 function renderAtlas() {

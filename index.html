@@ -26,7 +26,9 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=play-talk-1" />
+    <link rel="stylesheet" href="./styles.css?v=sky-fade-4k-1" />
+    <link rel="stylesheet" href="./visual-system.css?v=nav-slide-1" />
+    <link rel="stylesheet" href="./exhibition.css?v=hierarchy-2" />
   </head>
   <body>
     <a class="skip" href="#pressStart">跳到游戏</a>
@@ -39,7 +41,7 @@
           <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
           <nav class="site-nav" aria-label="展厅">
             <a href="./" aria-current="page">门厅</a>
-            <a href="#stage">实验</a>
+            <a href="./?figure=newton#experiment-newton-gravity">实验</a>
             <a href="./visitors.html">来访者</a>
             <a href="./me.html">我的</a>
           </nav>
@@ -85,6 +87,8 @@
         </div>
       </div>
 
+
+
       <div class="floor">
       <div class="shell">
         <section class="stage" id="stage" aria-label="实验终端">
@@ -112,6 +116,7 @@
                 <p>牛顿研究的问题其实都很日常：苹果为什么会掉下来？东西为什么会运动？月亮为什么不会飞走？</p>
                 <p>最后，他发现地上的苹果和天上的月亮，其实都遵循同一套规律。</p>
               </div>
+              <div class="concept-path" id="conceptPath" aria-label="核心概念"></div>
               <p class="bio-line" id="bioLine">他让人类第一次能够用一套规则去理解运动和引力。</p>
               <div class="bio-actions">
                 <button class="press-start press-start-sub" id="openTalk" type="button" aria-label="开始与牛顿的对话">
@@ -129,16 +134,25 @@
           </div>
         </section>
 
-        <section class="essay" id="hallEssay" aria-labelledby="essayTitle">
-          <p class="essay-kicker">观看</p>
-          <h2 id="essayTitle">苹果落下之后，光还在跑，时间也会弯。</h2>
-          <p>
-            这间展厅把经典力学、电磁学、相对论和量子物理连成一条可以走的路。九张软盘是九个人，不是九个章节标题。
-          </p>
-          <p>翻到谁，介绍和楼下的机器就属于谁。文字只做标签。</p>
-        </section>
+
       </div>
 
+        <section class="works scientist-works" id="works" hidden aria-labelledby="worksTitle">
+          <div class="shell">
+            <p class="essay-kicker" id="worksOwner">牛顿 / 科普模块</p>
+            <h2 id="worksTitle">继续探索</h2>
+            <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json" data-works-scope="scientist" data-scientist-id="newton"></div>
+
+          </div>
+        </section>
+
+        <div class="shell">
+          <section class="essay" id="hallEssay" aria-labelledby="essayTitle">
+            <p class="essay-kicker">物理漫游 / 九位科学家的世界</p>
+            <h2 id="essayTitle">苹果落下之后，光还在跑，时间也会弯。</h2>
+            <p>从经典力学、电磁学，到相对论和量子物理，九张软盘串起九种理解世界的方式。选择一位科学家，走进他的研究现场，再把问题带进对话与实验。</p>
+          </section>
+        </div>
         <section class="relics" id="relics" aria-roledescription="carousel" aria-label="展柜">
           <button class="carousel-step" id="relicPrev" type="button" aria-label="上一件展品">
             <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
@@ -155,16 +169,13 @@
           </button>
         </section>
 
-        <section class="works" id="works" aria-labelledby="worksTitle">
-          <div class="shell">
-            <p class="essay-kicker">来访者作品</p>
-            <h2 id="worksTitle">社区里留下的游戏</h2>
-            <p class="works-lede">试玩和下载都在这面墙上，不另开一站。</p>
-            <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json"></div>
+
+      </div>
+      <div class="shell import-zone">
             <details class="works-import">
               <summary>导入自己的游戏包</summary>
               <div class="module-dock" aria-label="作品导入">
-                <button id="gameModuleImport" type="button">选择 Skill 导出的 ZIP</button>
+                <button id="gameModuleImport" type="button">选择作品 ZIP</button>
                 <input id="gameModuleInput" type="file" accept=".zip,application/zip" hidden />
                 <ol class="module-progress" id="gameModuleProgress" aria-label="导入进度">
                   <li data-step="读取">读取</li>
@@ -173,7 +184,7 @@
                   <li data-step="验运行">验运行</li>
                   <li data-step="加入展厅">加入展厅</li>
                 </ol>
-                <p class="module-status" id="gameModuleStatus" aria-live="polite">ZIP 会先在本机验证，通过后才加入展厅。</p>
+                <p class="module-status" id="gameModuleStatus" aria-live="polite">本机验证后即可预览。</p>
                 <div id="themeDeveloperTools" hidden>
                   <button id="gameModuleFolderImport" type="button">开发模式：选择作品文件夹</button>
                   <input id="gameModuleFolderInput" type="file" webkitdirectory directory multiple hidden />
@@ -184,8 +195,6 @@
                 </div>
               </div>
             </details>
-          </div>
-        </section>
       </div>
     </main>
 
@@ -265,7 +274,8 @@
       </div>
     </dialog>
 
-    <script src="./script.js?v=play-talk-1" type="module"></script>
-    <script src="./works.js?v=play-talk-1" type="module"></script>
+    <script src="./script.js?v=scientist-owned-1" type="module"></script>
+    <script src="./works.js?v=scientist-owned-1" type="module"></script>
+    <script src="./nav-motion.js?v=experiment-2" type="module"></script>
   </body>
 </html>

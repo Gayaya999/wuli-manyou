@@ -1,0 +1,113 @@
+@font-face {
+  font-family: "Film Hand";
+  src: url("../assets/fonts/film-hand-medium.woff") format("woff");
+  font-style: normal;
+  font-weight: 500 900;
+  font-display: swap;
+}
+/* 本地手写字体：霞鹜文楷 v1.522 子集；许可见 assets/fonts/OFL-WenKai.txt。 */
+@font-face {
+  font-family: "Film Hand";
+  src: url("../assets/fonts/film-hand.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* 《苹果之外》唯一一套设计变量。数值来源：02_美术排版与UI设计方案、04_动效与声音设计、design/design-tokens.json。
+   舞台以 1280×720 为设计坐标；--u 是 1 个设计像素在当前舞台上的 CSS 尺寸（由 film.css 中的容器查询单位给出）。 */
+
+/* 本地字体：Noto Serif SC / Noto Sans SC 按本页实际用字裁出的子集（SIL OFL 1.1，见 assets/fonts/OFL.txt）。
+   系统已有宋体 / 苹方 / 雅黑时优先用系统字体；这里只做不联网的兜底。 */
+@font-face {
+  font-family: "Film Serif SC";
+  src: url("../assets/fonts/film-serif-sc.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Film Sans SC";
+  src: url("../assets/fonts/film-sans-sc-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Film Sans SC";
+  src: url("../assets/fonts/film-sans-sc-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* 颜色：全部取自影片的窗光、木桌、墨迹与纸边 */
+  --c-backdrop: #111411;   /* 幕外 */
+  --c-shade: #151a16;      /* 幕内局部遮罩 */
+  --c-text: #f1ebdd;       /* 主要文字 */
+  --c-text-2: #b5b3a5;     /* 次要文字 */
+  --c-brass: #c4a875;      /* 选定、已记录 */
+  --c-diff: #cb967d;       /* 偏差（总配文字） */
+  --c-paper: #dccdaa;      /* 手稿底色 */
+  --c-paper-thin: rgba(238, 229, 205, 0.62); /* 薄预测纸 */
+  --c-ink: #393c32;        /* 手稿墨色 */
+  --c-ink-2: #5d5d4f;      /* 手稿淡墨 */
+  --c-line: rgba(241, 235, 221, 0.55);
+  --c-line-faint: rgba(241, 235, 221, 0.22);
+  --c-focus: #c4a875;
+
+  /* 所有界面统一手写；原片内嵌字幕不受 CSS 影响。 */
+  --f-display: "Film Hand", "Kaiti SC", "KaiTi", cursive;
+  --f-body: "Film Hand", "Kaiti SC", "KaiTi", cursive;
+  --f-num: "Film Hand", "Kaiti SC", "KaiTi", cursive;
+
+  /* 动效 */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-settle: cubic-bezier(0.2, 0.65, 0.3, 1);
+  --t-hover-in: 140ms;
+  --t-hover-out: 100ms;
+  --t-press: 80ms;
+  --t-press-out: 120ms;
+  --t-stop: 180ms;
+  --t-choice-in: 240ms;
+  --t-choice-hold: 180ms;
+  --t-leave: 180ms;
+  --t-paper-in: 320ms;
+  --t-snap: 160ms;
+  --t-record: 140ms;
+  --t-result: 220ms;
+
+  --hit: 44px; /* 最小触控尺寸 */
+
+  /* —— 影片同款界面材质（第三版）——
+     取自影片的赛璐璐画法：哑光平涂、深棕墨线、无模糊的硬阴影；不用渐变、高光与外发光。 */
+  --k-paper: #ebdfc4;      /* 纸面 */
+  --k-paper-2: #d9c9a4;    /* 纸面暗部 */
+  --k-cream: #f5ecd6;      /* 奶白：影片里的示意线、箭头 */
+  --k-ink: #2a241d;        /* 墨线：与影片人物描线同色 */
+  --k-ink-2: #5a5043;      /* 淡墨 */
+  --k-ochre: #c48d3f;      /* 赭黄：唯一的强调色（选中、可发射） */
+  --k-ochre-2: #9c6a2a;
+  --k-red: #a83a2a;        /* 印章红：只用于印章与结果标记 */
+  --k-shadow: rgba(24, 20, 15, 0.85);
+  --k-cel: 3px 3px 0 var(--k-shadow);        /* 赛璐璐硬阴影 */
+  --k-cel-up: 5px 5px 0 var(--k-shadow);
+  --k-cel-down: 1px 1px 0 var(--k-shadow);
+  --k-line: 2.2px;                            /* 墨线粗细 */
+  /* 逐格节奏：手绘动画“一拍二”，每格约 83ms */
+  --k-twos: 83ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-hover-in: 0ms; --t-hover-out: 0ms; --t-press: 0ms; --t-press-out: 0ms;
+    --t-stop: 0ms; --t-choice-in: 100ms; --t-choice-hold: 0ms; --t-leave: 100ms;
+    --t-paper-in: 100ms; --t-snap: 0ms; --t-record: 100ms; --t-result: 100ms;
+  }
+}
+:root[data-motion="reduced"] {
+  --t-hover-in: 0ms; --t-hover-out: 0ms; --t-press: 0ms; --t-press-out: 0ms;
+  --t-stop: 0ms; --t-choice-in: 100ms; --t-choice-hold: 0ms; --t-leave: 100ms;
+  --t-paper-in: 100ms; --t-snap: 0ms; --t-record: 100ms; --t-result: 100ms;
+}

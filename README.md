@@ -5,7 +5,7 @@
 ## 运行展览页
 
 ```bash
-python3 -m http.server 4173 --bind 127.0.0.1
+node tools/serve-site.cjs 4173
 ```
 
 打开：
@@ -81,3 +81,11 @@ node --test tests/*.test.mjs
 顶部导航的“社区”打开 `community.html`，集中陈列当前公开发布的科学小游戏。展板清单读取 `published-modules/index.json`，每张卡片展示软盘封面、领域、科学家、作者与版本；点击“去展厅试玩”即回到展厅加载对应小游戏。
 
 当前首位展板是 `newton-gravity`（牛顿与万有引力）。精选阶段由仓库负责人用上面的发布工具把验证通过的模块放进 `published-modules/`，访客打开网站即可看到，创作者投稿入口后续再开放。
+
+## AIGC 完整体验
+
+选中牛顿软盘后，主入口进入《苹果之外》音乐音效完整版；旧牛顿引力小游戏位于牛顿档案下方的“继续探索”。作品按 scientist_id 绑定，其他人物及来访者页面不显示牛顿模块。影片点击后在站内打开，关闭会卸载播放器并停止声音。首页不预加载影片视频。
+
+影片位于 `experiences/apple-beyond/`，直接静态部署；下载包为 `experiences/apple-beyond.zip`。该可信成品由主项目 `interactive-films/apple-beyond-film/delivery/newton-film/tools/build-standalone.py` 打包，51 个文件的原始校验清单在 `FILES.sha256.json`，保留字幕、音乐、字体许可及原界面。它独立于受限内容包导入器，不接收上传脚本。
+
+本地预览使用上面的 Node 服务以支持视频 Range 请求；正式托管也应启用 Range。

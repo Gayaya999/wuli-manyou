@@ -108,27 +108,14 @@ body {
   z-index: -1;
   pointer-events: none;
   background-color: var(--bg);
-  background-image: url("./assets/bg/pixel-sky.jpg?v=3");
+  background-image: url("./assets/bg/pixel-sky-4k.jpg?v=1");
   background-repeat: no-repeat;
   background-position: top center;
-  background-size: 100% auto;
-  image-rendering: pixelated;
-}
-
-.sky::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: clamp(6.5rem, 20vw, 12rem);
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(to bottom, rgb(244 241 236 / 0), var(--bg));
-}
-
-html[data-theme="dark"] .sky::after {
-  background: linear-gradient(to bottom, oklch(0.168 0.006 95 / 0), var(--bg));
+  background-size: cover;
+  image-rendering: auto;
+  /* Fade the image itself, so its natural edge cannot form a blue seam. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgb(0 0 0 / 0.9) 65%, rgb(0 0 0 / 0.5) 80%, rgb(0 0 0 / 0.12) 93%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 52%, rgb(0 0 0 / 0.9) 65%, rgb(0 0 0 / 0.5) 80%, rgb(0 0 0 / 0.12) 93%, transparent 100%);
 }
 
 html[data-theme="dark"] .sky::before {
@@ -361,7 +348,9 @@ main {
   background: transparent;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -100%) scale(0.68);
+  /* Keep the anchor outside the animated transform to avoid matrix interpolation drift. */
+  translate: -50% -100%;
+  transform: translateX(0) rotate(0deg) scale(0.68);
   transform-origin: 50% 100%;
   cursor: pointer;
   transition:
@@ -391,17 +380,17 @@ main {
 .plate[data-slot="0"] {
   z-index: 6;
   cursor: zoom-in;
-  transform: translate(-50%, -100%) rotate(0deg) scale(1);
+  transform: translateX(0) rotate(0deg) scale(1);
 }
 
 .plate[data-slot="-1"] {
   z-index: 4;
-  transform: translate(-50%, -100%) translateX(-11.2rem) rotate(-30deg) scale(0.82);
+  transform: translateX(-11.2rem) rotate(-30deg) scale(0.82);
 }
 
 .plate[data-slot="1"] {
   z-index: 4;
-  transform: translate(-50%, -100%) translateX(11.2rem) rotate(30deg) scale(0.82);
+  transform: translateX(11.2rem) rotate(30deg) scale(0.82);
 }
 
 .plate[data-slot="-2"],
@@ -410,7 +399,7 @@ main {
   z-index: 2;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -100%) translateX(-16rem) rotate(-42deg) scale(0.64);
+  transform: translateX(-16rem) rotate(-42deg) scale(0.64);
 }
 
 .plate[data-slot="2"],
@@ -419,7 +408,7 @@ main {
   z-index: 2;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, -100%) translateX(16rem) rotate(42deg) scale(0.64);
+  transform: translateX(16rem) rotate(42deg) scale(0.64);
 }
 
 .plate.is-active img {
@@ -1473,11 +1462,11 @@ html[data-theme="light"] .plate.is-active img {
   }
 
   .plate[data-slot="-1"] {
-    transform: translate(-50%, -100%) translateX(-4.5rem) rotate(-22deg) scale(0.78);
+    transform: translateX(-4.5rem) rotate(-22deg) scale(0.78);
   }
 
   .plate[data-slot="1"] {
-    transform: translate(-50%, -100%) translateX(4.5rem) rotate(22deg) scale(0.78);
+    transform: translateX(4.5rem) rotate(22deg) scale(0.78);
   }
 
   .hero h1 {

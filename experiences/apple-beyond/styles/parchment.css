@@ -1,0 +1,106 @@
+/* 羊皮纸材质：只绘制背景；文字、命中区域与剧情布局保持独立。 */
+:root {
+  --k-paper: #ead5a4;
+  --k-paper-2: #d4b77e;
+  --k-cream: #f8edcf;
+  --k-ink: #39291c;
+  --k-ink-2: #66503a;
+  --c-ink: #39291c;
+  --c-ink-2: #66503a;
+  --paper-texture: url('../assets/ui/parchment-texture-v1.png');
+  --paper-tint: rgba(247, 231, 188, .12);
+  --paper-rim: rgba(132, 78, 29, .52);
+  --paper-cut: polygon(1% 5%, 4% 2%, 9% 4%, 14% 1%, 21% 3%, 27% 0, 33% 3%, 40% 1%, 48% 3%, 55% 0, 62% 3%, 69% 1%, 77% 4%, 84% 1%, 91% 3%, 97% 1%, 99% 8%, 98% 24%, 100% 39%, 98.8% 58%, 100% 72%, 98% 94%, 94% 97%, 87% 95%, 80% 99%, 72% 97%, 64% 100%, 57% 97%, 48% 100%, 40% 97%, 31% 99%, 23% 96%, 15% 99%, 8% 96%, 2% 99%, 0 90%, 1% 73%, 0 54%, 1.2% 37%, 0 19%);
+}
+:is(.pill, .medal, .bubble, .result, .thinking, .hs-tag, .menu, .toast, .clue, .icon-btn, .chrome-btn, .nb-help, .kit-key, .kit-paper, .slot.is-found .slot-mark) {
+  isolation: isolate;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--k-ink);
+}
+:is(.kit-paper, .slot-mark) { position: relative; }
+/* 不在文本上应用滤镜。背景单独撕边，不裁掉焦点环、图标或按钮触控范围。 */
+:is(.pill, .medal, .thinking, .hs-tag, .menu, .toast, .clue, .icon-btn, .chrome-btn, .nb-help, .kit-key, .kit-paper, .slot.is-found .slot-mark)::before,
+:is(.bubble, .result)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border: 0;
+  border-radius: inherit;
+  background-color: var(--k-paper);
+  background-image: linear-gradient(var(--paper-tint), var(--paper-tint)), radial-gradient(ellipse at 48% 45%, rgba(255,249,220,.25) 15%, transparent 72%), var(--paper-texture);
+  background-size: auto, auto, 420px 420px;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px #8b582e, inset 0 0 9px 2px var(--paper-rim), inset 0 0 25px rgba(157,102,37,.17);
+  clip-path: var(--paper-cut);
+  filter: url(#ink-a);
+  animation: none;
+}
+:is(.pill, .bubble, .result, .menu, .toast, .clue, .nb-help, .kit-key, .kit-paper) { border-radius: 3px 6px 4px 2px; }
+:is(.icon-btn, .chrome-btn) { --paper-cut: ellipse(49% 48% at 50% 50%); }
+.medal::after { border-color: rgba(113, 66, 31, .55); }
+:is(.pill.is-ready, .pill.is-big, .medal[aria-checked='true'], .bubble.is-chosen, .slot.is-found .slot-mark) {
+  --paper-tint: rgba(176, 116, 39, .26);
+  --paper-rim: rgba(114, 59, 23, .72);
+}
+.medal[aria-checked='true']::after { border: 2px solid var(--k-red); transform: rotate(-9deg); border-radius: 46% 52% 44% 51%; }
+.bubble.is-chosen::after { box-shadow: inset 0 0 0 2px var(--k-red), inset 0 0 13px 2px var(--paper-rim); }
+.bubble:first-child::before { background: var(--k-paper); filter: none; opacity: .85; }
+.pill:disabled { color: #75634d; opacity: .58; }
+.pill:disabled::before { --paper-tint: rgba(100, 86, 65, .2); border: 0; }
+:is(.pill, .bubble, .medal, .icon-btn, .chrome-btn):focus-visible { outline: 3px solid var(--k-cream); outline-offset: 5px; }
+:is(.pill, .bubble, .medal):hover:not(:disabled) { --paper-tint: rgba(255, 246, 214, .24); }
+.menu-item#m-motion[aria-pressed='true'] { background: rgba(153, 97, 38, .16); border-left: 3px solid var(--k-red); }
+.sheet { filter: drop-shadow(3px 4px 0 rgba(39,24,12,.7)); }
+/* 手稿纤维低于图线，预测纸继续半透明以便比较。 */
+.sheet .paper-crease { pointer-events: none; }
+
+.clue::after { border: 0; pointer-events: none; }
+
+/* 取消结尾悟字章后，让记录与重开操作自然排列。 */
+.finale-end { grid-template-columns: minmax(0, 1fr); }
+.finale-end > .record, .finale-end > .exits, .finale-end > .confirm { grid-column: 1; }
+
+/* 全界面使用同一套本地手写字体。视频内嵌字幕保持原样。 */
+body, button, input, select, textarea, code, kbd, svg text,
+.sheet text, .sheet .serif { font-family: var(--f-body) !important; }
+.sheet text { fill: #49301f; mix-blend-mode: multiply; }
+.sheet .ink-strokes, .sheet .pred-line, .sheet .pcross {
+  filter: url(#nb-ink);
+  mix-blend-mode: multiply;
+  opacity: .9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sheet .pred-line { stroke-width: 2.3; }
+/* 编号都是纸签，取消硬圆框与规整的内虚线。 */
+.medal, .slot-mark, .slot.is-found .slot-mark { border: 0; border-radius: 2px; }
+.medal::after { border: 0; inset: auto 20% 13%; height: 2px; border-radius: 0; transform: rotate(-4deg); }
+.medal[aria-checked='true']::after { border: 0; border-radius: 0; background: var(--k-ink); transform: rotate(-4deg); height: 2px; }
+.medal-num { font-weight: 400; }
+
+/* 不规则纸签：三张的轮廓、纹理偏移各不相同；文字与触控区不裁切。 */
+.medal, .slot-mark { filter: drop-shadow(0 2px 0 #77502d) drop-shadow(1px 3px 0 rgba(35,22,12,.65)); }
+.medal[data-v="0"], .slot:nth-child(1) .slot-mark { --paper-cut: polygon(0 9%, 7% 5%, 16% 7%, 24% 1%, 29% 4%, 42% 2%, 53% 6%, 66% 0, 78% 4%, 91% 2%, 98% 9%, 97% 27%, 100% 41%, 97% 53%, 99% 72%, 95% 93%, 82% 97%, 70% 92%, 60% 99%, 47% 95%, 34% 100%, 26% 95%, 13% 97%, 2% 91%, 4% 68%, 0 55%, 3% 36%); }
+.medal[data-v="1"], .slot:nth-child(2) .slot-mark { --paper-cut: polygon(3% 3%, 17% 6%, 31% 1%, 37% 6%, 49% 2%, 57% 5%, 72% 0, 81% 5%, 97% 2%, 99% 19%, 96% 36%, 100% 49%, 98% 71%, 100% 88%, 91% 97%, 78% 93%, 62% 100%, 48% 96%, 33% 99%, 20% 94%, 5% 97%, 0 83%, 3% 65%, 0 47%, 4% 27%); }
+.medal[data-v="2"], .slot:nth-child(3) .slot-mark { --paper-cut: polygon(1% 7%, 12% 2%, 22% 6%, 35% 0, 48% 4%, 61% 2%, 70% 6%, 82% 1%, 96% 5%, 100% 17%, 97% 31%, 99% 47%, 96% 63%, 100% 81%, 96% 96%, 85% 92%, 74% 99%, 59% 94%, 45% 98%, 34% 93%, 18% 100%, 3% 94%, 0 76%, 3% 59%, 0 40%, 4% 25%); }
+.medal[data-v="1"]::before { background-position: center, center, 83px 147px; }
+.medal[data-v="2"]::before { background-position: center, center, 211px 58px; }
+.medal::after, .medal[aria-checked='true']::after { display: none; }
+.medal[aria-checked='true'] { --paper-tint: rgba(145, 82, 27, .4); --paper-rim: rgba(97, 52, 23, .72); }
+.dial.is-open .medal[aria-checked='true'] { transform: translateY(2px); }
+.medal-num, .slot-mark { font-weight: 600; }
+.medal[aria-checked='true'] .medal-num { font-weight: 700; }
+.pill, .bubble, .task, .cover-title, .slot-text { font-weight: 600; }
+.bubble { padding-inline: calc(24 * var(--u) + 10px); }
+/* 不再在呼吸中切换噪声滤镜，避免热点轮廓逐帧跳变。 */
+.hs::before { animation: hs-breathe 1.8s ease-in-out infinite; filter: url(#ink-a); }
+.hs::after { animation: none; filter: url(#ink-b); }
+.sheet .nb-pulse { animation: hs-breathe 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .hs::before, .sheet .nb-pulse { animation: none; } }
+:root[data-motion="reduced"] .hs::before, :root[data-motion="reduced"] .sheet .nb-pulse { animation: none; }
+
+body { font-weight: 500; }
+.sheet text { font-weight: 500; }

@@ -26,8 +26,10 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=play-talk-1" />
+    <link rel="stylesheet" href="./styles.css?v=sky-fade-4k-1" />
     <link rel="stylesheet" href="./visitors.css?v=play-talk-1" />
+    <link rel="stylesheet" href="./visual-system.css?v=nav-slide-1" />
+    <link rel="stylesheet" href="./exhibition.css?v=hierarchy-2" />
   </head>
   <body class="cabinet-page">
     <a class="skip" href="#openBench">跳到制盘</a>
@@ -38,7 +40,7 @@
           <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
           <nav class="site-nav" aria-label="展厅">
             <a href="./">门厅</a>
-            <a href="./#stage">实验</a>
+            <a href="./?figure=newton#experiment-newton-gravity">实验</a>
             <a href="./visitors.html" aria-current="page">来访者</a>
             <a href="./me.html">我的</a>
           </nav>
@@ -50,7 +52,7 @@
 
         <section class="room" aria-labelledby="roomTitle">
           <h1 id="roomTitle">来访者档案</h1>
-          <p class="lede">九位物理学家的档案软盘。你也可以留下一张。</p>
+          <p class="lede">留下一张你的软盘。</p>
           <button class="text-link" id="openBench" type="button">存放一张档案</button>
           <div class="cabinet" id="cabinet" aria-label="物理学家档案软盘"></div>
         </section>
@@ -101,19 +103,14 @@
 
         <section class="board" id="community" aria-labelledby="communityTitle">
           <header class="board-head">
-            <h2 id="communityTitle">社区动态</h2>
+            <h2 id="communityTitle">软盘展墙</h2>
             <button class="text-link" id="openUpload" type="button">上传软盘</button>
           </header>
-          <p class="board-lede">来访者把盘留在墙上。点开一张就能看清标签。</p>
+          <p class="board-lede">点开软盘，认识一位来访者。</p>
           <div class="board-wall" id="communityWall" aria-label="社区软盘墙"></div>
         </section>
 
-        <section class="works" id="works" aria-labelledby="worksTitle">
-          <p class="essay-kicker">来访者作品</p>
-          <h2 id="worksTitle">社区里留下的游戏</h2>
-          <p class="works-lede">试玩和下载都在这面墙上，不另开一站。</p>
-          <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json"></div>
-        </section>
+
       </div>
     </main>
 
@@ -160,6 +157,6 @@
 
     <script src="./visitors.js?v=play-talk-1" type="module"></script>
     <script src="./community.js?v=play-talk-1" type="module"></script>
-    <script src="./works.js?v=play-talk-1" type="module"></script>
+    <script src="./nav-motion.js?v=experiment-2" type="module"></script>
   </body>
 </html>

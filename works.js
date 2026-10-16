@@ -1,4 +1,7 @@
+import { worksForScientist } from "./work-catalog.mjs";
 const list = document.querySelector("#worksList");
+const requestedFigure = new URLSearchParams(location.search).get("figure");
+if (list?.dataset.worksScope === "scientist" && requestedFigure) list.dataset.scientistId = requestedFigure;
 if (!list) {
   /* this page has no works wall */
 }
@@ -68,26 +71,51 @@ function commentList(post) {
   return ol;
 }
 
-function entry(post) {
+function entry(post, index) {
   const article = el("article", "works-item");
-
-  if (post.cover) {
-    const img = el("img");
-    img.src = post.cover;
-    img.alt = "";
-    img.loading = "lazy";
-    article.append(img);
-  }
+  article.dataset.kind = post.kind || "game";
+  article.id = `experiment-${post.id}`;
+  const media = el("a", "works-media");
+  media.href = post.play;
+  media.setAttribute("aria-label", `${post.kind === "film" ? "观看" : "试玩"}《${post.title}》`);
+  if (post.kind === "film") media.dataset.experience = "film";
+  const image = el("img", "works-cover");
+  image.src = post.cover;
+  image.alt = "";
+  image.loading = "lazy";
+  media.append(image);
+  const badge = el("span", "works-badge", `${String(index + 1).padStart(2, "0")} / ${post.label || "互动体验"}`);
+  const launch = el("span", "works-launch", "▶");
+  launch.setAttribute("aria-hidden", "true");
+  media.append(badge, launch);
+  article.append(media);
 
   const body = el("div", "works-copy");
-  const meta = el("p", "works-meta");
-  meta.append(
-    el("span", null, post.author?.nick || "访客"),
-    el("span", null, post.author?.tag || "来访者"),
-    el("time", null, post.at || ""),
-  );
-  body.append(el("h3", null, post.title), meta, el("p", null, post.summary));
-
+  const titleRow = el("div", "works-title-row");
+  titleRow.append(el("h3", null, post.title));
+  if (post.download) {
+    const dl = el("a", "works-download", "↓");
+    dl.href = post.download;
+    dl.download = "";
+    dl.setAttribute("aria-label", `下载《${post.title}》完整作品`);
+    titleRow.append(dl);
+  }
+  body.append(titleRow, el("p", "works-caption", post.summary));
+  if (post.stills?.length) {
+    const strip = el("div", "works-stills");
+    post.stills.forEach((still) => {
+      const shot = el("figure");
+      const img = el("img");
+      img.src = still.src;
+      img.alt = "";
+      img.loading = "lazy";
+      shot.append(img, el("figcaption", null, still.label));
+      strip.append(shot);
+    });
+    body.append(strip);
+  }
+  const community = el("details", "works-community");
+  community.append(el("summary", null, "收藏与留言"));
   const actions = el("div", "works-actions");
   const like = el("button", "works-like");
   like.type = "button";
@@ -106,27 +134,12 @@ function entry(post) {
     renderLike();
   });
   actions.append(like);
-
   const noteBtn = el("button");
   noteBtn.type = "button";
   noteBtn.textContent = `留言 ${commentCount(post)}`;
+  noteBtn.setAttribute("aria-expanded", "false");
   actions.append(noteBtn);
-
-  if (post.download) {
-    const dl = el("a", null, "下载");
-    dl.href = post.download;
-    dl.download = "";
-    actions.append(dl);
-  } else {
-    actions.append(el("span", "works-muted", "下载尚未备好"));
-  }
-
-  if (post.play) {
-    const play = el("a", null, "试玩");
-    play.href = post.play;
-    actions.append(play);
-  }
-  body.append(actions);
+  community.append(actions);
 
   const drawer = el("div", "works-drawer");
   drawer.hidden = true;
@@ -134,11 +147,13 @@ function entry(post) {
   const nick = el("input");
   nick.maxLength = MAX_NICK;
   nick.placeholder = "署名（可空）";
+  nick.setAttribute("aria-label", "留言署名");
   nick.autocomplete = "off";
   const text = el("input");
   text.maxLength = MAX_TEXT;
   text.required = true;
-  text.placeholder = "写一句观察，不含链接";
+  text.placeholder = "写一句观察";
+  text.setAttribute("aria-label", "留言内容");
   text.autocomplete = "off";
   const submit = el("button");
   submit.type = "submit";
@@ -171,12 +186,26 @@ function entry(post) {
   });
   noteBtn.addEventListener("click", () => {
     drawer.hidden = !drawer.hidden;
+    noteBtn.setAttribute("aria-expanded", String(!drawer.hidden));
   });
-  body.append(drawer);
+  community.append(drawer);
+  body.append(community);
   article.append(body);
   return article;
 }
 
+let catalogue = [];
+function renderWorks() {
+  if (!list) return;
+  const scoped = list.dataset.worksScope === "scientist";
+  const posts = scoped ? worksForScientist(catalogue, list.dataset.scientistId) : catalogue.filter((post) => post.play);
+  const section = list.closest(".works");
+  if (section) section.hidden = posts.length === 0;
+  list.replaceChildren(...posts.map(entry));
+  document.dispatchEvent(new CustomEvent("wuli:works-rendered"));
+}
+
+document.addEventListener("wuli:scientist-change", renderWorks);
 async function loadWorks() {
   if (!list) return;
   const feedUrl = list.dataset.worksFeed || "./data/community-feed.json";
@@ -184,11 +213,11 @@ async function loadWorks() {
     const response = await fetch(feedUrl, { cache: "no-store" });
     if (!response.ok) throw new Error();
     const data = await response.json();
-    const posts = Array.isArray(data.posts) ? data.posts : [];
-    if (!posts.length) throw new Error();
-    list.replaceChildren(...posts.map(entry));
+    catalogue = Array.isArray(data.posts) ? data.posts : [];
+    renderWorks();
   } catch {
-    list.replaceChildren(el("p", "works-empty", "这面墙还空着。"));
+    catalogue = [];
+    renderWorks();
   }
 }
 

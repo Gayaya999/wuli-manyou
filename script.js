@@ -1,3 +1,4 @@
+import { openFilmExperience } from "./experience-player.js";
 import { api, apiEnabled, migrateLocalIfNeeded } from "./api.js";
 import {
   clearThemeProgress,
@@ -161,6 +162,8 @@ const FIGURES = [
     lead: "物质也可以有波长。运动越慢，[[物质波]]铺得越开。",
     asideA: "粒子的动量与波长成反比。电子也能像光一样干涉。",
     asideB: "这不是比喻。衍射实验把波长写进了实物本身。",
+    dungeon: "物质的波纹",
+    dungeonEn: "Ripples of Matter",
     latin: "Louis de Broglie",
     bio: [
       "物质也可以有波长。德布罗意提出，运动越慢，这种波动铺得越开。",
@@ -214,6 +217,19 @@ const FIGURES = [
     line: "他让人们知道，光其实也是一种电磁波。",
   },
 ];
+
+// Visual concept labels complement each scientist’s full biography.
+const EXHIBIT_LABELS = {
+  newton: { lead: "苹果与月亮，都在引力中下落。", bio: "把下落的苹果与绕行的月亮，放进同一条引力定律。", concepts: [["apple", "下落"], ["gravity", "吸引"], ["orbit", "轨道"]] },
+  einstein: { lead: "时间与空间，会随运动改变。", bio: "速度与引力，改变我们测量时间和空间的方式。", concepts: [["watch", "时间"], ["radio", "光速"], ["watch", "时空"]] },
+  dirac: { lead: "一个方程，预言了反物质。", bio: "让量子力学与相对论在电子方程中相遇。", concepts: [["charge", "电子"], ["chalkboard", "方程"], ["charge", "反物质"]] },
+  feynman: { lead: "抵达同一点，有无数种可能。", bio: "把所有可能路径的振幅相加，理解粒子的行为。", concepts: [["chalkboard", "路径"], ["atom", "振幅"], ["chalkboard", "相互作用"]] },
+  yang: { lead: "微观世界，不总与镜像相同。", bio: "从宇称到规范场，探索自然界的对称与破缺。", concepts: [["parity", "镜像"], ["charge", "对称"], ["parity", "破缺"]] },
+  bohr: { lead: "电子跃迁，留下光谱。", bio: "电子在特定能级间跃迁，吸收或放出光。", concepts: [["atom", "能级"], ["charge", "跃迁"], ["radio", "光谱"]] },
+  debroglie: { lead: "粒子，也有波长。", bio: "动量越大，物质波的波长越短。", concepts: [["atom", "粒子"], ["radio", "波动"], ["chalkboard", "干涉"]] },
+  schrodinger: { lead: "用波函数，描述微观可能。", bio: "波函数描述量子态；测量结果以概率呈现。", concepts: [["cat", "叠加"], ["chalkboard", "波函数"], ["atom", "测量"]] },
+  maxwell: { lead: "电与磁接力，光由此传播。", bio: "变化的电场与磁场相互关联，形成电磁波。", concepts: [["charge", "电场"], ["magnet", "磁场"], ["radio", "光"]] },
+};
 
 const FIGURE_BASELINES = new Map(FIGURES.map((figure) => [figure.id, { ...figure }]));
 
@@ -286,7 +302,8 @@ const themeGameNext = document.querySelector("#themeGameNext");
 const themeGameClose = document.querySelector("#themeGameClose");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-let currentId = FIGURES[0].id;
+const initialFigure = new URLSearchParams(location.search).get("figure");
+let currentId = FIGURES.some((figure) => figure.id === initialFigure) ? initialFigure : FIGURES[0].id;
 let archive = null;
 let lastClicked = null;
 const conversations = new Map();
@@ -459,7 +476,7 @@ function updateFanSlots() {
 
 function stepFigure(delta) {
   const index = FIGURES.findIndex((figure) => figure.id === currentId);
-  selectFigure(FIGURES[(index + delta + FIGURES.length) % FIGURES.length].id);
+  selectFigure(FIGURES[(index + delta + FIGURES.length) % FIGURES.length].id, { syncRoute: true });
 }
 
 function renderPrompts() {
@@ -477,6 +494,22 @@ function renderPrompts() {
 
 function updateBio(figure) {
   if (!scientistBio || !bioLatin || !bioName || !bioBody || !bioLine) return;
+  const conceptPath = document.querySelector("#conceptPath");
+  conceptPath?.replaceChildren(...(EXHIBIT_LABELS[figure.id]?.concepts || []).map(([icon, label]) => {
+    const item = document.createElement("div");
+    item.className = "concept-step";
+    const image = document.createElement("img");
+    const conceptAssets = {
+      gravity: "./published-modules/newton-gravity/game-pack/assets/props/mass-ball.png",
+      orbit: "./published-modules/newton-gravity/game-pack/assets/props/central-body.png",
+    };
+    image.src = conceptAssets[icon] || `./assets/relics/${icon}.png`;
+    image.alt = "";
+    const caption = document.createElement("span");
+    caption.textContent = label;
+    item.append(image, caption);
+    return item;
+  }));
   bioLatin.textContent = figure.latin || "";
   bioName.textContent = figure.name;
   bioBody.replaceChildren(
@@ -512,8 +545,15 @@ function updateCopy() {
     }
   }
   updateBio(figure);
+  const worksList = document.querySelector('#worksList[data-works-scope="scientist"]');
+  if (worksList && worksList.dataset.scientistId !== figure.id) {
+    worksList.dataset.scientistId = figure.id;
+    document.dispatchEvent(new CustomEvent("wuli:scientist-change"));
+  }
+  const worksOwner = document.querySelector("#worksOwner");
+  if (worksOwner) worksOwner.textContent = `${figure.name} / 科普模块`;
   enterGame.setAttribute("aria-label", `开始与${figure.name}的对话`);
-  pressStart?.setAttribute("aria-label", `进入${figure.name}的游戏`);
+  pressStart?.setAttribute("aria-label", usesNewtonFilm() ? "进入牛顿的科普电影" : `进入${figure.name}的游戏`);
   if (talkLatin) talkLatin.textContent = figure.latin || "";
   if (talkTitle) talkTitle.textContent = `与${figure.name}对话`;
   openTalk?.setAttribute("aria-label", `开始与${figure.name}的对话`);
@@ -534,7 +574,7 @@ function showGuide(figure) {
   }
 }
 
-function selectFigure(id, { lightboxOnRepeat = false } = {}) {
+function selectFigure(id, { lightboxOnRepeat = false, syncRoute = false } = {}) {
   const figure = FIGURES.find((item) => item.id === id);
   if (!figure) return;
 
@@ -546,15 +586,36 @@ function selectFigure(id, { lightboxOnRepeat = false } = {}) {
   }
 
   currentId = id;
+  if (syncRoute) {
+    const url = new URL(location.href);
+    url.searchParams.set("figure", id);
+    if (url.hash.startsWith("#experiment-")) url.hash = "stage";
+    for (const key of ["module", "play", "talk"]) url.searchParams.delete(key);
+    history.replaceState(null, "", url);
+  }
   lastClicked = id;
   if (themeGame?.open && activeThemePack?.manifest.target_scientist_id !== id) themeGame.close();
   updateCopy();
   loadThread(id);
 }
 
+document.addEventListener("wuli:navigate-scientist", (event) => {
+  selectFigure(event.detail?.id);
+});
+
+function usesNewtonFilm() {
+  return currentId === "newton"
+    && activeThemePack?.manifest.target_scientist_id !== currentId
+    && (!gameModules.has(currentId) || gameModules.get(currentId).published);
+}
+
 function openPortal() {
   if (activeThemePack?.manifest.target_scientist_id === currentId) {
     openThemeGame();
+    return;
+  }
+  if (usesNewtonFilm()) {
+    openFilmExperience(pressStart);
     return;
   }
   if (gameModules.has(currentId)) {
@@ -683,7 +744,7 @@ function registerGameModule(manifest, { entries = null, files = [], baseUrl = ""
   const avatar = disk ? URL.createObjectURL(disk) : `${baseUrl}/${manifest.assets.disk.path}`;
   const guideUrl = guide ? URL.createObjectURL(guide) : `${baseUrl}/${manifest.assets.guide.path}`;
   const modulePresentation = {
-    name: manifest.presentation.scientist_name,
+    name: figure?.name || manifest.presentation.scientist_name,
     fullName: manifest.presentation.scientist_name,
     title: manifest.presentation.title,
     domain: manifest.presentation.domain,
@@ -725,8 +786,8 @@ function focusRequestedModule() {
   requestAnimationFrame(() => pressStart?.classList.add("community-cue"));
   pressStart?.focus({ preventScroll: true });
   setGameModuleStatus("已从社区选中作品，正在进入游戏。", "success");
-  openPortal();
   window.setTimeout(() => pressStart?.classList.remove("community-cue"), 2800);
+  return true;
 }
 
 async function loadPublishedModules() {
@@ -747,7 +808,6 @@ async function loadPublishedModules() {
       loaded += 1;
     }
     if (loaded) setGameModuleStatus(`已加载 ${loaded} 个作品简介；完整游戏会在点击 Press start 后加载。`, "success");
-    focusRequestedModule();
   } catch (error) {
     console.warn("公开小游戏目录未加载", error);
   }
@@ -770,7 +830,7 @@ function setThemePackStatus(message, state = "") {
   themePackStatus.dataset.state = state;
 }
 
-function activateThemePackRecord(record) {
+function activateThemePackRecord(record, { select = true } = {}) {
   const { manifest, assets } = record;
   const figure = FIGURES.find((item) => item.id === manifest.target_scientist_id);
   if (!figure) throw new Error(`当前展厅没有人物：${manifest.target_scientist_id}`);
@@ -793,7 +853,8 @@ function activateThemePackRecord(record) {
   activeThemePack = record;
   themePackReset.hidden = false;
   renderFan();
-  selectFigure(figure.id);
+  if (select) selectFigure(figure.id);
+  else updateCopy();
   setThemePackStatus(`已启用：${manifest.presentation.card_label}`, "success");
 }
 
@@ -1009,7 +1070,7 @@ const fanNext = document.querySelector("#fanNext");
 fan.addEventListener("click", (event) => {
   const plate = event.target.closest(".plate");
   if (!plate) return;
-  selectFigure(plate.dataset.id, { lightboxOnRepeat: true });
+  selectFigure(plate.dataset.id, { lightboxOnRepeat: true, syncRoute: true });
 });
 
 fanPrev.addEventListener("click", () => stepFigure(-1));
@@ -1211,8 +1272,12 @@ window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", (e
 function applyRoute() {
   const params = new URLSearchParams(location.search);
   const figureId = params.get("figure");
-  if (figureId) selectFigure(figureId);
-  if (params.get("talk") === "1") {
+  if (params.has("module")) {
+    if (!focusRequestedModule()) return;
+  } else if (figureId) selectFigure(figureId);
+  if (params.has("module") && params.get("talk") !== "1") {
+    openGameModule(gameModules.get(currentId));
+  } else if (params.get("talk") === "1") {
     openTalkRoom();
   } else if (params.get("play") === "1") {
     openPortal();
@@ -1227,7 +1292,10 @@ updateCopy();
 ensureArchive().then(async () => {
   try {
     const savedTheme = await loadActiveThemePack();
-    if (savedTheme) activateThemePackRecord(savedTheme);
+    if (savedTheme) {
+      const route = new URLSearchParams(location.search);
+      activateThemePackRecord(savedTheme, { select: !route.has("figure") && !route.has("module") });
+    }
   } catch {
     deactivateThemePack();
     setThemePackStatus("上次主题包无法读取，已安全回到默认展厅。", "error");

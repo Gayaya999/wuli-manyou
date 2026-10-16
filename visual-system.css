@@ -1,0 +1,182 @@
+/* Shared typography and alignment for the hall, visitors and personal archive. */
+:root {
+  --font-display: "Fusion Pixel 12", var(--font-sans);
+  --font-serif: var(--font-sans);
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-label: 0.75rem;
+  --text-title: clamp(2.25rem, 4.5vw, 3rem);
+  --text-section: clamp(1.5rem, 2.8vw, 2rem);
+}
+
+/* Dynamic scientist biographies must not pull the viewport away from the carousel. */
+body { line-height: 1.75; overflow-anchor: none; }
+button, input, textarea, select { font-family: var(--font-sans); }
+
+.cabinet-page .shell { padding-top: var(--space-6); }
+.masthead { align-items: center; }
+.site-nav { align-items: center; }
+.site-nav a { display: inline-flex; align-items: center; min-height: 2.5rem; }
+.appearance { align-items: center; }
+.appearance button { min-height: 2rem; line-height: 1; letter-spacing: 0; }
+
+.hero h1,
+.room h1,
+.identity-name {
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+  -webkit-font-smoothing: none;
+  overflow-wrap: anywhere;
+}
+
+.hero h1 { min-block-size: 1.25em; text-wrap: balance; }
+.lede, .identity-lede, .works-lede, .board-lede, .section-note, .essay p,
+.bio-body, .bio-line, .talk-list .last {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.8;
+  letter-spacing: 0;
+}
+
+/* Reserve copy space so selecting another scientist does not move the controls. */
+.hero .lede { min-block-size: 3.6em; }
+.hero { overflow-anchor: none; }
+
+.bio-name, .essay h2, .works h2, .board-head h2,
+.atlas h2, .mine-disks h2, .mine-talks h2,
+.talk-title, .portal-title, .theme-game-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+  -webkit-font-smoothing: none;
+}
+
+.bench-head h2, .works-copy h3, .talk-list .who {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.bio-latin, .room-kicker, .talk-list .latin {
+  font-size: var(--text-label);
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+}
+
+.cta-status, .sign-status, .ledger, .atlas-count,
+.board-note, .slot span, .atlas-cell span {
+  font-family: var(--font-sans);
+  font-size: var(--text-small);
+  line-height: 1.6;
+}
+
+.bench-fields label, .sign label, .board-frame label, .shells legend {
+  font-size: var(--text-small);
+  line-height: 1.5;
+  gap: var(--space-2);
+}
+
+.bench-fields input, .sign input, .board-frame input[type="text"] {
+  min-height: 2.75rem;
+  font-size: var(--text-body);
+  line-height: 1.5;
+}
+
+.sign input::placeholder { color: var(--muted); }
+
+.text-link, .sign button, .portrait-make button, .portrait-drop,
+.board-submit, .bench-actions button {
+  min-height: 2.75rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-small);
+  line-height: 1.5;
+}
+
+.text-link, .portrait-drop, .sign button, .board-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.press-start-face { justify-content: center; padding-inline: 1.5rem; }
+.bio-actions .press-start-face { padding-inline: 1.5rem; }
+
+.bench-head, .board-head, .section-head {
+  align-items: baseline;
+  flex-wrap: wrap;
+  row-gap: var(--space-3);
+}
+
+.identity-copy, .works-copy { min-width: 0; }
+.identity-lede { margin-inline: 0; }
+.sign { grid-template-columns: minmax(0, 14rem) minmax(0, 14rem) max-content; }
+.sign button { padding-inline: var(--space-4); justify-self: start; }
+.identity-copy > :last-child { margin-bottom: 0; }
+.board-post { text-align: center; }
+.board-name, .board-note { overflow-wrap: anywhere; }
+
+/* All page sections share the shell's edges; reading columns stay bounded inside. */
+.works { width: 100%; }
+.bench { text-align: left; }
+
+@media (max-width: 767px) {
+  .room { text-align: center; }
+  .room.identity { text-align: left; }
+  .room .lede { margin-inline: auto; }
+  .identity .lede { margin-inline: 0; }
+  .hero .lede { min-block-size: 5.4em; }
+  .sign { grid-template-columns: 1fr; }
+  .identity-row { grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; }
+  .identity-name { font-size: clamp(1.5rem, 6vw, 2.25rem); }
+  .identity-lede { font-size: var(--text-small); }
+  .identity .ledger { font-size: var(--text-label); }
+  .dossier-bio { width: 100%; }
+  .press-start-face { padding-inline: 1.25rem; }
+}
+
+/* One moving selection surface for all four navigation destinations. */
+.site-nav {
+  position: relative;
+  isolation: isolate;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--surface-2) 48%, transparent);
+}
+
+.site-nav::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block: 0.25rem;
+  left: 0;
+  width: var(--nav-pill-w, 0px);
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08), inset 0 0 0 1px var(--hairline);
+  transform: translateX(var(--nav-pill-x, 0px));
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 620ms var(--ease), width 620ms var(--ease), opacity 160ms ease;
+}
+
+.site-nav[data-ready]::before { opacity: 1; }
+.site-nav[data-instant]::before { transition: none; }
+.site-nav a { padding-inline: 0.8rem; transition: color 280ms ease; }
+.site-nav a[aria-current="page"] { box-shadow: none; }
+#stage { scroll-margin-top: var(--space-8); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+@media (max-width: 767px) {
+  .site-nav { gap: 0.125rem; }
+  .site-nav a { padding-inline: 0.7rem; }
+}

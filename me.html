@@ -26,8 +26,10 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=no-sky-1" />
+    <link rel="stylesheet" href="./styles.css?v=sky-fade-4k-1" />
     <link rel="stylesheet" href="./me.css?v=no-sky-1" />
+    <link rel="stylesheet" href="./visual-system.css?v=nav-slide-1" />
+    <link rel="stylesheet" href="./exhibition.css?v=hierarchy-2" />
   </head>
   <body class="cabinet-page">
     <a class="skip" href="#visitorName">跳到署名</a>
@@ -38,7 +40,7 @@
           <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
           <nav class="site-nav" aria-label="展厅">
             <a href="./">门厅</a>
-            <a href="./#stage">实验</a>
+            <a href="./?figure=newton#experiment-newton-gravity">实验</a>
             <a href="./visitors.html">来访者</a>
             <a href="./me.html" aria-current="page">我的</a>
           </nav>
@@ -58,7 +60,7 @@
               <p class="room-kicker" id="identityLatin">Visitor</p>
               <h1 id="roomTitle" class="identity-name">尚未署名</h1>
               <p class="lede identity-lede">
-                这是你的展厅角落。署名之后，软盘、对话和像素形象会写入你的档案。
+                你的形象、软盘与探索足迹。
               </p>
               <p class="ledger" id="ledger">软盘 0 张 · 通信 0 人</p>
             </div>
@@ -90,7 +92,7 @@
             <h2 id="atlasTitle">九人图鉴</h2>
             <p class="atlas-count" id="atlasCount">走过 0 / 9</p>
           </div>
-          <p class="section-note">聊过的人会亮起来。空位等你去门厅开口。</p>
+          <p class="section-note">聊过的科学家会亮起。</p>
           <ul class="atlas-grid" id="atlasGrid"></ul>
         </section>
 
@@ -99,7 +101,7 @@
             <h2 id="disksTitle">我的软盘</h2>
             <a class="text-link" href="./visitors.html">去制盘</a>
           </div>
-          <p class="section-note" id="disksNote">来访者柜里还没有你的盘。制成后会回到这里。</p>
+          <p class="section-note" id="disksNote">还没有软盘。</p>
           <div class="cabinet mine-cabinet" id="mineCabinet"></div>
         </section>
 
@@ -108,18 +110,18 @@
             <h2 id="talksTitle">通信痕迹</h2>
             <a class="text-link" href="./?talk=1#stage">去对话</a>
           </div>
-          <p class="section-note" id="talksNote">还没有和科学家说过话。门厅右侧可以开始第一句。</p>
+          <p class="section-note" id="talksNote">还没有对话。</p>
           <ul class="talk-list" id="talkList"></ul>
         </section>
       </div>
     </main>
 
     <footer class="colophon">
-      <a href="./">回到门厅</a>
       <a href="./">门厅</a>
       <span>挑战杯原型</span>
     </footer>
 
-    <script src="./me.js?v=atlas-1" type="module"></script>
+    <script src="./me.js?v=showcase-1" type="module"></script>
+    <script src="./nav-motion.js?v=experiment-2" type="module"></script>
   </body>
 </html>

@@ -21,13 +21,13 @@ test("feed seed is a valid zero-backend social timeline", () => {
   }
 });
 
-test("game works hang below the hall relics and the visitor cabinet", () => {
+test("Newton works stay below the scientist module and outside the visitor room", () => {
   assert.match(hall, /id="works"/);
-  assert.match(hall, /社区里留下的游戏/);
-  assert.match(visitors, /id="works"/);
-  assert.match(visitors, /id="worksList"/);
-  assert.match(visitors, /src="\.\/works\.js/);
-  assert.doesNotMatch(visitors, /href="\.\/community\.html"/);
+  assert.match(hall, /data-works-scope="scientist"/);
+  assert.ok(hall.indexOf('id="stage"') < hall.indexOf('id="works"'));
+  assert.ok(hall.indexOf('id="works"') < hall.indexOf('id="relics"'));
+  assert.doesNotMatch(visitors, /id="worksList"|src="\.\/works\.js|src="\.\/experience-player\.js/);
+  assert.match(visitors, /id="community"/);
   assert.doesNotMatch(hall, /class="feed-page"/);
 });
 
@@ -53,6 +53,7 @@ test("works two-layer likes and comments persist locally", () => {
 test("works provides real download and play actions", () => {
   assert.match(script, /dl\.download = ""/);
   assert.match(script, /试玩/);
-  assert.match(script, /下载尚未备好/);
-  assert.match(feed.posts[0].play, /\?module=newton-gravity/);
+  assert.ok(feed.posts.every((post) => post.play), "only completed playable works are listed");
+  assert.match(feed.posts.find((post) => post.id === "newton-gravity").play, /\?module=newton-gravity/);
+  assert.match(feed.posts.find((post) => post.id === "apple-beyond").play, /experiences\/apple-beyond\/index\.html/);
 });

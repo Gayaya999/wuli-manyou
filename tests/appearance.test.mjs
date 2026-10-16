@@ -12,7 +12,7 @@ test("hall exposes an Apple-style light appearance", () => {
   assert.match(html, /localStorage\.getItem\("qo-alt-theme"\)/);
   assert.match(css, /html\[data-theme="light"\]\s*\{/);
   assert.match(css, /--bg:\s*#f4f1ec/);
-  assert.match(css, /url\("\.\/assets\/bg\/pixel-sky\.jpg/);
+  assert.match(css, /url\("\.\/assets\/bg\/pixel-sky-4k\.jpg/);
   assert.match(script, /THEME_KEY = "qo-alt-theme"/);
 });
 
