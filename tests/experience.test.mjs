@@ -29,7 +29,8 @@ test('every published experience and download resolves to a real bundled file', 
 
 test('Newton film and pixel game never leak into another scientist module', async () => {
   const { posts } = JSON.parse(await readFile(new URL('data/community-feed.json', root), 'utf8'));
-  assert.deepEqual(worksForScientist(posts, 'newton').map(p => p.id), ['apple-beyond', 'newton-gravity']);
+  assert.deepEqual(worksForScientist(posts, 'newton').map(p => p.id), ['apple-beyond']);
+  assert.ok(posts.find((p) => p.id === 'newton-gravity').hidden, 'hidden works stay out of the module');
   for (const scientist of ['einstein', 'dirac', 'feynman', 'yang', 'bohr', 'debroglie', 'schrodinger', 'maxwell']) {
     assert.deepEqual(worksForScientist(posts, scientist), [], scientist);
   }

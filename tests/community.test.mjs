@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-const visitors = await readFile(new URL("../visitors.html", import.meta.url), "utf8");
+const community = await readFile(new URL("../community.html", import.meta.url), "utf8");
+const communityScript = await readFile(new URL("../community.js", import.meta.url), "utf8");
 const hall = await readFile(new URL("../index.html", import.meta.url), "utf8");
 const script = await readFile(new URL("../works.js", import.meta.url), "utf8");
 const feed = JSON.parse(await readFile(new URL("../data/community-feed.json", import.meta.url), "utf8"));
@@ -21,13 +22,13 @@ test("feed seed is a valid zero-backend social timeline", () => {
   }
 });
 
-test("Newton works stay below the scientist module and outside the visitor room", () => {
+test("Newton works stay below the scientist module and outside the community feed", () => {
   assert.match(hall, /id="works"/);
   assert.match(hall, /data-works-scope="scientist"/);
   assert.ok(hall.indexOf('id="stage"') < hall.indexOf('id="works"'));
   assert.ok(hall.indexOf('id="works"') < hall.indexOf('id="relics"'));
-  assert.doesNotMatch(visitors, /id="worksList"|src="\.\/works\.js|src="\.\/experience-player\.js/);
-  assert.match(visitors, /id="community"/);
+  assert.doesNotMatch(community, /id="worksList"|src="\.\/works\.js|src="\.\/experience-player\.js/);
+  assert.match(community, /id="feed"/);
   assert.doesNotMatch(hall, /class="feed-page"/);
 });
 
@@ -56,4 +57,21 @@ test("works provides real download and play actions", () => {
   assert.ok(feed.posts.every((post) => post.play), "only completed playable works are listed");
   assert.match(feed.posts.find((post) => post.id === "newton-gravity").play, /\?module=newton-gravity/);
   assert.match(feed.posts.find((post) => post.id === "apple-beyond").play, /experiences\/apple-beyond\/index\.html/);
+});
+
+test("community page lets people post images, like and comment", () => {
+  assert.match(community, /id="composer"/);
+  assert.match(community, /id="composeImages"[^>]*type="file"[^>]*multiple/);
+  assert.match(community, /aria-current="page">社区/);
+  assert.match(communityScript, /addPost/);
+  assert.match(communityScript, /setLike/);
+  assert.match(communityScript, /addComment/);
+  assert.match(communityScript, /claude\.use\("db"\)/);
+  assert.match(communityScript, /localStore\(\)/);
+});
+
+test("community feed renders user input as text only", () => {
+  assert.doesNotMatch(communityScript, /\.innerHTML\s*=|insertAdjacentHTML/);
+  assert.match(communityScript, /startsWith\("data:image\/"\)/);
+  assert.match(communityScript, /slice\(0, MAX_TEXT\)/);
 });

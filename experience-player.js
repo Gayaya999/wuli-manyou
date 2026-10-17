@@ -17,7 +17,7 @@ function createPlayer() {
   close.type = "button";
   close.className = "experience-close";
   close.setAttribute("aria-label", "关闭影片，返回展厅");
-  close.textContent = "返回展厅 ×";
+  close.textContent = "← 返回展厅";
   close.addEventListener("click", () => player.close());
   head.append(title, close);
   frame = document.createElement("iframe");
@@ -30,6 +30,7 @@ function createPlayer() {
   player.addEventListener("close", () => {
     frame.src = "about:blank"; // Destroy the session so video and continuous music both stop.
     document.documentElement.classList.remove("experience-open");
+    if (document.fullscreenElement === player) document.exitFullscreen?.().catch(() => {});
     opener?.focus({ preventScroll: true });
   });
 }
@@ -40,6 +41,8 @@ export function openFilmExperience(trigger) {
   frame.src = filmUrl.href;
   document.documentElement.classList.add("experience-open");
   player.showModal();
+  // Real fullscreen where the browser allows it; the dialog already covers the window otherwise.
+  player.requestFullscreen?.().catch(() => {});
 }
 
 document.addEventListener("click", (event) => {

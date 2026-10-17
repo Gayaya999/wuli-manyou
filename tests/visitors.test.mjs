@@ -8,17 +8,10 @@ const css = await readFile(new URL("../visitors.css", import.meta.url), "utf8");
 const composer = await readFile(new URL("../disk-compose.js", import.meta.url), "utf8");
 const script = await readFile(new URL("../visitors.js", import.meta.url), "utf8");
 
-test("visitor archive is a separate room linked from the hall", () => {
-  assert.match(hall, /href="\.\/visitors\.html"/);
-  assert.doesNotMatch(hall, /href="\.\/community\.html"/);
-  assert.match(html, /来访者档案/);
-  assert.match(html, /href="\.\/"/);
-  assert.match(html, /id="cabinet"/);
-  assert.match(html, /id="bench"/);
-  assert.match(html, /存放一张档案/);
-  assert.match(html, /放入展墙/);
-  assert.match(html, /取回/);
-  assert.match(html, /id="community"/);
+test("old visitor room now forwards to the community", () => {
+  assert.match(hall, /href="\.\/community\.html"/);
+  assert.doesNotMatch(hall, /href="\.\/visitors\.html"/);
+  assert.match(html, /location\.replace\("\.\/community\.html"\)/);
 });
 
 test("visitor disks are composited locally and stored on this machine", () => {

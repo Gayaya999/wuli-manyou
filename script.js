@@ -551,7 +551,7 @@ function updateCopy() {
     document.dispatchEvent(new CustomEvent("wuli:scientist-change"));
   }
   const worksOwner = document.querySelector("#worksOwner");
-  if (worksOwner) worksOwner.textContent = `${figure.name} / 科普模块`;
+  if (worksOwner) worksOwner.textContent = `${figure.name} · 互动作品`;
   enterGame.setAttribute("aria-label", `开始与${figure.name}的对话`);
   pressStart?.setAttribute("aria-label", usesNewtonFilm() ? "进入牛顿的科普电影" : `进入${figure.name}的游戏`);
   if (talkLatin) talkLatin.textContent = figure.latin || "";
@@ -1138,6 +1138,8 @@ talkForm?.addEventListener("submit", (event) => {
 });
 
 if (themeDeveloperTools) themeDeveloperTools.hidden = !new URLSearchParams(location.search).has("dev");
+const importZone = document.querySelector("#importZone");
+if (importZone) importZone.hidden = !new URLSearchParams(location.search).has("dev");
 themePackImport?.addEventListener("click", () => themePackInput.click());
 themePackInput.addEventListener("change", async () => {
   if (!themePackInput.files?.length) return;
@@ -1217,7 +1219,9 @@ function makeRelicButton(relic) {
   const image = document.createElement("img");
   image.src = relic.src;
   image.alt = relic.alt;
-  button.append(image);
+  const name = document.createElement("span");
+  name.textContent = relic.label;
+  button.append(image, name);
   return button;
 }
 

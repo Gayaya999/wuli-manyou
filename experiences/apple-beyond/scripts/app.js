@@ -562,6 +562,34 @@
     else if (paused && state.node !== "welcome") { openMenu(); }
   });
 
+  /* ================= 快进：1× → 2× → 4× → 1×，换片后保持 ================= */
+  var RATES = [1, 2, 4];
+  var rateIndex = 0;
+  var btnFf = $("#btn-ff");
+  function applyRate() {
+    var r = RATES[rateIndex];
+    video.defaultPlaybackRate = r;
+    video.playbackRate = r;
+    $(".ff-rate", btnFf).textContent = r + "×";
+    btnFf.setAttribute("aria-pressed", String(r > 1));
+    btnFf.setAttribute("aria-label", "快进：当前 " + r + " 倍速");
+    btnFf.classList.toggle("is-fast", r > 1);
+  }
+  function cycleRate() {
+    rateIndex = (rateIndex + 1) % RATES.length;
+    applyRate();
+    showToast(RATES[rateIndex] > 1 ? "快进 " + RATES[rateIndex] + "×" : "恢复正常速度", 1200);
+  }
+  function syncFf() { btnFf.hidden = !isPlayingVideo(); }
+  btnFf.addEventListener("click", cycleRate);
+  ["loadstart", "playing", "pause", "emptied", "ended"].forEach(function (e) { video.addEventListener(e, syncFf); });
+  // 换片时浏览器会把速度重置为 defaultPlaybackRate；这里再确认一次
+  video.addEventListener("loadedmetadata", function () { video.playbackRate = RATES[rateIndex]; });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if ((e.key === "f" || e.key === "F") && isPlayingVideo() && !/INPUT|TEXTAREA|SELECT/.test(tag)) cycleRate();
+  });
+
   /* ================= 启动 ================= */
   sound.onError(showToast);
   var p = prefs();

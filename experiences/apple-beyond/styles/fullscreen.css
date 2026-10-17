@@ -1,0 +1,52 @@
+/* 全屏播放：影片里的上下黑边（下黑边是烘焙字幕）一律裁掉。
+   影片按 1280×720 制作，有效画面只占 y=64…656（1280×592）。
+   舞台里的画面、叠层、热点都按 1280×720 坐标绘制，所以整块“影片框”一起放大、居中，
+   只把有效画面留在可视区域里；文字与按钮（.ui）则按屏幕摆放，不随画面裁切。 */
+
+.stage > :not(.stage-msg) {
+  position: absolute;
+  left: calc((100% - var(--fw)) / 2);
+  top: calc((100% - var(--fh)) / 2);
+  right: auto;
+  bottom: auto;
+  width: var(--fw);
+  height: var(--fh);
+}
+.stage > .still,
+.stage > .clip,
+.stage > .freeze { object-fit: cover; }
+.stage { --fh: calc(var(--fw) * 720 / 1280); --u: calc(var(--fw) / 1280); }
+
+/* 宽屏：画面铺满整个窗口，没有任何黑边 */
+@media (min-width: 761px) and (orientation: landscape) {
+  html, body.film-body { height: 100%; overflow: hidden; }
+  .film { display: block; min-height: 0; height: 100dvh; padding: 0; }
+  .film .scene {
+    display: block;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+    background: #000;
+  }
+  .scene > .stage {
+    position: absolute;
+    inset: 0;
+    width: auto;
+    max-width: none;
+    aspect-ratio: auto;
+    /* 让 592 高的有效画面盖满窗口：取宽、高两个方向里更大的那个缩放 */
+    --fw: max(100vw, 100dvh * 1280 / 592);
+  }
+  .scene > .ui {
+    position: absolute;
+    inset: 0;
+    --u: min(calc(100vw / 1280), calc(100dvh / 592));
+  }
+}
+
+/* 竖屏与窄屏：保留“影片在上、交互在下”，但影片只显示有效画面，去掉上下黑边和字幕 */
+@media not ((min-width: 761px) and (orientation: landscape)) {
+  .film { padding-inline: 0; padding-top: 0; }
+  .film .scene { width: 100%; }
+  .scene > .stage { aspect-ratio: 1280 / 592; --fw: 100cqw; }
+}

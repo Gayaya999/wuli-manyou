@@ -296,3 +296,13 @@ body.film-body {
   .toast { bottom: auto; top: 8px; }
   .pips { gap: 8px; }
 }
+
+/* 快进按钮：与暂停按钮并排，只在影片播放时出现 */
+.chrome { display: flex; align-items: center; gap: max(10px, calc(12 * var(--u))); }
+.chrome-ff[hidden] { display: none; }
+.chrome-ff { width: auto; min-width: max(44px, calc(46 * var(--u))); padding: 0 max(12px, calc(14 * var(--u))); border-radius: 999px; grid-auto-flow: column; gap: 6px; }
+.chrome-ff::before { border-radius: 999px; }
+.chrome-ff svg { width: max(18px, calc(20 * var(--u))); height: auto; }
+.chrome-ff .ff-rate { font: 600 max(14px, calc(16 * var(--u))) / 1 var(--f-body); }
+.chrome .chrome-ff { --paper-cut: inset(0 round 999px); }
+.chrome .chrome-ff.is-fast { --paper-tint: rgba(176, 116, 39, .42); }

@@ -36,6 +36,7 @@
     },
     {
       "id": "newton-gravity",
+      "hidden": true,
       "author": {
         "nick": "站长",
         "tag": "精选"

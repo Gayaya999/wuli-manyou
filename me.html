@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="物理漫游用户档案：署名、软盘与通信痕迹。"
+      content="物理漫游用户档案：署名、图鉴与通信痕迹。"
     />
     <title>我的档案 · 物理漫游</title>
     <script>
@@ -41,7 +41,7 @@
           <nav class="site-nav" aria-label="展厅">
             <a href="./">门厅</a>
             <a href="./?figure=newton#experiment-newton-gravity">实验</a>
-            <a href="./visitors.html">来访者</a>
+            <a href="./community.html">社区</a>
             <a href="./me.html" aria-current="page">我的</a>
           </nav>
           <div class="appearance" role="group" aria-label="外观">
@@ -49,6 +49,11 @@
             <button type="button" data-theme="dark" aria-pressed="true">深色</button>
           </div>
         </header>
+
+        <div class="demo-banner" id="demoBanner" role="status" hidden>
+          <p><strong>正在查看演示档案</strong><span>这是一位示例用户的样子，你自己的档案不受影响。</span></p>
+          <button type="button" id="demoExit">退出演示</button>
+        </div>
 
         <section class="room identity" aria-labelledby="roomTitle">
           <div class="identity-row">
@@ -60,9 +65,10 @@
               <p class="room-kicker" id="identityLatin">Visitor</p>
               <h1 id="roomTitle" class="identity-name">尚未署名</h1>
               <p class="lede identity-lede">
-                你的形象、软盘与探索足迹。
+                你的形象与探索足迹。
               </p>
-              <p class="ledger" id="ledger">软盘 0 张 · 通信 0 人</p>
+              <p class="ledger" id="ledger">通信 0 人</p>
+              <button class="demo-open" id="demoOpen" type="button">看看演示档案</button>
             </div>
           </div>
           <form class="sign" id="signForm">
@@ -89,17 +95,31 @@
 
         <section class="atlas" aria-labelledby="atlasTitle">
           <div class="section-head">
-            <h2 id="atlasTitle">九人图鉴</h2>
-            <p class="atlas-count" id="atlasCount">走过 0 / 9</p>
+            <h2 id="atlasTitle">成就卡</h2>
+            <div class="atlas-meta">
+              <p class="atlas-count" id="atlasCount">已解锁 0 / 9</p>
+              <button class="atlas-toggle" id="atlasToggle" type="button" aria-expanded="false" aria-controls="atlasBody">
+                <span>展开</span>
+                <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3.5 6 8 10.5 12.5 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+            </div>
           </div>
-          <p class="section-note">聊过的科学家会亮起。</p>
-          <ul class="atlas-grid" id="atlasGrid"></ul>
+          <p class="section-note">和一位科学家聊上一次，就点亮他的成就卡；聊满 6 句，卡片升为金边。</p>
+          <div class="ach-summary" aria-label="成就进度">
+            <div class="ach-bar" role="progressbar" aria-valuemin="0" aria-valuemax="9" aria-valuenow="0" id="achBar"><i id="achBarFill"></i></div>
+            <ol class="ach-milestones" id="achMilestones"></ol>
+          </div>
+          <div class="atlas-body" id="atlasBody" data-open="false">
+            <div class="atlas-body-inner">
+              <ul class="ach-grid" id="atlasGrid"></ul>
+            </div>
+          </div>
         </section>
 
-        <section class="mine-disks" aria-labelledby="disksTitle">
+        <section class="mine-disks" hidden aria-labelledby="disksTitle">
           <div class="section-head">
             <h2 id="disksTitle">我的软盘</h2>
-            <a class="text-link" href="./visitors.html">去制盘</a>
+            <a class="text-link" href="./community.html">去社区</a>
           </div>
           <p class="section-note" id="disksNote">还没有软盘。</p>
           <div class="cabinet mine-cabinet" id="mineCabinet"></div>

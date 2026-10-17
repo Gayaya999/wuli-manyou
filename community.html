@@ -2,11 +2,144 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0;url=./visitors.html#community" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="物理漫游社区：分享你的发现、疑问和作品，点赞与评论。"
+    />
     <title>社区 · 物理漫游</title>
-    <script>location.replace("./visitors.html#community");</script>
+    <script>
+      (() => {
+        let saved = null;
+        try { saved = localStorage.getItem("qo-alt-theme"); } catch {}
+        const theme =
+          saved === "light" || saved === "dark"
+            ? saved
+            : matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=sky-fade-4k-1" />
+    <link rel="stylesheet" href="./visual-system.css?v=nav-slide-1" />
+    <link rel="stylesheet" href="./exhibition.css?v=hierarchy-2" />
+    <link rel="stylesheet" href="./community.css?v=feed-1" />
   </head>
-  <body>
-    <p><a href="./visitors.html#community">社区已挂在来访者档案下方。</a></p>
+  <body class="cabinet-page community-page">
+    <a class="skip" href="#composeText">跳到发帖</a>
+
+    <main>
+      <div class="shell">
+        <header class="masthead">
+          <a class="wordmark" href="./" aria-label="物理漫游首页">物理漫游</a>
+          <nav class="site-nav" aria-label="展厅">
+            <a href="./">门厅</a>
+            <a href="./?figure=newton#experiment-newton-gravity">实验</a>
+            <a href="./community.html" aria-current="page">社区</a>
+            <a href="./me.html">我的</a>
+          </nav>
+          <div class="appearance" role="group" aria-label="外观">
+            <button type="button" data-theme="light" aria-pressed="false">浅色</button>
+            <button type="button" data-theme="dark" aria-pressed="true">深色</button>
+          </div>
+        </header>
+
+        <section class="cm-hero" aria-labelledby="cmTitle">
+          <p class="cm-kicker">COMMUNITY · 物理漫游</p>
+          <h1 id="cmTitle">社区</h1>
+          <p class="lede">把你在展厅里的发现、疑问和作品贴上来，<br class="cm-br" />也看看别人想到了什么。</p>
+          <p class="cm-stats" id="cmStats" aria-live="polite">正在打开社区…</p>
+        </section>
+
+        <div class="cm-layout">
+          <div class="cm-main">
+            <form class="cm-composer" id="composer" aria-label="发布新帖">
+              <div class="cm-composer-row">
+                <img class="cm-avatar" id="composeAvatar" alt="" width="44" height="44" />
+                <div class="cm-composer-body">
+                  <label class="sr-only" for="composeText">想分享什么</label>
+                  <textarea
+                    id="composeText"
+                    maxlength="500"
+                    rows="3"
+                    placeholder="苹果落下的那一刻，你想到了什么？"
+                  ></textarea>
+                  <div class="cm-thumbs" id="composeThumbs" aria-label="已选图片"></div>
+                </div>
+              </div>
+
+              <div class="cm-topics" id="composeTopics" role="radiogroup" aria-label="选择话题"></div>
+
+              <div class="cm-composer-foot">
+                <label class="cm-tool" title="添加图片">
+                  <input id="composeImages" type="file" accept="image/*" multiple class="sr-only" />
+                  <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M2 3h12v10H2V3zm1 1v6.6l3-3 2.5 2.5L10 8.6l3 3V4H3zm7.5 1A1.5 1.5 0 1 1 10.5 8a1.5 1.5 0 0 1 0-3z"/></svg>
+                  <span>图片</span>
+                </label>
+                <label class="cm-alias">
+                  <span class="sr-only">署名</span>
+                  <input id="composeAlias" type="text" maxlength="16" autocomplete="off" placeholder="署名（可空）" />
+                </label>
+                <span class="cm-count" id="composeCount">0 / 500</span>
+                <button class="cm-submit" id="composeSubmit" type="submit">发布</button>
+              </div>
+              <p class="cm-status" id="composeStatus" aria-live="polite"></p>
+            </form>
+
+            <div class="cm-toolbar">
+              <div class="cm-tabs" role="tablist" aria-label="排序">
+                <button type="button" role="tab" data-sort="new" aria-selected="true">最新</button>
+                <button type="button" role="tab" data-sort="hot" aria-selected="false">最热</button>
+                <button type="button" role="tab" data-sort="mine" aria-selected="false">我的</button>
+              </div>
+              <div class="cm-filter" id="topicFilter" aria-label="按话题筛选"></div>
+            </div>
+
+            <div class="cm-feed" id="feed" aria-live="polite"></div>
+            <p class="cm-empty" id="feedEmpty" hidden>这里还没有帖子，发第一条吧。</p>
+          </div>
+
+          <aside class="cm-side" aria-label="社区侧栏">
+            <section class="cm-panel" aria-labelledby="featuredTitle">
+              <h2 id="featuredTitle">精选作品</h2>
+              <div class="cm-featured" id="featured"></div>
+            </section>
+            <section class="cm-panel" aria-labelledby="topicTitle">
+              <h2 id="topicTitle">话题</h2>
+              <ul class="cm-topic-list" id="topicList"></ul>
+            </section>
+            <section class="cm-panel cm-rules" aria-labelledby="rulesTitle">
+              <h2 id="rulesTitle">社区约定</h2>
+              <ol>
+                <li>说你看到的、想到的，也说你不懂的。</li>
+                <li>对观点提问，不对人。</li>
+                <li>图片只传自己拍的或有权分享的。</li>
+              </ol>
+              <p class="cm-mode" id="cmMode"></p>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+    <footer class="colophon">
+      <a href="./">门厅</a>
+      <span>挑战杯原型</span>
+    </footer>
+
+    <dialog class="lightbox cm-lightbox" id="lightbox" aria-label="查看图片">
+      <img id="lightboxImage" alt="" />
+      <form method="dialog"><button class="lightbox-close" type="submit">关闭</button></form>
+    </dialog>
+
+    <script src="./community.js?v=feed-1" type="module"></script>
+    <script src="./nav-motion.js?v=experiment-2" type="module"></script>
   </body>
 </html>

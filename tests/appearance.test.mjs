@@ -39,11 +39,11 @@ test("hall Macintosh uses the exhibition CRT and biography", () => {
   assert.match(script, /function openTalkRoom\(/);
 });
 
-test("hall nav has no separate community page", () => {
-  assert.match(html, /href="\.\/visitors\.html">来访者/);
+test("hall nav links the community instead of the old visitor room", () => {
+  assert.match(html, /href="\.\/community\.html">社区/);
   assert.match(html, /href="\.\/me\.html">我的/);
-  assert.doesNotMatch(html, /href="\.\/community\.html"/);
-  assert.doesNotMatch(html, />社区</);
+  assert.doesNotMatch(html, /href="\.\/visitors\.html"/);
+  assert.doesNotMatch(html, />来访者</);
 });
 
 test("published games still launch from Press start", () => {

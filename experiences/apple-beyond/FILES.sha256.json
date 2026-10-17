@@ -34,8 +34,8 @@
   "assets/video/relation-question.mp4": "dcf212b5d1b0afef046c3ff8ddde67e93f28d4687bb41284700b7772cad04dc3",
   "assets/video/research-tail.mp4": "b625a30d247c80ebf0959d8f6e71144ade1c56ace321283105c16b7dd9542625",
   "assets/video/research.mp4": "2ef0ca2cb2b21a7baf55dfa0be83dbb87824844ed48a69b72b8301b32fd34a05",
-  "index.html": "18b55c4c1d4bb9f12db72fe493c6641eb76c09e587d7cce2b7bb6a5ddfd0d3fe",
-  "scripts/app.js": "dad605545a1714e1da84a1aab1884c2e5e2ad74a4af9ebec26f82df2117f6768",
+  "index.html": "3d3f9d902c8f5f50eed30d9a6e0ae71f03bdfd07842cdfeb8df032ab68e0e8e3",
+  "scripts/app.js": "39f698cedf4db2328d91ec42771c29a3308a71719d3a7ecf777a475821d911be",
   "scripts/audio.js": "75df62649c1e9a3e56a05365c78ce27d88a8f2a83c479d6ca3cc758fae3fe063",
   "scripts/config.js": "3cdbde3655b9ed6b2cbac6f22211629a7ddc44fc797f6f4f9c7281a52926b6f5",
   "scripts/fx.js": "3ca08e04ae92deddbd105de0f4e05a80a536b7b2385d336ab14b84bca3001b0b",
@@ -45,8 +45,9 @@
   "scripts/plates.js": "31cfc97d2625fcaaba79cd5e0dc5348b54a156bc476d1fd5b57a2ceefad7fd65",
   "scripts/story.js": "0eaf1ab350a744e1b2316fa605603710beb9f7ec051aaa71be3e649ad9893bc4",
   "styles/film.css": "f101d7e6bd11c3dc7c4b8bd8cf27c8612a402234738b580404af83f22695cc21",
+  "styles/fullscreen.css": "6b3050b689f2b86514a574670abc3d102cc6c6783dfe72786a96f7eaa4e3664b",
   "styles/parchment.css": "f92afc933b8b2a401955c112073318ea71f97b368fede04e375ee1828e45353f",
-  "styles/player.css": "40b15187e54593a3f720602e159592eb43443c56d2038549530cf01ff3a2fe9c",
+  "styles/player.css": "60f14fb1163867d18c8e37320f98000d02967f971ed56602b8b670d42eb90bc9",
   "styles/tokens.css": "a12094b9052fe2aab2aeb6e8b4a5d23546a290150e67db3ff96a756ef8c79895",
   "打开说明.txt": "6a54e4abf8bda21f13fd8f514bab9253697583ae1784ec2868f983a1c4cbee6a"
 }

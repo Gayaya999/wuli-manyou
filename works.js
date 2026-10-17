@@ -88,7 +88,10 @@ function entry(post, index) {
   const launch = el("span", "works-launch", "▶");
   launch.setAttribute("aria-hidden", "true");
   media.append(badge, launch);
-  article.append(media);
+  // The cover and its stills read as one picture column; the copy sits beside it.
+  const visual = el("div", "works-visual");
+  visual.append(media);
+  article.append(visual);
 
   const body = el("div", "works-copy");
   const titleRow = el("div", "works-title-row");
@@ -112,7 +115,7 @@ function entry(post, index) {
       shot.append(img, el("figcaption", null, still.label));
       strip.append(shot);
     });
-    body.append(strip);
+    visual.append(strip);
   }
   const community = el("details", "works-community");
   community.append(el("summary", null, "收藏与留言"));
@@ -198,7 +201,7 @@ let catalogue = [];
 function renderWorks() {
   if (!list) return;
   const scoped = list.dataset.worksScope === "scientist";
-  const posts = scoped ? worksForScientist(catalogue, list.dataset.scientistId) : catalogue.filter((post) => post.play);
+  const posts = scoped ? worksForScientist(catalogue, list.dataset.scientistId) : catalogue.filter((post) => post.play && !post.hidden);
   const section = list.closest(".works");
   if (section) section.hidden = posts.length === 0;
   list.replaceChildren(...posts.map(entry));

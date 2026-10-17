@@ -42,7 +42,7 @@
           <nav class="site-nav" aria-label="展厅">
             <a href="./" aria-current="page">门厅</a>
             <a href="./?figure=newton#experiment-newton-gravity">实验</a>
-            <a href="./visitors.html">来访者</a>
+            <a href="./community.html">社区</a>
             <a href="./me.html">我的</a>
           </nav>
           <div class="appearance" role="group" aria-label="外观">
@@ -110,7 +110,7 @@
               </button>
             </div>
             <article class="dossier-bio" id="scientistBio" aria-label="人物介绍">
-              <p class="bio-latin" id="bioLatin">Isaac Newton</p>
+              <p class="bio-latin" id="bioLatin" hidden>Isaac Newton</p>
               <h3 class="bio-name" id="bioName">牛顿</h3>
               <div class="bio-body" id="bioBody">
                 <p>牛顿研究的问题其实都很日常：苹果为什么会掉下来？东西为什么会运动？月亮为什么不会飞走？</p>
@@ -139,8 +139,8 @@
 
         <section class="works scientist-works" id="works" hidden aria-labelledby="worksTitle">
           <div class="shell">
-            <p class="essay-kicker" id="worksOwner">牛顿 / 科普模块</p>
-            <h2 id="worksTitle">继续探索</h2>
+            <p class="essay-kicker" id="worksOwner">牛顿 · 互动作品</p>
+            <h2 id="worksTitle">沉浸体验</h2>
             <div class="works-list" id="worksList" data-works-feed="./data/community-feed.json" data-works-scope="scientist" data-scientist-id="newton"></div>
 
           </div>
@@ -149,7 +149,7 @@
         <div class="shell">
           <section class="essay" id="hallEssay" aria-labelledby="essayTitle">
             <p class="essay-kicker">物理漫游 / 九位科学家的世界</p>
-            <h2 id="essayTitle">苹果落下之后，光还在跑，时间也会弯。</h2>
+            <h2 id="essayTitle">苹果落下之后，<br />光还在跑，时间也会弯。</h2>
             <p>从经典力学、电磁学，到相对论和量子物理，九张软盘串起九种理解世界的方式。选择一位科学家，走进他的研究现场，再把问题带进对话与实验。</p>
           </section>
         </div>
@@ -171,7 +171,7 @@
 
 
       </div>
-      <div class="shell import-zone">
+      <div class="shell import-zone" id="importZone" hidden>
             <details class="works-import">
               <summary>导入自己的游戏包</summary>
               <div class="module-dock" aria-label="作品导入">

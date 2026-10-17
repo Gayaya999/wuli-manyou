@@ -20,6 +20,7 @@
 <script defer src="scripts/audio.js"></script>
 <script defer src="scripts/app.js"></script>
 <link rel="stylesheet" href="styles/parchment.css">
+<link rel="stylesheet" href="styles/fullscreen.css">
 </head>
 <body class="film-body">
 <noscript><p class="noscript">这部互动电影需要浏览器开启 JavaScript。</p></noscript>
@@ -192,6 +193,10 @@
 
     <!-- 播放器工具：右上角，闲置 2.5 秒后淡出 -->
     <div class="chrome" id="chrome">
+      <button type="button" class="chrome-btn chrome-ff" id="btn-ff" aria-label="快进：当前 1 倍速" aria-pressed="false" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6 L11.5 12 L3.5 18 Z"/><path d="M12 6 L20 12 L12 18 Z"/></svg>
+        <b class="ff-rate">1×</b>
+      </button>
       <button type="button" class="chrome-btn" id="btn-menu" aria-expanded="false" aria-controls="menu" aria-label="暂停与菜单">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.4" height="14" rx="1.2"/><rect x="13.6" y="5" width="3.4" height="14" rx="1.2"/></svg>
       </button>
